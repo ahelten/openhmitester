@@ -31,9 +31,4 @@ HEADERS += $$PWD/qteventconsumer.h \
 ###
 
 
-linux {
-    LIBS += -lX11
-}
-win32 {
-    LIBS +=
-}
+LIBS += -lX11

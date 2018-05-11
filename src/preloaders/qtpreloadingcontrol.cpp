@@ -21,55 +21,54 @@
  *
  */
 
-#include <qtpreloadingcontrol.h>
-#include <debug.h>
 #include <QWidget>
+#include <debug.h>
+#include <qtpreloadingcontrol.h>
 
 #if LINUX_OHT
 #include <X11/Xlib.h>
 #endif
 
-PreloadingControl* QtPreloadingControl::pc = NULL;
+PreloadingControl *QtPreloadingControl::pc = NULL;
 
 QtPreloadingControl::QtPreloadingControl(EventConsumer *ec, EventExecutor *ex)
-    : PreloadingControl(ec, ex)
-{
-    _event_consumer = ec;
-    _event_executor = ex;
+    : PreloadingControl(ec, ex) {
+  _event_consumer = ec;
+  _event_executor = ex;
 }
 
-
-QtPreloadingControl::~QtPreloadingControl()
-{
-    if (_event_consumer != NULL) delete _event_consumer;
-    if (_event_executor != NULL) delete _event_executor;
+QtPreloadingControl::~QtPreloadingControl() {
+  if (_event_consumer != NULL)
+    delete _event_consumer;
+  if (_event_executor != NULL)
+    delete _event_executor;
 }
 
-bool QtPreloadingControl::Do_preload()
-{
-    if (!pc)
-    {
-        DEBUG(D_PRELOAD,"(QtPreloadingControl::do_preload) Initializing hooking process.");
+bool QtPreloadingControl::Do_preload() {
+  if (!pc) {
+    DEBUG(D_PRELOAD,
+          "(QtPreloadingControl::do_preload) Initializing hooking process.");
 
 #if LINUX_OHT
-        //sinchronizing X11 threads
-        XInitThreads();
+    // sinchronizing X11 threads
+    XInitThreads();
 #endif
 
-        // create specific consumers and executor...
-        // ...to create a control instance
-        pc = new QtPreloadingControl(new QtEventConsumer(),new QtEventExecutor());
+    // create specific consumers and executor...
+    // ...to create a control instance
+    pc = new QtPreloadingControl(new QtEventConsumer(), new QtEventExecutor());
 
-        //call the initialize method
-        pc->initPreload();
-        DEBUG(D_PRELOAD,"(QtPreloadingControl::do_preload) Hooking process finished.");
+    // call the initialize method
+    pc->initPreload();
+    DEBUG(D_PRELOAD,
+          "(QtPreloadingControl::do_preload) Hooking process finished.");
 
-        std::cout << "Waking up..." << std::endl;
+    std::cout << "Waking up..." << std::endl;
 
-        return true;
-    }
+    return true;
+  }
 
-    return false;
+  return false;
 }
 
 ///
@@ -82,9 +81,8 @@ bool QtPreloadingControl::Do_preload()
   replace the original implementation and add the
 */
 
-
-bool QWidget::nativeEvent(const QByteArray & eventType, void * message, long * result)
-{
-    QtPreloadingControl::Do_preload();
-    return false;
+bool QWidget::nativeEvent(const QByteArray &eventType, void *message,
+                          long *result) {
+  QtPreloadingControl::Do_preload();
+  return false;
 }

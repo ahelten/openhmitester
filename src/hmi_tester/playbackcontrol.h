@@ -23,42 +23,39 @@
 #ifndef PLAYBACKCONTROL_H
 #define PLAYBACKCONTROL_H
 
+#include <boost/shared_ptr.hpp>
+#include <boost/thread.hpp>
 #include <datamodel.h>
 #include <datamodelmanager.h>
-#include <executionthread.h>
 #include <executionobserver.h>
-#include <boost/thread.hpp>
-#include <boost/shared_ptr.hpp>
+#include <executionthread.h>
 #include <memory>
 
-class PlaybackControl
-{
+class PlaybackControl {
 
 public:
+  PlaybackControl(Comm *, PlaybackObserver *);
+  ~PlaybackControl();
 
-    PlaybackControl(Comm*, PlaybackObserver*);
-    ~PlaybackControl();
+  /// execution process control
+  bool runTestCase(DataModel::TestCase *, float speed);
+  bool pauseExecution();
+  bool resumeExecution();
+  bool stopExecution();
 
-    ///execution process control
-    bool runTestCase(DataModel::TestCase*, float speed);
-    bool pauseExecution();
-    bool resumeExecution();
-    bool stopExecution();
-
-    //some notification signal handlers
-    void applicationFinished();
-    void handleEventExecutedOnPreloadModule();
+  // some notification signal handlers
+  void applicationFinished();
+  void handleEventExecutedOnPreloadModule();
 
 private:
+  // communication
+  Comm *comm_;
 
-    //communication
-    Comm *comm_;
+  PlaybackObserver *observer_;
 
-    PlaybackObserver* observer_;
-
-    // Execution thread
-    std::auto_ptr<ExecutionThread> executionThread_;
-    boost::thread _internal_thread;
+  // Execution thread
+  std::auto_ptr<ExecutionThread> executionThread_;
+  boost::thread _internal_thread;
 };
 
 #endif // PLAYBACKCONTROL_H

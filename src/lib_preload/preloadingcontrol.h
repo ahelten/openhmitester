@@ -23,23 +23,22 @@
 #ifndef PRELOADINGCONTROL_H
 #define PRELOADINGCONTROL_H
 
-#include <eventexecutor.h>
+#include <QThread>
 #include <eventconsumer.h>
+#include <eventexecutor.h>
 
-class PreloadingControl
-{
+class PreloadingControl {
 public:
+  /// constructor
+  PreloadingControl(EventConsumer *ec, EventExecutor *ex);
 
-    /// constructor
-    PreloadingControl(EventConsumer* ec, EventExecutor* ex);
-
-    ///preload init method that has to be called
-    void initPreload();
+  /// preload init method that has to be called
+  void initPreload();
 
 private:
-    EventConsumer* _event_consumer;
-    EventExecutor* _event_executor;
-
+  EventConsumer *_event_consumer;
+  EventExecutor *_event_executor;
+  QThread *test_thread_;
 };
 
 #endif // PRELOADINGCONTROL_H

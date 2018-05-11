@@ -23,247 +23,235 @@
 #ifndef DATAMODEL_H
 #define DATAMODEL_H
 
-#include <uuid.h>
-#include <map>
 #include <boost/ptr_container/ptr_list.hpp>
-#include <string>
 #include <exception>
+#include <map>
+#include <string>
+#include <uuid.h>
 
 #define WANT_SERIALIZE
 
 #ifdef WANT_SERIALIZE
-#include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/map.hpp>
+#include <boost/serialization/utility.hpp>
 #endif
 
-namespace DataModel
-{
-    ///
-    /// types
-    ///
-    typedef std::map<std::string, std::string> KeyValueMap;
+namespace DataModel {
+///
+/// types
+///
+typedef std::map<std::string, std::string> KeyValueMap;
 
-    struct not_found : public std::exception
-    {
-    };
+struct not_found : public std::exception {};
 
-    ///
-    /// test base
-    /// object base which includes data and metadata maps
-    ///
-    class TestBase
-    {
-    public:
-        TestBase();
-        ~TestBase();
+///
+/// test base
+/// object base which includes data and metadata maps
+///
+class TestBase {
+public:
+  TestBase();
+  ~TestBase();
 
-        // Inner types to define maps
-        typedef KeyValueMap DataMap;
-        typedef KeyValueMap MetadataMap;
+  // Inner types to define maps
+  typedef KeyValueMap DataMap;
+  typedef KeyValueMap MetadataMap;
 
-        bool addData(const std::string&, const std::string&);
-        std::string getData(const std::string&) const throw (not_found);
+  bool addData(const std::string &, const std::string &);
+  std::string getData(const std::string &) const throw(not_found);
 
-        // Access to the data map
-        const DataMap& dataMap() const;
+  // Access to the data map
+  const DataMap &dataMap() const;
 
-        // TODO: Provide non-readonly operation or just add an operation
-        // to add and remove data and metadata pairs?
-        DataMap& dataMap();
+  // TODO: Provide non-readonly operation or just add an operation
+  // to add and remove data and metadata pairs?
+  DataMap &dataMap();
 
-        bool addMetadata(const std::string&, const std::string&);
-        std::string getMetadata(const std::string&) const throw (not_found);
+  bool addMetadata(const std::string &, const std::string &);
+  std::string getMetadata(const std::string &) const throw(not_found);
 
-        const MetadataMap& metadataMap() const;
-        // TODO: Provide non-readonly operation or just add an operation
-        // to add and remove data and metadata pairs?
-        MetadataMap& metadataMap();
+  const MetadataMap &metadataMap() const;
+  // TODO: Provide non-readonly operation or just add an operation
+  // to add and remove data and metadata pairs?
+  MetadataMap &metadataMap();
 
-    protected:
-        bool addPair(KeyValueMap&, const std::string&, const std::string&);
-        const std::string& getValue(const KeyValueMap&, const std::string& ) const throw (not_found);
+protected:
+  bool addPair(KeyValueMap &, const std::string &, const std::string &);
+  const std::string &getValue(const KeyValueMap &, const std::string &) const
+      throw(not_found);
 
-        DataMap dataMap_;
-        MetadataMap metadataMap_;
-    };
+  DataMap dataMap_;
+  MetadataMap metadataMap_;
+};
 
-    ///
-    /// test item
-    ///
-    class TestItem : virtual public TestBase
-    {
-        // ID of this testitem
-        uuid_t uuid_;
+///
+/// test item
+///
+class TestItem : virtual public TestBase {
+  // ID of this testitem
+  uuid_t uuid_;
 
-    public:
-        TestItem();
-        TestItem(int type, int subtype, int timestamp);
-        TestItem(DataModel::TestItem*);
-        ~TestItem();
+public:
+  TestItem();
+  TestItem(int type, int subtype, int timestamp);
+  TestItem(DataModel::TestItem *);
+  ~TestItem();
 
-        uuid_t uuid() const;
+  uuid_t uuid() const;
 
-        int type() const;
-        void type(int);
-        int subtype() const;
-        void subtype(int);
-        int timestamp() const;
-        void timestamp(int);
+  int type() const;
+  void type(int);
+  int subtype() const;
+  void subtype(int);
+  int timestamp() const;
+  void timestamp(int);
 
 #ifdef WANT_SERIALIZE
-        //serialization
-        friend class boost::serialization::access;
-        template<class Archive>
-                void serialize(Archive & ar, const unsigned int /*version*/)
-        {
-            ar & dataMap_;
-            ar & metadataMap_;
+  // serialization
+  friend class boost::serialization::access;
+  template <class Archive>
+  void serialize(Archive &ar, const unsigned int /*version*/) {
+    ar &dataMap_;
+    ar &metadataMap_;
 
-            ar & uuid_;
-            ar & type_;
-            ar & subtype_;
-            ar & timestamp_;
-        }
+    ar &uuid_;
+    ar &type_;
+    ar &subtype_;
+    ar &timestamp_;
+  }
 #endif
 
-        //copy methods
-        virtual void copy(DataModel::TestItem*);
-        virtual void deepCopy(DataModel::TestItem*);
+  // copy methods
+  virtual void copy(DataModel::TestItem *);
+  virtual void deepCopy(DataModel::TestItem *);
 
-    protected:
-        int type_;
-        int subtype_;
-        int timestamp_;
+protected:
+  int type_;
+  int subtype_;
+  int timestamp_;
 
-    private:
-        //this class must be virtual
-        virtual void none(){}
-    };
+private:
+  // this class must be virtual
+  virtual void none() {}
+};
 
-    ///
-    /// test case
-    ///
-    class TestCase : virtual public TestBase
-    {
-        uuid_t uuid_;
+///
+/// test case
+///
+class TestCase : virtual public TestBase {
+  uuid_t uuid_;
 
-    public:
-        TestCase();
-        ~TestCase();
+public:
+  TestCase();
+  ~TestCase();
 
-        uuid_t uuid() const;
+  uuid_t uuid() const;
 
-        typedef boost::ptr_list<TestItem> TestItemList;
+  typedef boost::ptr_list<TestItem> TestItemList;
 
-        const TestItemList& testItemList() const;
+  const TestItemList &testItemList() const;
 
-        void addTestItem(DataModel::TestItem*);
-        void addTestItem(TestItemList::iterator,
-                         DataModel::TestItem*);
+  void addTestItem(DataModel::TestItem *);
+  void addTestItem(TestItemList::iterator, DataModel::TestItem *);
 
-        void deleteTestItem(TestItemList::iterator) throw (not_found);
+  void deleteTestItem(TestItemList::iterator) throw(not_found);
 
-        size_t count() const;
+  size_t count() const;
 
-        //own properties
-        std::string name() const;
-        void name(const std::string&);
+  // own properties
+  std::string name() const;
+  void name(const std::string &);
 
 #ifdef WANT_SERIALIZE
-        //serialization
-        friend class boost::serialization::access;
-        template<class Archive>
-                void serialize(Archive & ar, const unsigned int /*version*/)
-        {
-            ar & dataMap_;
-            ar & metadataMap_;
+  // serialization
+  friend class boost::serialization::access;
+  template <class Archive>
+  void serialize(Archive &ar, const unsigned int /*version*/) {
+    ar &dataMap_;
+    ar &metadataMap_;
 
-            ar & uuid_;
-            ar & name_;
-            ar & testItems_;
+    ar &uuid_;
+    ar &name_;
+    ar &testItems_;
 
-            // This is a little bit tricky.
-            // When we serialize we have to make sure
-            // that the map is synced with the read data
-            // Allows us not to serialize the map we use
-            // for optimization
-            __syncMap();
-        }
+    // This is a little bit tricky.
+    // When we serialize we have to make sure
+    // that the map is synced with the read data
+    // Allows us not to serialize the map we use
+    // for optimization
+    __syncMap();
+  }
 #endif
 
-    protected:
-        typedef std::map<uuid_t, TestItem*> ItemMap;
+protected:
+  typedef std::map<uuid_t, TestItem *> ItemMap;
 
-        ItemMap itemMap_;
-        TestItemList testItems_;
-        std::string name_;
+  ItemMap itemMap_;
+  TestItemList testItems_;
+  std::string name_;
 
-        void __syncMap();
-    };
+  void __syncMap();
+};
 
-    ///
-    /// test suite
-    ///
-    class TestSuite : virtual public TestBase
-    {
-    public:
-        TestSuite();
-        ~TestSuite();
+///
+/// test suite
+///
+class TestSuite : virtual public TestBase {
+public:
+  TestSuite();
+  ~TestSuite();
 
-        typedef boost::ptr_list<DataModel::TestCase> TestCaseList;
+  typedef boost::ptr_list<DataModel::TestCase> TestCaseList;
 
-        ///TestCase List operations
+  /// TestCase List operations
 
-        const TestCaseList& testCases() const;
+  const TestCaseList &testCases() const;
 
-        void addTestCase(DataModel::TestCase*);
-        void addTestCase(TestCaseList::iterator,
-                         DataModel::TestCase*);
-        void deleteTestCase(TestCaseList::iterator) throw (not_found);
-//        void deleteTestCase(uuid_t) throw (not_found);
-        void deleteTestCase(const std::string&) throw (not_found);
+  void addTestCase(DataModel::TestCase *);
+  void addTestCase(TestCaseList::iterator, DataModel::TestCase *);
+  void deleteTestCase(TestCaseList::iterator) throw(not_found);
+  //        void deleteTestCase(uuid_t) throw (not_found);
+  void deleteTestCase(const std::string &) throw(not_found);
 
+  //        DataModel::TestCase* getTestCase(uuid_t) throw (not_found);
+  DataModel::TestCase *getTestCase(const std::string &) throw(not_found);
 
-//        DataModel::TestCase* getTestCase(uuid_t) throw (not_found);
-        DataModel::TestCase* getTestCase(const std::string&) throw (not_found);
+  //        DataModel::TestCase* existsTestCase(uuid_t);
+  DataModel::TestCase *existsTestCase(const std::string &);
 
-//        DataModel::TestCase* existsTestCase(uuid_t);
-        DataModel::TestCase* existsTestCase(const std::string&);
+  size_t count() const;
 
-        size_t count() const;
+  // own properties
+  std::string appId() const;
+  void appId(const std::string &);
 
-        //own properties
-        std::string appId() const;
-        void appId(const std::string&);
-
-        std::string name() const;
-        void name(const std::string&);
+  std::string name() const;
+  void name(const std::string &);
 
 #ifdef WANT_SERIALIZE
-        //serialization
-        friend class boost::serialization::access;
-        template<class Archive>
-                void serialize(Archive & ar, const unsigned int /*version*/)
-        {
-            ar & dataMap_;
-            ar & metadataMap_;
+  // serialization
+  friend class boost::serialization::access;
+  template <class Archive>
+  void serialize(Archive &ar, const unsigned int /*version*/) {
+    ar &dataMap_;
+    ar &metadataMap_;
 
-            ar & appId_;
-            ar & tcMap_;
-            ar & testCases_;
-        }
+    ar &appId_;
+    ar &tcMap_;
+    ar &testCases_;
+  }
 #endif
 
-    protected:
-        typedef std::map<std::string, TestCase*> TestCaseMap;
+protected:
+  typedef std::map<std::string, TestCase *> TestCaseMap;
 
-        TestCaseMap tcMap_;
-        TestCaseList testCases_;
-        std::string appId_;
-        std::string name_;
-    };
+  TestCaseMap tcMap_;
+  TestCaseList testCases_;
+  std::string appId_;
+  std::string name_;
+};
 
-}
+} // namespace DataModel
 
 #endif // DATAMODEL_H

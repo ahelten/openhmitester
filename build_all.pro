@@ -38,23 +38,15 @@ SUBDIRS += src/common
 SUBDIRS += src/hmi_tester
 SUBDIRS += src/lib_preload
 SUBDIRS += src/qt_lib_preload
-
+SUBDIRS += src/linux/qt_linux_hmi_tester
+SUBDIRS += src/linux/qt_linux_lib_preload
 # targets (depends on os)
-linux{
-   SUBDIRS += src/linux/qt_linux_hmi_tester
-   SUBDIRS += src/linux/qt_linux_lib_preload
-}
-win{
-   SUBDIRS += src/linux/qt_win_hmi_tester
-   SUBDIRS += src/linux/qt_win_lib_preload
-   #SUBDIRS += src/win/win_oht_launcher
-}
 
 # testbench
-SUBDIRS += testbench/desktop
-testbench/desktop.file = testbench/desktop/simusaes.pro
-SUBDIRS += testbench/web
-testbench/web.file = testbench/web/fancybrowser.pro
+#SUBDIRS += testbench/desktop
+#testbench/desktop.file = testbench/desktop/simusaes.pro
+#SUBDIRS += testbench/web
+#testbench/web.file = testbench/web/fancybrowser.pro
 
 
 

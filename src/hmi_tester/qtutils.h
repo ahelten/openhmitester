@@ -25,78 +25,72 @@
 
 #include <QString>
 
-class QtUtils
-{
+class QtUtils {
 public:
+  /// ///
+  ///
+  /// directory and file utils
+  ///
+  /// ///
 
-    /// ///
-    ///
-    /// directory and file utils
-    ///
-    /// ///
+  /// returns true if it is a valid binary
+  static bool isExecutable(const QString &);
 
-    ///returns true if it is a valid binary
-    static bool isExecutable ( const QString&);
+  /// returns true if it is a valid binary (cross-platform version)
+  static bool isExecutableCP(const QString &);
 
-    ///returns true if it is a valid binary (cross-platform version)
-    static bool isExecutableCP (const QString&);
+  /// returns true if file exists
+  static bool fileExists(const QString &file);
 
-    ///returns true if file exists
-    static bool fileExists (const QString&file);
+  /// gets the current directory
+  static QString getCurrentDir();
 
-    ///gets the current directory
-    static QString getCurrentDir();
+  /// gets the working directory
+  static QString getWorkingDir();
 
-    ///gets the working directory
-    static QString getWorkingDir();
+  /// gets the directory from a full path (linux)
+  static QString getDirFromPath(const QString &s);
 
-    ///gets the directory from a full path (linux)
-    static QString getDirFromPath ( const QString &s );
+  /// ///
+  ///
+  /// messageBox utils
+  ///
+  /// ///
 
-    /// ///
-    ///
-    /// messageBox utils
-    ///
-    /// ///
+  // shows an OK/Cancel dialog
+  static bool showOkCancelDialog(const QString &s);
 
-    //shows an OK/Cancel dialog
-    static bool showOkCancelDialog( const QString &s );
+  /// shows an error dialog
+  static void newErrorDialog(const QString &s);
 
-    ///shows an error dialog
-    static void newErrorDialog ( const QString &s );
+  /// shows an info dialog
+  static void newInfoDialog(const QString &s);
 
-    ///shows an info dialog
-    static void newInfoDialog ( const QString &s );
+  /// ///
+  ///
+  /// file dialog utils
+  ///
+  /// ///
 
+  /// returns the path of the selected file (open)
+  static QString openFileDialog(const QString &title, const QString &dir,
+                                const QString &ext);
 
-    /// ///
-    ///
-    /// file dialog utils
-    ///
-    /// ///
+  /// returns the path of the selected file (save)
+  static QString saveFileDialog(const QString &title, const QString &dir,
+                                const QString &ext);
 
-    ///returns the path of the selected file (open)
-    static QString openFileDialog ( const QString& title,
-                                           const QString& dir,
-                                           const QString& ext );
+  /// returns the selected path
+  static QString selectPathDialog(const QString &title, const QString &dir);
 
-    ///returns the path of the selected file (save)
-    static QString saveFileDialog( const QString& title,
-                                          const QString& dir,
-                                          const QString& ext );
+  /// ///
+  ///
+  /// time utils
+  ///
+  /// ///
 
-    ///returns the selected path
-    static QString selectPathDialog( const QString& title,
-                                            const QString& dir);
-
-    /// ///
-    ///
-    /// time utils
-    ///
-    /// ///
-
-    ///returns the selected path
-    static void sleep(int ms);
+  /// returns the selected path
+  static void sleep(int ms);
 };
 
 #endif // QTUTILS_H

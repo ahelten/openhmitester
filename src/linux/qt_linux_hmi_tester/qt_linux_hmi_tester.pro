@@ -25,7 +25,7 @@ equals(QT_MAJOR_VERSION, 5) {
    CONFIG +=
 }
 else {
-  message(" ================ QT 4 ================ ")
+  message(" ================ QT 4 test ================ ")
    QT +=
    CONFIG += qtestlib
 }

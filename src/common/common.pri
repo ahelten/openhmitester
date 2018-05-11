@@ -23,27 +23,13 @@ HEADERS += $$PWD/datamodel.h \
            $$PWD/debug.h
 
 # define platform variable
-linux {
-    DEFINES += LINUX_OHT
-}
-win32 {
-    DEFINES += WINDOWS_OHT
-}
+DEFINES += LINUX_OHT
 
 
 
 # add here your boost includes if needed
-linux {
-    message(" Linux Boost libs selected")
-    LIBS += -L/opt/boost/boost_1_60_0/lib/
-    INCLUDEPATH += /opt/boost/boost_1_60_0/include/
-    LIBS += -lboost_serialization
-}
-win32 {
-    message(" Win32 Boost libs selected")
-    LIBS += -LC:/boost/lib
-    INCLUDEPATH += C:/boost/include/
-    LIBS += -lboost_serialization-mgw49-mt-d-1_60
-}
-
+message(" Linux Boost libs selected")
+LIBS += -L/opt/boost/boost_1_60_0/lib/
+INCLUDEPATH += /opt/boost/boost_1_60_0/include/
+LIBS += -lboost_serialization
 

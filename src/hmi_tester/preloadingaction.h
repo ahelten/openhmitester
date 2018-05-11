@@ -28,61 +28,55 @@
 
 #include <exceptions.h>
 
-class PreloadingAction : public QObject
-{
-    Q_OBJECT
+class PreloadingAction : public QObject {
+  Q_OBJECT
 
 public:
+  ///
+  /// returns lib preload location
+  ///
+  virtual std::string libPreloadPath() = 0;
 
+  ///
+  /// launches a binary and the preload library
+  ///
+  virtual bool launchApplication(
+      const std::string &binaryPath, const std::string &preloadLibraryPath,
+      const std::string &outputFile,
+      const std::string &errorFile) throw(bin_error_exception,
+                                          lib_error_exception) = 0;
 
-    ///
-    /// returns lib preload location
-    ///
-    virtual std::string libPreloadPath() = 0;
+  ///
+  /// stops the binary
+  ///
+  virtual bool stopApplication() = 0;
 
-
-    ///
-    /// launches a binary and the preload library
-    ///
-    virtual bool launchApplication( const std::string &binaryPath,
-                                    const std::string &preloadLibraryPath,
-                                    const std::string &outputFile,
-                                    const std::string &errorFile) throw (bin_error_exception, lib_error_exception) = 0;
-
-    ///
-    /// stops the binary
-    ///
-    virtual bool stopApplication() = 0;
-
-    //output
+  // output
 
 signals:
-    ///
-    /// Standar output notification
-    ///
-    void standardOutput(const std::string&);
+  ///
+  /// Standar output notification
+  ///
+  void standardOutput(const std::string &);
 
-    ///
-    /// Error output notification
-    ///
-    void standardError(const std::string&);
+  ///
+  /// Error output notification
+  ///
+  void standardError(const std::string &);
 
-    ///
-    /// Preloading error notification
-    ///
-    void preloadingError(const std::string&);
+  ///
+  /// Preloading error notification
+  ///
+  void preloadingError(const std::string &);
 
-    //application
+  // application
 
-    ///
-    /// Application finished notification
-    ///
-    void applicationClosed(int);
+  ///
+  /// Application finished notification
+  ///
+  void applicationClosed(int);
 
 private slots:
-
-
-
 };
 
 #endif // PRELOADINGACTION_H

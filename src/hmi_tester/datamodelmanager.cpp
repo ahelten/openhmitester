@@ -23,55 +23,46 @@
 
 #include "datamodelmanager.h"
 
+DataModelManager::DataModelManager() {}
 
-DataModelManager::DataModelManager()
-{
-}
-
-DataModelManager::~DataModelManager()
-{
-}
-
+DataModelManager::~DataModelManager() {}
 
 ///
 /// datamodel adapters management
 ///
 
-void DataModelManager::addDataModelAdapter(const std::string& key,
-                                           DataModelAdapter* adapter)
-{
-    adapters_.insert(const_cast<std::string &>(key), adapter);
+void DataModelManager::addDataModelAdapter(const std::string &key,
+                                           DataModelAdapter *adapter) {
+  adapters_.insert(const_cast<std::string &>(key), adapter);
 }
 
-DataModelAdapter* DataModelManager::getDataModelAdapter(const std::string& key)
-    throw (not_exists)
-{
-    AdapterMap::iterator it = adapters_.find(key);
-    if (it == adapters_.end())
-	throw not_exists();
+DataModelAdapter *DataModelManager::getDataModelAdapter(
+    const std::string &key) throw(not_exists) {
+  AdapterMap::iterator it = adapters_.find(key);
+  if (it == adapters_.end())
+    throw not_exists();
 
-    return it->second;
+  return it->second;
 }
 
-DataModelManager::StringList DataModelManager::getDataModelAdapterKeys() const
-{
-    StringList sl;
-    for (AdapterMap::const_iterator it = adapters_.begin(); it != adapters_.end(); ++it)
-	sl.push_back(it->first);
-    return sl;
+DataModelManager::StringList DataModelManager::getDataModelAdapterKeys() const {
+  StringList sl;
+  for (AdapterMap::const_iterator it = adapters_.begin(); it != adapters_.end();
+       ++it)
+    sl.push_back(it->first);
+  return sl;
 }
 
-bool DataModelManager::setCurrentDataModelAdapter(const std::string& key) throw (not_exists)
-{
-    AdapterMap::iterator it = adapters_.find(key);
-    if (it == adapters_.end())
-	throw not_exists();
+bool DataModelManager::setCurrentDataModelAdapter(const std::string &key) throw(
+    not_exists) {
+  AdapterMap::iterator it = adapters_.find(key);
+  if (it == adapters_.end())
+    throw not_exists();
 
-    currentAdapter_ = it->second;
-    return true;
+  currentAdapter_ = it->second;
+  return true;
 }
 
-DataModelAdapter* DataModelManager::getCurrentDataModelAdapter() const
-{
-    return currentAdapter_;
+DataModelAdapter *DataModelManager::getCurrentDataModelAdapter() const {
+  return currentAdapter_;
 }

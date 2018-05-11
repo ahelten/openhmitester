@@ -25,47 +25,43 @@
 
 #include <QDialog>
 #include <QLineEdit>
-#include <QString>
 #include <QSettings>
+#include <QString>
 
 namespace Ui {
-    class NewTSDialog;
+class NewTSDialog;
 }
 
 class NewTSDialog : public QDialog {
-    Q_OBJECT
-    //Q_DISABLE_COPY(NewTSDialog);
+  Q_OBJECT
+  // Q_DISABLE_COPY(NewTSDialog);
 
 public:
-    explicit NewTSDialog(QWidget *parent = 0);
-    virtual ~NewTSDialog();
+  explicit NewTSDialog(QWidget *parent = 0);
+  virtual ~NewTSDialog();
 
 public:
-
-    QString& getTestsuiteName();
-    QString& getTestsuitePath();
-    QString& getAUTPath();
-
-
-
+  QString &getTestsuiteName();
+  QString &getTestsuitePath();
+  QString &getAUTPath();
 
 private slots:
-    void on_pb_aut_clicked();
+  void on_pb_aut_clicked();
 
-    void on_pb_tsPath_clicked();
+  void on_pb_tsPath_clicked();
 
-    void on_buttonBox_accepted();
+  void on_buttonBox_accepted();
 
-    void on_buttonBox_rejected();
+  void on_buttonBox_rejected();
 
-    void on_le_tsName_editingFinished();
+  void on_le_tsName_editingFinished();
 
 private:
-    Ui::NewTSDialog *m_ui;
-    QString _tsPath;
-    QString _autPath;
-    QString _tsName;
-    QSettings _settings;
+  Ui::NewTSDialog *m_ui;
+  QString _tsPath;
+  QString _autPath;
+  QString _tsName;
+  QSettings _settings;
 };
 
 #endif // NewTSDialog_H

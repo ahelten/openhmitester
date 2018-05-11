@@ -23,78 +23,73 @@
 #ifndef EXECUTIONTHREAD_H
 #define EXECUTIONTHREAD_H
 
-#include <datamodel.h>
 #include <comm.h>
+#include <datamodel.h>
 #include <executionobserver.h>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 
-class ExecutionThread
-{
-    // Do not copy
-    ExecutionThread (const ExecutionThread&);
+class ExecutionThread {
+  // Do not copy
+  ExecutionThread(const ExecutionThread &);
 
-    enum thread_state_t { NONE, PAUSED, RUN, STOPPED, WANT_TERMINATE, ERROR };
-
-public:
-    ExecutionThread(Comm*, PlaybackObserver*, float speed );
-    ~ExecutionThread();
+  enum thread_state_t { NONE, PAUSED, RUN, STOPPED, WANT_TERMINATE, ERROR };
 
 public:
-
-    //execution control
-    void pause();
-    void resume();
-    void stop();
-    void kill();
-
-    void applicationFinished();
-
-    bool isRunning();
-    bool isPaused();
-
-    //test case execution
-    void currentTestCase(DataModel::TestCase*);
-
-    //execution semaphore
-    void continueExecution();
-    void waitExecution();
-
+  ExecutionThread(Comm *, PlaybackObserver *, float speed);
+  ~ExecutionThread();
 
 public:
-    void operator()();
+  // execution control
+  void pause();
+  void resume();
+  void stop();
+  void kill();
+
+  void applicationFinished();
+
+  bool isRunning();
+  bool isPaused();
+
+  // test case execution
+  void currentTestCase(DataModel::TestCase *);
+
+  // execution semaphore
+  void continueExecution();
+  void waitExecution();
+
+public:
+  void operator()();
 
 private:
+  // execution flags
+  thread_state_t threadState_;
+  thread_state_t pendingState_;
 
-    //execution flags
-    thread_state_t threadState_;
-    thread_state_t pendingState_;
+  // mutex -> for pause and resume
+  boost::mutex pause_mutex_;
+  boost::condition_variable resume_pause_;
 
-    //mutex -> for pause and resume
-    boost::mutex pause_mutex_;
-    boost::condition_variable resume_pause_;
+  // Condition variable to step execution
+  boost::mutex step_mutex_;
+  boost::condition_variable next_step_ready_;
 
-    // Condition variable to step execution
-    boost::mutex step_mutex_;
-    boost::condition_variable next_step_ready_;
+  // test case to be executed
+  DataModel::TestCase *currentTestCase_;
 
-    //test case to be executed
-    DataModel::TestCase *currentTestCase_;
+  // comm module reference
+  Comm *_comm;
 
-    //comm module reference
-    Comm *_comm;
+  // Control object
+  PlaybackObserver *_observer;
 
-    // Control object
-    PlaybackObserver* _observer;
+  // execution speed
+  float _executionSpeed;
 
-    //execution speed
-    float _executionSpeed;
-
-    void _sendStartPlayback();
-    void _sendStopPlayback();
-    void _sleep(int ms);
+  void _sendStartPlayback();
+  void _sendStopPlayback();
+  void _sleep(int ms);
 };
-
 
 #endif // EXECUTIONTHREAD_H

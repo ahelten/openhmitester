@@ -24,15 +24,13 @@
 #define RECORDINGOBSERVER_H
 
 // Observer of the recording process
-class RecordingObserver
-{
-    public:
-
-    //indicates that a test case recording has finished
-    virtual void testRecordingFinished(DataModel::TestCase*) = 0;
-    //indicates the amount of test cases received
-    //up to this moment
-    virtual void testItemsReceivedCounter(int) = 0;
+class RecordingObserver {
+public:
+  // indicates that a test case recording has finished
+  virtual void testRecordingFinished(DataModel::TestCase *) = 0;
+  // indicates the amount of test cases received
+  // up to this moment
+  virtual void testItemsReceivedCounter(int) = 0;
 };
 
 #endif // RECORDINGOBSERVER_H

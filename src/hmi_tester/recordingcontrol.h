@@ -24,41 +24,37 @@
 #ifndef RECORDINGCONTROL_H
 #define RECORDINGCONTROL_H
 
-#include <datamodel.h>
 #include <comm.h>
-#include <itemmanager.h>
+#include <datamodel.h>
 #include <datamodelmanager.h>
+#include <itemmanager.h>
 #include <recordingobserver.h>
 
 #include <memory>
 
-
-class RecordingControl
-{
+class RecordingControl {
 
 public:
+  RecordingControl(Comm *, RecordingObserver *);
+  ~RecordingControl();
 
-    RecordingControl(Comm*, RecordingObserver*);
-    ~RecordingControl();
+  /// recording process control
+  void recordTestCase(DataModel::TestCase *);
+  void pauseRecording();
+  void resumeRecording();
+  void stopRecording();
 
-    ///recording process control
-    void recordTestCase(DataModel::TestCase*);
-    void pauseRecording();
-    void resumeRecording();
-    void stopRecording();
-
-    void applicationFinished();
+  void applicationFinished();
 
 private:
+  // communication
+  Comm *comm_;
 
-    //communication
-    Comm *comm_;
+  // recording observer
+  RecordingObserver *observer_;
 
-    //recording observer
-    RecordingObserver *observer_;
-
-    //item manager
-    std::auto_ptr<ItemManager> itemManager_;
+  // item manager
+  std::auto_ptr<ItemManager> itemManager_;
 };
 
 #endif // RECORDINGCONTROL_H
