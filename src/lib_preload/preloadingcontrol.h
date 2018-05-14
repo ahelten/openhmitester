@@ -23,7 +23,6 @@
 #ifndef PRELOADINGCONTROL_H
 #define PRELOADINGCONTROL_H
 
-#include <QThread>
 #include <eventconsumer.h>
 #include <eventexecutor.h>
 
@@ -38,7 +37,6 @@ public:
 private:
   EventConsumer *_event_consumer;
   EventExecutor *_event_executor;
-  QThread *test_thread_;
 };
 
 #endif // PRELOADINGCONTROL_H
