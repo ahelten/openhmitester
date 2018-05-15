@@ -31,6 +31,7 @@ OBJECTS_DIR = $${BUILD_DIR}/objs
 # config
 CONFIG += no_keywords
 CONFIG += ordered
+CONFIG += c++11
 
 # common targets
 SUBDIRS += src/common

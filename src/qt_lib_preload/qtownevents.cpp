@@ -224,9 +224,11 @@ QOE_MousePress::QOE_MousePress() {
 
 void QOE_MousePress::execute(QWidget *w) {
   if (w) {
+    qDebug() << "mouse_press requested";
     QTest::mousePress(w, (Qt::MouseButton)button(),
                       (Qt::KeyboardModifiers)modifiers(), adaptedPosition(w));
     // position() );
+    qDebug() << "mouse_press executed";
   }
 }
 
@@ -242,8 +244,10 @@ QOE_MouseRelease::QOE_MouseRelease() {
 
 void QOE_MouseRelease::execute(QWidget *w) {
   if (w) {
+    qDebug() << "mouse_release requested";
     QTest::mouseRelease(w, (Qt::MouseButton)button(),
                         (Qt::KeyboardModifiers)modifiers(), adaptedPosition(w));
+    qDebug() << "mouse_release executed";
     // position() );
   }
 }
@@ -260,8 +264,10 @@ QOE_MouseDouble::QOE_MouseDouble() {
 
 void QOE_MouseDouble::execute(QWidget *w) {
   if (w) {
+    qDebug() << "mouse_double requested";
     QTest::mouseDClick(w, (Qt::MouseButton)button(),
                        (Qt::KeyboardModifiers)modifiers(), adaptedPosition(w));
+    qDebug() << "mouse_double executed";
     // position() );
   }
 }

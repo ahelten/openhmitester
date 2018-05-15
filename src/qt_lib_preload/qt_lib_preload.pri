@@ -32,3 +32,4 @@ HEADERS += $$PWD/qteventconsumer.h \
 
 
 LIBS += -lX11
+CONFIG += c++11

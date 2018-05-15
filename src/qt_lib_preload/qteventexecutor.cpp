@@ -22,6 +22,7 @@
  */
 
 #include "qteventexecutor.h"
+#include <QDebug>
 #include <QWidget>
 #include <debug.h>
 #include <ohtbaseconfig.h>
@@ -105,40 +106,35 @@ void QtEventExecutor::handleNewTestItemReceived(DataModel::TestItem *ti) {
   ///
   // window events
   if (ti->type() == QOE::QOE_WINDOW_CLOSE) {
-    // executeCloseEvent(dynamic_cast<QOE::QOE_WindowClose*>(ti));
     QOE::QOE_WindowClose qoe;
     qoe.copy(ti);
     executeCloseEvent(&qoe);
   }
   // mouse events
   else if (ti->type() == QOE::QOE_MOUSE_PRESS) {
-    // executeMousePressEvent(dynamic_cast<QOE::QOE_MousePress*>(ti));
     QOE::QOE_MousePress qoe;
     qoe.copy(ti);
     executeMousePressEvent(&qoe);
   } else if (ti->type() == QOE::QOE_MOUSE_RELEASE) {
-    // executeMouseReleaseEvent(dynamic_cast<QOE::QOE_MouseRelease*>(ti));
     QOE::QOE_MouseRelease qoe;
     qoe.copy(ti);
     executeMouseReleaseEvent(&qoe);
   } else if (ti->type() == QOE::QOE_MOUSE_DOUBLE) {
-    // executeMouseDoubleEvent(dynamic_cast<QOE::QOE_MouseDouble*>(ti));
     QOE::QOE_MouseDouble qoe;
     qoe.copy(ti);
     executeMouseDoubleEvent(&qoe);
   } else if (ti->type() == QOE::QOE_MOUSE_WHEEL) {
-    // executeWheelEvent(dynamic_cast<QOE::QOE_MouseWheel*>(ti));
     QOE::QOE_MouseWheel qoe;
     qoe.copy(ti);
     executeWheelEvent(&qoe);
   }
   // keyboard events
   else if (ti->type() == QOE::QOE_KEY_PRESS) {
-    // executeKeyPressEvent(dynamic_cast<QOE::QOE_KeyPress*>(ti));
     QOE::QOE_KeyPress qoe;
     qoe.copy(ti);
     executeKeyPressEvent(&qoe);
   }
+  qDebug() << __PRETTY_FUNCTION__ << "ending";
 }
 
 ///
@@ -182,6 +178,7 @@ void QtEventExecutor::executeMouseReleaseEvent(QOE::QOE_MouseRelease *qoe) {
   _preExecutionWithMouseMove(qoe, widget);
   qoe->execute(widget);
   _postExecution(qoe, widget);
+  qDebug() << "mouse release done";
 }
 
 void QtEventExecutor::executeMouseDoubleEvent(QOE::QOE_MouseDouble *qoe) {
@@ -488,6 +485,8 @@ void QtEventExecutor::_preExecutionWithMouseHover(QOE::QOE_Base *qoe,
 }
 
 void QtEventExecutor::_postExecution(QOE::QOE_Base *qoe, QWidget *widget) {
+  QPointer<QWidget> q_widget(widget);
+  qDebug() << "post execution started" << qoe << q_widget;
   if (qoe && widget) {
 
     // if sensitive -> set  sensitive data
@@ -499,8 +498,10 @@ void QtEventExecutor::_postExecution(QOE::QOE_Base *qoe, QWidget *widget) {
     // set focus
     QWidgetUtils::setFocusOnWidget(widget);
 
+    qDebug() << "post execution almost ended" << qoe << q_widget;
     // end simulation
     widget->setUpdatesEnabled(true);
     widget->update();
+    qDebug() << "post execution ended" << qoe << q_widget;
   }
 }

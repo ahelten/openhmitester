@@ -18,6 +18,7 @@ else {
 }
 
 CONFIG += debug
+CONFIG += c++11
 
 TARGET = qt_oht_preload
 TEMPLATE = lib
