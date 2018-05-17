@@ -25,126 +25,114 @@
 
 #include <datamodel.h>
 
-namespace Control
-{
+namespace Control {
 
-    ///
-    /// constants
-    ///
+///
+/// constants
+///
 
-    const int CTI_TYPE = -1;
-    // 0 -> control signaling OHT > PM
-    const int CTI_ERROR = 0;
-    // 90 -> control signaling PM > OHT
-    const int CTI_EVENT_EXECUTED = 91;
-    //
-    //
-    // 10 -> playback
-    const int CTI_START_PLAYBACK = 11;
-    const int CTI_STOP_PLAYBACK = 12;
-    const int CTI_PAUSE_PLAYBACK = 13;
-    // 20 -> recording
-    const int CTI_START_RECORDING = 21;
-    const int CTI_STOP_RECORDING = 22;
-    const int CTI_PAUSE_RECORDING = 23;
+const int CTI_TYPE = -1;
+// 0 -> control signaling OHT > PM
+const int CTI_ERROR = 0;
+// 90 -> control signaling PM > OHT
+const int CTI_EVENT_EXECUTED = 91;
+//
+//
+// 10 -> playback
+const int CTI_START_PLAYBACK = 11;
+const int CTI_STOP_PLAYBACK = 12;
+const int CTI_PAUSE_PLAYBACK = 13;
+// 20 -> recording
+const int CTI_START_RECORDING = 21;
+const int CTI_STOP_RECORDING = 22;
+const int CTI_PAUSE_RECORDING = 23;
 
-    ///
-    /// control test item base
-    ///
-    class ControlTestItem : public DataModel::TestItem
-    {
-    public:
-        //constructor
-        ControlTestItem();
-    };
+///
+/// control test item base
+///
+class ControlTestItem : public DataModel::TestItem {
+public:
+  // constructor
+  ControlTestItem();
+};
 
-    ///
-    ///  error
-    ///
-    const std::string CTI_Error_Description = "desc";
-    class CTI_Error : public ControlTestItem
-    {
-    public:
-        //constructor
-        CTI_Error();
+///
+///  error
+///
+const std::string CTI_Error_Description = "desc";
+class CTI_Error : public ControlTestItem {
+public:
+  // constructor
+  CTI_Error();
 
-        //error message
-        void description(const std::string&);
-        const std::string description();
+  // error message
+  void description(const std::string &);
+  const std::string description();
+};
 
-    };
+///
+/// StartPlayback
+///
+class CTI_StartPlayback : public ControlTestItem {
+public:
+  // constructor
+  CTI_StartPlayback();
+};
 
-    ///
-    /// StartPlayback
-    ///
-    class CTI_StartPlayback : public ControlTestItem
-    {
-    public:
-        //constructor
-        CTI_StartPlayback();
-    };
+///
+/// StopPlayback
+///
+class CTI_StopPlayback : public ControlTestItem {
+public:
+  // constructor
+  CTI_StopPlayback();
+};
 
-    ///
-    /// StopPlayback
-    ///
-    class CTI_StopPlayback : public ControlTestItem
-    {
-    public:
-        //constructor
-        CTI_StopPlayback();
-    };
+///
+/// PausePlayback
+///
+class CTI_PausePlayback : public ControlTestItem {
+public:
+  // constructor
+  CTI_PausePlayback();
+};
 
-    ///
-    /// PausePlayback
-    ///
-    class CTI_PausePlayback : public ControlTestItem
-    {
-    public:
-        //constructor
-        CTI_PausePlayback();
-    };
+///
+/// StartRecording
+///
+class CTI_StartRecording : public ControlTestItem {
+public:
+  // constructor
+  CTI_StartRecording();
+};
 
-    ///
-    /// StartRecording
-    ///
-    class CTI_StartRecording : public ControlTestItem
-    {
-    public:
-        //constructor
-        CTI_StartRecording();
-    };
+///
+/// StopRecording
+///
+class CTI_StopRecording : public ControlTestItem {
+public:
+  // constructor
+  CTI_StopRecording();
+};
 
-    ///
-    /// StopRecording
-    ///
-    class CTI_StopRecording : public ControlTestItem
-    {
-    public:
-        //constructor
-        CTI_StopRecording();
-    };
+///
+/// PauseRecording
+///
+class CTI_PauseRecording : public ControlTestItem {
+public:
+  // constructor
+  CTI_PauseRecording();
+};
 
-    ///
-    /// PauseRecording
-    ///
-    class CTI_PauseRecording : public ControlTestItem
-    {
-    public:
-        //constructor
-        CTI_PauseRecording();
-    };
+///
+/// EventExecuted
+///
+class CTI_EventExecuted : public ControlTestItem {
+public:
+  // constructor
+  CTI_EventExecuted();
+};
 
-    ///
-    /// EventExecuted
-    ///
-    class CTI_EventExecuted : public ControlTestItem
-    {
-    public:
-        //constructor
-        CTI_EventExecuted();
-    };
-
-
-}
+} // namespace Control
 
 #endif // CONTROLSIGNALING_H

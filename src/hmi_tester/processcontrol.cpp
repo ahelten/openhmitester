@@ -738,6 +738,7 @@ void ProcessControl::slot_handlePreloadingError(const std::string &s) {
 /// ///
 
 void ProcessControl::handleControlSignaling(DataModel::TestItem *ti) {
+  qDebug() << __PRETTY_FUNCTION__;
   DEBUG(D_BOTH, "(ProcessControl::handleControlSignaling)");
 
   // if this event has a signaling type...

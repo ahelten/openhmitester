@@ -23,8 +23,8 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 ///
 /// custom debug
@@ -32,11 +32,13 @@
 
 #define DEBUG_ENABLED 1
 
-#define DEBUGc(content)\
-if (DEBUG_ENABLED) std::cout << content << std::endl;
+#define DEBUGc(content)                                                        \
+  if (DEBUG_ENABLED)                                                           \
+    std::cout << content << std::endl;
 
-#define _d(content)\
-if (DEBUG_ENABLED) std::cout << content << std::endl;
+#define _d(content)                                                            \
+  if (DEBUG_ENABLED)                                                           \
+    std::cout << content << std::endl;
 
 ///
 /// parameterized debug
@@ -57,11 +59,11 @@ if (DEBUG_ENABLED) std::cout << content << std::endl;
 #define D_GUI 0
 #define D_COMM 0
 
-//method
-#define DEBUG(type,content)\
-if (type == D_ERROR) std::cerr << content << std::endl;\
-else if (type && DEBUG_ENABLED) std::cout << content << std::endl
-
-
+// method
+#define DEBUG(type, content)                                                   \
+  if (type == D_ERROR)                                                         \
+    std::cerr << content << std::endl;                                         \
+  else if (type && DEBUG_ENABLED)                                              \
+  std::cout << content << std::endl
 
 #endif // DEBUG_H

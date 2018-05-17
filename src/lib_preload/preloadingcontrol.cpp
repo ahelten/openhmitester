@@ -48,11 +48,11 @@ void PreloadingControl::initPreload() {
   pc->initialize();
   pc->moveToThread(test_thread_);
 
-  QObject::connect(test_thread_, SIGNAL(started()), pc, SLOT(process()));
-  QObject::connect(pc, SIGNAL(finished()), test_thread_, SLOT(quit()));
-  QObject::connect(pc, SIGNAL(finished()), pc, SLOT(deleteLater()));
-  QObject::connect(test_thread_, SIGNAL(finished()), test_thread_,
-                   SLOT(deleteLater()));
+  //  QObject::connect(test_thread_, SIGNAL(started()), pc, SLOT(process()));
+  //  QObject::connect(pc, SIGNAL(finished()), test_thread_, SLOT(quit()));
+  //  QObject::connect(pc, SIGNAL(finished()), pc, SLOT(deleteLater()));
+  //  QObject::connect(test_thread_, SIGNAL(finished()), test_thread_,
+  //                   SLOT(deleteLater()));
   test_thread_->start();
 
   DEBUG(D_PRELOAD, "(PreloadingControl::initPreload) Preload Controller "

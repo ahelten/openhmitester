@@ -23,16 +23,11 @@
 #ifndef OHTCONFIG_H
 #define OHTCONFIG_H
 
-
-
 /// ///
 ///
 /// Configuration file
 ///
 /// ///
-
-
-
 
 ///
 /// SO config
@@ -40,7 +35,7 @@
 #define PATH_SEPARATOR "/"
 
 ///
-///Comm configuration
+/// Comm configuration
 ///
 
 #define SERVER_IP "127.0.0.1"

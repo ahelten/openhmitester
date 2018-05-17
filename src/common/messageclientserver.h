@@ -23,73 +23,64 @@
 #ifndef MESSAGECLIENTSERVER_H
 #define MESSAGECLIENTSERVER_H
 
-#include <datamodel.h>
-#include <utilclasses.h>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <memory>
+#include <datamodel.h>
 #include <deque>
+#include <memory>
+#include <utilclasses.h>
 
-
-class MessageClientServer : public QTcpServer
-{
-    Q_OBJECT
+class MessageClientServer : public QTcpServer {
+  Q_OBJECT
 
 public:
-    MessageClientServer ( QObject *parent, uint port, bool isServer );
-    ~MessageClientServer();
+  MessageClientServer(QObject *parent, uint port, bool isServer);
+  ~MessageClientServer();
 
 public slots:
-    void readMessage();
-    void writeMessage ( const QString& );
-    void displayError ( QAbstractSocket::SocketError socketError );
+  void readMessage();
+  void writeMessage(const QString &);
+  void displayError(QAbstractSocket::SocketError socketError);
 
-    void handleClientDisconnected();
+  void handleClientDisconnected();
 
 signals:
-    void receivedMessage ( const QString& );
-    void error ( const QString& );
-    void newClientConnected();
-    void clientDisconnected();
+  void receivedMessage(const QString &);
+  void error(const QString &);
+  void newClientConnected();
+  void clientDisconnected();
 
 protected:
 #if QT_VERSION >= 0x050000
-    void incomingConnection ( qintptr socketDescriptor );
+  void incomingConnection(qintptr socketDescriptor);
 #else
-    void incomingConnection (int socketDescriptor );
+  void incomingConnection(int socketDescriptor);
 #endif
 
-
-    bool _readSocket ( QTcpSocket *s, QCircularByteArray_ *buffer );
-    bool _writeSocket ( QTcpSocket *s, const QString& message );
+  bool _readSocket(QTcpSocket *s, QCircularByteArray_ *buffer);
+  bool _writeSocket(QTcpSocket *s, const QString &message);
 
 private:
+  uint _port;
 
-    uint _port;
+  std::auto_ptr<QTcpSocket> currentSocket_;
 
-    std::auto_ptr<QTcpSocket> currentSocket_;
-
-    QCircularByteArray_ buffer_;
+  QCircularByteArray_ buffer_;
 };
 
-
-
 /// ////////////////////////////////////////////
 /// ////////////////////////////////////////////
 /// ////////////////////////////////////////////
 
-class ClientSocket : public QTcpSocket
-{
-    Q_OBJECT
+class ClientSocket : public QTcpSocket {
+  Q_OBJECT
 
 public:
-    ClientSocket ( int sock, QObject *parent );
-    ~ClientSocket();
+  ClientSocket(int sock, QObject *parent);
+  ~ClientSocket();
 
 signals:
-    void error ( const QString& );
-
+  void error(const QString &);
 };
-
 
 #endif // MESSAGECLIENTSERVER_H

@@ -22,9 +22,13 @@
  */
 
 #include "preloadcontroller.h"
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
 #include <cassert>
 #include <debug.h>
+#include <iostream>
 #include <ohtbaseconfig.h>
+#include <sstream>
 
 PreloadController::PreloadController(PreloadingControl *pc, EventConsumer *ec,
                                      EventExecutor *ex) {
@@ -60,9 +64,12 @@ bool PreloadController::initialize() {
   // signals between comm and preloadController
   connect(this, SIGNAL(sendTestItem(const DataModel::TestItem &)), _comm,
           SLOT(handleSendTestItem(const DataModel::TestItem &)));
-  connect(_comm, SIGNAL(receivedTestItem(DataModel::TestItem *)), this,
-          SLOT(handleReceivedTestItem(DataModel::TestItem *)),
-          Qt::BlockingQueuedConnection);
+  //  connect(_comm, SIGNAL(receivedTestItem(DataModel::TestItem *)), this,
+  //          SLOT(handleReceivedTestItem(DataModel::TestItem *)),
+  //          Qt::BlockingQueuedConnection);
+
+  connect(_comm, SIGNAL(OurReceivedMessage(QString)),
+          SLOT(handleReceivedMessage(QString)));
 
   // signals between eventConsumer and comm
   connect(_ev_consumer, SIGNAL(newTestItem(const DataModel::TestItem &)), _comm,
@@ -74,6 +81,22 @@ bool PreloadController::initialize() {
   state_ = STOP;
 
   return true;
+}
+
+void PreloadController::handleReceivedMessage(const QString &s) {
+  qDebug() << __PRETTY_FUNCTION__;
+  std::istringstream iss(s.toStdString());
+  // Create the test archive using a string as a buffer
+  boost::archive::text_iarchive ia(iss);
+  // write class instance to archive
+  DataModel::TestItem *ti = new DataModel::TestItem();
+  ia >> *ti;
+
+  DEBUG(D_COMM, "(Comm::handleReceivedMessage) Emiting new received TestItem.");
+
+//  emit receivedTestItem(ti);
+
+  handleReceivedTestItem(ti);
 }
 
 ///

@@ -23,113 +23,76 @@
 
 #include <controlsignaling.h>
 
-
 using namespace Control;
 
 ///
 /// control test item base
 ///
 
-//constructor
-ControlTestItem::ControlTestItem()
-{
-    type(CTI_TYPE);
-}
-
+// constructor
+ControlTestItem::ControlTestItem() { type(CTI_TYPE); }
 
 ///
 ///  error
 ///
 
-//constructor
-CTI_Error::CTI_Error()
-{
-    subtype(CTI_ERROR);
+// constructor
+CTI_Error::CTI_Error() { subtype(CTI_ERROR); }
+
+// error message
+void CTI_Error::description(const std::string &text) {
+  addData(CTI_Error_Description, text);
 }
 
-//error message
-void CTI_Error::description(const std::string& text)
-{
-    addData(CTI_Error_Description,text);
+const std::string CTI_Error::description() {
+  return getData(CTI_Error_Description);
 }
-
-const std::string CTI_Error::description()
-{
-    return getData(CTI_Error_Description);
-}
-
 
 ///
 /// StartPlayback
 ///
 
-//constructor
-CTI_StartPlayback::CTI_StartPlayback()
-{
-    subtype(CTI_START_PLAYBACK);
-}
-
+// constructor
+CTI_StartPlayback::CTI_StartPlayback() { subtype(CTI_START_PLAYBACK); }
 
 ///
 /// StopPlayback
 ///
 
-//constructor
-CTI_StopPlayback::CTI_StopPlayback()
-{
-    subtype(CTI_STOP_PLAYBACK);
-}
+// constructor
+CTI_StopPlayback::CTI_StopPlayback() { subtype(CTI_STOP_PLAYBACK); }
 
 ///
 /// PausePlayback
 ///
 
-//constructor
-CTI_PausePlayback::CTI_PausePlayback()
-{
-    subtype(CTI_PAUSE_PLAYBACK);
-}
-
+// constructor
+CTI_PausePlayback::CTI_PausePlayback() { subtype(CTI_PAUSE_PLAYBACK); }
 
 ///
 /// StartRecording
 ///
 
-//constructor
-CTI_StartRecording::CTI_StartRecording()
-{
-    subtype(CTI_START_RECORDING);
-}
-
+// constructor
+CTI_StartRecording::CTI_StartRecording() { subtype(CTI_START_RECORDING); }
 
 ///
 /// StopRecording
 ///
 
-//constructor
-CTI_StopRecording::CTI_StopRecording()
-{
-    subtype(CTI_STOP_RECORDING);
-}
+// constructor
+CTI_StopRecording::CTI_StopRecording() { subtype(CTI_STOP_RECORDING); }
 
 ///
 /// PauseRecording
 ///
 
-//constructor
-CTI_PauseRecording::CTI_PauseRecording()
-{
-    subtype(CTI_PAUSE_RECORDING);
-}
-
+// constructor
+CTI_PauseRecording::CTI_PauseRecording() { subtype(CTI_PAUSE_RECORDING); }
 
 ///
 /// EventExecuted
 ///
 
-//constructor
-CTI_EventExecuted::CTI_EventExecuted()
-{
-    subtype(CTI_EVENT_EXECUTED);
-}
-
+// constructor
+CTI_EventExecuted::CTI_EventExecuted() { subtype(CTI_EVENT_EXECUTED); }

@@ -23,22 +23,17 @@
 // -*- mode: c++; c-basic-offset: 4; c-basic-style: bsd; -*-
 #include "utilclasses.h"
 
-
-
-
 /// ///
 ///
 ///
 ///
 /// ///
 
-
 /// ///
 ///
 ///
 ///
 /// ///
-
 
 /// ///
 ///

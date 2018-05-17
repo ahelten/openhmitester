@@ -23,27 +23,19 @@
 
 #include <uuid.h>
 
-#include <ctime>
 #include <cstdio>
+#include <ctime>
 
 uuid U;
 
-uuid::uuid()
-{
-        time_t val = time (NULL);
-        impl_uuid_ = static_cast<uuid_t>(val) +
-                static_cast<uuid_t>(clock());
+uuid::uuid() {
+  time_t val = time(NULL);
+  impl_uuid_ = static_cast<uuid_t>(val) + static_cast<uuid_t>(clock());
 }
 
-uuid_t
-uuid::uuid_new()
-{
-        return impl_uuid_++;
-}
+uuid_t uuid::uuid_new() { return impl_uuid_++; }
 
-void
-uuid::update (uuid_t n)
-{
-        if (n > impl_uuid_)
-                impl_uuid_ = n+1;
+void uuid::update(uuid_t n) {
+  if (n > impl_uuid_)
+    impl_uuid_ = n + 1;
 }

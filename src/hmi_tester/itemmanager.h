@@ -24,55 +24,52 @@
 #define ITEMMANAGER_H
 
 #include "comm.h"
+#include <QObject>
 #include <datamodel.h>
 #include <recordingobserver.h>
-#include <QObject>
 
-class ItemManager : public QObject
-{
-    Q_OBJECT
+class ItemManager : public QObject {
+  Q_OBJECT
 
-    public:
-
-    ItemManager(Comm*, RecordingObserver*);
-    ~ItemManager();
+public:
+  ItemManager(Comm *, RecordingObserver *);
+  ~ItemManager();
 
 public slots:
 
-    ///recording process control
-    void recordTestCase(DataModel::TestCase*);
-    void pauseRecording();
-    void resumeRecording();
-    void stopRecording();
+  /// recording process control
+  void recordTestCase(DataModel::TestCase *);
+  void pauseRecording();
+  void resumeRecording();
+  void stopRecording();
 
-    void applicationFinished();
+  void applicationFinished();
 
-    //recording process state
-    bool isRecording();
-    bool isPaused();
+  // recording process state
+  bool isRecording();
+  bool isPaused();
 
-    //messages received from Preload Module
-    void handleNewTestItem ( DataModel::TestItem* );
+  // messages received from Preload Module
+  void handleNewTestItem(DataModel::TestItem *);
 
 private:
+  // recording flags
+  bool f_recording_;
+  bool f_paused_;
+  bool f_terminate_;
+  bool f_error_;
 
-    //recording flags
-    bool f_recording_;
-    bool f_paused_;
-    bool f_terminate_;
-    bool f_error_;
+  // received test items counter
+  int rtiCounter_;
 
-    //received test items counter
-    int rtiCounter_;
+  // communication
+  Comm *comm_;
 
-    //communication
-    Comm *comm_;
+  // observer
+  RecordingObserver *observer_;
 
-    //observer
-    RecordingObserver *observer_;
-
-    //current test case
-    DataModel::TestCase *currentTestCase_;
+  // current test case
+  DataModel::TestCase *currentTestCase_;
 };
 
 #endif // ITEMMANAGER_H
