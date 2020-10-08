@@ -176,11 +176,11 @@ private:
   HMITesterControl *gui_reference_;
 
   // process controllers
-  std::auto_ptr<PlaybackControl> playback_control_;
-  std::auto_ptr<RecordingControl> recording_control_;
+  std::unique_ptr<PlaybackControl> playback_control_;
+  std::unique_ptr<RecordingControl> recording_control_;
 
   // communication manager
-  std::auto_ptr<Comm> _comm;
+  std::unique_ptr<Comm> _comm;
 
   // dataModel manager
   DataModelManager *dataModel_manager_;

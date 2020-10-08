@@ -34,7 +34,7 @@
 /// it supports repeated widget names
 ///
 QWidget *QWidgetUtils::getAbsoluteWidget(QStringList path) {
-  DEBUGc("(QWidgetUtils::getAbsoluteWidget)");
+  DEBUGc("(QWidgetUtils::getAbsoluteWidget): path='" << path.join(' ').toStdString() << "'");
   /// update the view
   QWidgetUtils::updateAppView();
 

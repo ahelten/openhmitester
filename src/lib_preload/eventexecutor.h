@@ -29,6 +29,8 @@
 class EventExecutor
 {
 public:
+    virtual ~EventExecutor() = default;
+
     ///
     /// this method is called to install the event executor
     ///

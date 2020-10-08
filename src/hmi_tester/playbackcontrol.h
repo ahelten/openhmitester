@@ -54,7 +54,7 @@ private:
   PlaybackObserver *observer_;
 
   // Execution thread
-  std::auto_ptr<ExecutionThread> executionThread_;
+  std::unique_ptr<ExecutionThread> executionThread_;
   boost::thread _internal_thread;
 };
 

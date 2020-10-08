@@ -54,7 +54,7 @@ private:
   RecordingObserver *observer_;
 
   // item manager
-  std::auto_ptr<ItemManager> itemManager_;
+  std::unique_ptr<ItemManager> itemManager_;
 };
 
 #endif // RECORDINGCONTROL_H

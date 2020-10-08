@@ -63,7 +63,7 @@ protected:
 private:
   uint _port;
 
-  std::auto_ptr<QTcpSocket> currentSocket_;
+  std::unique_ptr<QTcpSocket> currentSocket_;
 
   QCircularByteArray_ buffer_;
 };

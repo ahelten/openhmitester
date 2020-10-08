@@ -66,7 +66,7 @@ private:
     bool redirectStandarErrorToFile(const std::string &errorFile);
 
 private:
-    std::auto_ptr<QProcess> process_;
+    std::unique_ptr<QProcess> process_;
 };
 
 #endif // LINUXPRELOADINGACTION_H

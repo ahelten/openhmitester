@@ -71,7 +71,7 @@ signals:
 private:
   // Pending events to process
   std::deque<DataModel::TestItem> testItemQueue_;
-  std::auto_ptr<MessageClientServer> mcs_;
+  std::unique_ptr<MessageClientServer> mcs_;
   bool _isServer;
   int _port;
   bool clientConnected_;

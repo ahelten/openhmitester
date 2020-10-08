@@ -31,6 +31,7 @@ class PreloadingControl {
 public:
   /// constructor
   PreloadingControl(EventConsumer *ec, EventExecutor *ex);
+  virtual ~PreloadingControl() = default;
 
   /// preload init method that has to be called
   void initPreload();

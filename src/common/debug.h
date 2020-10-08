@@ -33,12 +33,18 @@
 #define DEBUG_ENABLED 1
 
 #define DEBUGc(content)                                                        \
-  if (DEBUG_ENABLED)                                                           \
-    std::cout << content << std::endl;
+do { \
+  if (DEBUG_ENABLED) {                                                         \
+    std::cout << content << std::endl; \
+  } \
+} while(false)
 
 #define _d(content)                                                            \
-  if (DEBUG_ENABLED)                                                           \
-    std::cout << content << std::endl;
+do { \
+  if (DEBUG_ENABLED) {                                                         \
+    std::cout << content << std::endl; \
+  } \
+} while(false)
 
 ///
 /// parameterized debug
@@ -61,9 +67,13 @@
 
 // method
 #define DEBUG(type, content)                                                   \
-  if (type == D_ERROR)                                                         \
+do { \
+  if (type == D_ERROR) {                                                       \
     std::cerr << content << std::endl;                                         \
-  else if (type && DEBUG_ENABLED)                                              \
-  std::cout << content << std::endl
+  } \
+  else if (type && DEBUG_ENABLED) {                                            \
+    std::cout << content << std::endl; \
+  } \
+} while(false)
 
 #endif // DEBUG_H

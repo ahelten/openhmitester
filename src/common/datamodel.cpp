@@ -361,7 +361,7 @@ const std::string &TestBase::getValue(const KeyValueMap &map,
   KeyValueMap::const_iterator it = map.find(key);
 
   if (it == map.end()) {
-    qDebug() << "getValue() throw";
+    qDebug() << "getValue() throw not_found for key: '" << key.c_str() << "'";
     throw not_found();
   }
   return it->second;

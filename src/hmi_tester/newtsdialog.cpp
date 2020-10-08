@@ -118,7 +118,7 @@ void NewTSDialog::on_pb_tsPath_clicked()
     //ask for the location
     QString aux = QtUtils::saveFileDialog("Please, select a path and a name to store the TestSuite:",
                                    lastSaveDir + QDir::separator() + m_ui->le_tsName->text().toLower() + "." + OHT_FILE_EXTENSION,
-                                   "*."OHT_FILE_EXTENSION);
+                                   "*." OHT_FILE_EXTENSION);
 
     if (aux != NULL && aux != ""){
         _tsPath = aux;
