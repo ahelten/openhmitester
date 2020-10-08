@@ -36,70 +36,71 @@ std::string LinuxPreloadingAction::libPreloadPath() {
 }
 
 ///
-bool LinuxPreloadingAction::launchApplication(
-    const std::string &binaryPath, const std::string &preloadLibraryPath,
-    const std::string &outputFile,
-    const std::string &errorFile) throw(bin_error_exception,
-                                        lib_error_exception) {
-  // checking if the binary exists
-  if (!QtUtils::isExecutable(QString(binaryPath.c_str())))
-    throw bin_error_exception(binaryPath);
+bool LinuxPreloadingAction::launchApplication ( const std::string &binaryPath,
+                                                const std::string &preloadLibraryPath,
+                                                const std::string &outputFile,
+                                                const std::string &errorFile) throw (bin_error_exception, lib_error_exception)
+{
+    //checking if the binary exists
+    if ( !QtUtils::isExecutable ( QString (binaryPath.c_str()) ) )
+        throw bin_error_exception(binaryPath);
 
-  // checking if the library exists
-  if (!QtUtils::fileExists(QString(preloadLibraryPath.c_str())))
-    throw lib_error_exception(preloadLibraryPath);
+    //checking if the library exists
+    if ( !QtUtils::fileExists(QString(preloadLibraryPath.c_str()) ) )
+        throw lib_error_exception(preloadLibraryPath);
 
-  // delete current and create a new process
-  process_.reset(new QProcess(this));
+    //delete current and create a new process
+    process_.reset (new QProcess (this));
 
-  // create dirs for logs and redirect process output
-  if (outputFile != "") {
-    assert(redirectStandarOutputToFile(outputFile));
-  }
-  if (errorFile != "") {
-    assert(redirectStandarErrorToFile(errorFile));
-  }
+    // create dirs for logs and redirect process output
+    if (outputFile != ""){
+        assert(redirectStandarOutputToFile(outputFile));
+    }
+    if (errorFile != ""){
+        assert(redirectStandarErrorToFile(errorFile));
+    }
 
-  /*connect( process_.get(), SIGNAL ( readyReadStandardOutput() ),
-            this, SIGNAL ( standardOutput(const QString&) ) );
-  connect( process_.get(), SIGNAL ( readyReadStandardError() ),
-            this, SIGNAL ( standardError(const QString&) ) );*/
+    /*connect( process_.get(), SIGNAL ( readyReadStandardOutput() ),
+              this, SIGNAL ( standardOutput(const QString&) ) );
+    connect( process_.get(), SIGNAL ( readyReadStandardError() ),
+              this, SIGNAL ( standardError(const QString&) ) );*/
 
-  // connecting process signals
-  connect(process_.get(), SIGNAL(finished(int, QProcess::ExitStatus)), this,
-          SIGNAL(applicationClosed(int)));
+    //connecting process signals
+    connect ( process_.get(), SIGNAL ( finished (int, QProcess::ExitStatus) ),
+              this, SIGNAL ( applicationClosed(int) ) );
 
-  // setting preloading environment for the process
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  env.insert(PRELOAD_ENVVAR, QString(preloadLibraryPath.c_str()));
-  // env.insert(PRELOAD_ENVVAR,
-  // "/home/pedro/svn_catedra/anotaciones/testing/imp_HMITester_github/openhmitester/build/qt_linux_lib_preload/libOHTPreload.so");
-  process_->setProcessEnvironment(env);
+    //setting preloading environment for the process
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert(PRELOAD_ENVVAR, QString(preloadLibraryPath.c_str()));
+    //env.insert(PRELOAD_ENVVAR, "/home/pedro/svn_catedra/anotaciones/testing/imp_HMITester_github/openhmitester/build/qt_linux_lib_preload/libOHTPreload.so");
+    process_->setProcessEnvironment(env);
 
-  /*QStringList environment = process_->processEnvironment().toStringList();
-  for(int i=0; i < environment.size(); i++){
-      std::cout << environment.at(i).toLocal8Bit().constData() << std::endl;
-  }*/
+    /*QStringList environment = process_->processEnvironment().toStringList();
+    for(int i=0; i < environment.size(); i++){
+        std::cout << environment.at(i).toLocal8Bit().constData() << std::endl;
+    }*/
+    QStringList args;
+    if (env.contains(OPENHMI_UI_ARGS))
+    {
+        args = env.value(OPENHMI_UI_ARGS).split(' ');
+    }
 
-  DEBUG(D_PRELOAD, "==========================================");
-  DEBUG(
-      D_PRELOAD,
-      "(LinuxPreloadingAction::launchApplication) Launching application with:");
-  DEBUG(D_PRELOAD, " - binaryPath = " << binaryPath);
-  DEBUG(D_PRELOAD, " - preloadLibraryPath = " << preloadLibraryPath);
-  // DEBUG(D_PRELOAD," - envvar = " << envvar.toStdString());
-  DEBUG(D_PRELOAD, " - outputFile = " << outputFile);
-  DEBUG(D_PRELOAD, " - errorFile = " << errorFile);
-  DEBUG(D_PRELOAD, "==========================================");
+    DEBUG(D_PRELOAD,"==========================================");
+    DEBUG(D_PRELOAD,"(LinuxPreloadingAction::launchApplication) Launching application with:");
+    DEBUG(D_PRELOAD," - binaryPath = " << binaryPath);
+    DEBUG(D_PRELOAD," - appArgs = " << args.join(' ').toStdString());
+    DEBUG(D_PRELOAD," - preloadLibraryPath = " << preloadLibraryPath);
+    //DEBUG(D_PRELOAD," - envvar = " << envvar.toStdString());
+    DEBUG(D_PRELOAD," - outputFile = " << outputFile);
+    DEBUG(D_PRELOAD," - errorFile = " << errorFile);
+    DEBUG(D_PRELOAD,"==========================================");
 
-  // process execution
-  process_->start("valgrind " + QString(binaryPath.c_str()));
-  process_->waitForStarted();
+    //process execution
+    process_->start(QString(binaryPath.c_str()), args);
+    process_->waitForStarted();
 
-  std::cout
-      << "(LinuxPreloadingAction::launchApplication) Application launched."
-      << std::endl;
-  return true;
+    std::cout << "(LinuxPreloadingAction::launchApplication) Application launched." << std::endl;
+    return true;
 }
 
 ///

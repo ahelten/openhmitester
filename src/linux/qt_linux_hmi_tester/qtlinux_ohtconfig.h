@@ -37,6 +37,9 @@
 /// oreload environment variable
 #define PRELOAD_ENVVAR "LD_PRELOAD"
 
+/// Hack to specify command-line arguments to the UI application
+#define OPENHMI_UI_ARGS "OPENHMI_UI_ARGS"
+
 
 
 
