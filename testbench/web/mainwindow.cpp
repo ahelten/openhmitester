@@ -45,7 +45,7 @@
 
 //! [1]
 
-MainWindow::MainWindow(const QUrl& url)
+MainWindow::MainWindow(const QUrl &url)
 {
     progress = 0;
 
@@ -80,7 +80,7 @@ MainWindow::MainWindow(const QUrl& url)
 //! [2]
 
     QMenu *viewMenu = menuBar()->addMenu(tr("&View"));
-    QAction* viewSourceAction = new QAction("Page Source", this);
+    QAction *viewSourceAction = new QAction("Page Source", this);
     connect(viewSourceAction, SIGNAL(triggered()), SLOT(viewSource()));
     viewMenu->addAction(viewSourceAction);
 
@@ -108,16 +108,16 @@ MainWindow::MainWindow(const QUrl& url)
 
 void MainWindow::viewSource()
 {
-    QNetworkAccessManager* accessManager = view->page()->networkAccessManager();
+    QNetworkAccessManager *accessManager = view->page()->networkAccessManager();
     QNetworkRequest request(view->url());
-    QNetworkReply* reply = accessManager->get(request);
+    QNetworkReply *reply = accessManager->get(request);
     connect(reply, SIGNAL(finished()), this, SLOT(slotSourceDownloaded()));
 }
 
 void MainWindow::slotSourceDownloaded()
 {
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(const_cast<QObject*>(sender()));
-    QTextEdit* textEdit = new QTextEdit(NULL);
+    QNetworkReply *reply = qobject_cast<QNetworkReply *>(const_cast<QObject *>(sender()));
+    QTextEdit *textEdit = new QTextEdit(NULL);
     textEdit->setAttribute(Qt::WA_DeleteOnClose);
     textEdit->show();
     textEdit->setPlainText(reply->readAll());

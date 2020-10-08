@@ -32,22 +32,22 @@ public:
 
     ///returns a widget
     ///it supports repeated widget names
-    static QWidget* getAbsoluteWidget(QStringList);
+    static QWidget *getAbsoluteWidget(QStringList);
 
     ///returns a widget
-    static QWidget* getAWidget(QStringList*);
+    static QWidget *getAWidget(QStringList *);
 
     ///updates the GUIactualiza todas las ventanas de la app
     static void updateAppView();
 
     ///returns an identifying path from a widget
-    static QString getWidgetPath(QObject*);
+    static QString getWidgetPath(QObject *);
 
     ///returns an identifying name from a widget
-    static QString getWidgetName (QWidget*);
+    static QString getWidgetName (QWidget *);
 
     ///change the focus to the widget
-    static void setFocusOnWidget (QWidget*);
+    static void setFocusOnWidget (QWidget *);
 };
 
 #endif // QWIDGETUTILS_H

@@ -43,7 +43,7 @@ public:
     /// this method is called when the consumer wants to
     /// send a new item to the HMI Tester
     ///
-    void sendNewTestItem(DataModel::TestItem& ti);
+    void sendNewTestItem(DataModel::TestItem &ti);
 
     ///
     /// capture process control methods
@@ -60,7 +60,7 @@ signals:
     ///
     ///
     ///
-    void newTestItem(const DataModel::TestItem&);
+    void newTestItem(const DataModel::TestItem &);
 };
 
 #endif // EVENTCONSUMER_H

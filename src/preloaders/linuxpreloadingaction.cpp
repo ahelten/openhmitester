@@ -32,7 +32,7 @@ LinuxPreloadingAction::LinuxPreloadingAction() {}
 
 /// returns lib preload location
 std::string LinuxPreloadingAction::libPreloadPath() {
-  return std::string(LIBPRELOAD_PATH);
+    return std::string(LIBPRELOAD_PATH);
 }
 
 ///
@@ -53,10 +53,10 @@ bool LinuxPreloadingAction::launchApplication ( const std::string &binaryPath,
     process_.reset (new QProcess (this));
 
     // create dirs for logs and redirect process output
-    if (outputFile != ""){
+    if (outputFile != "") {
         assert(redirectStandarOutputToFile(outputFile));
     }
-    if (errorFile != ""){
+    if (errorFile != "") {
         assert(redirectStandarErrorToFile(errorFile));
     }
 
@@ -105,8 +105,8 @@ bool LinuxPreloadingAction::launchApplication ( const std::string &binaryPath,
 
 ///
 bool LinuxPreloadingAction::stopApplication() {
-  process_->kill();
-  return true;
+    process_->kill();
+    return true;
 }
 
 ///
@@ -114,25 +114,25 @@ bool LinuxPreloadingAction::stopApplication() {
 ///
 
 bool LinuxPreloadingAction::redirectStandarOutputToFile(
-    const std::string &outputFile) {
-  if (process_.get() && outputFile != "") {
-    process_->setStandardOutputFile(QString(outputFile.c_str()));
-    DEBUG(D_PRELOAD, "(LinuxPreloadingAction::launchApplication) std output "
-                     "redirected to file: "
-                         << outputFile);
-    return true;
-  }
-  return false;
+        const std::string &outputFile) {
+    if (process_.get() && outputFile != "") {
+        process_->setStandardOutputFile(QString(outputFile.c_str()));
+        DEBUG(D_PRELOAD, "(LinuxPreloadingAction::launchApplication) std output "
+              "redirected to file: "
+              << outputFile);
+        return true;
+    }
+    return false;
 }
 
 bool LinuxPreloadingAction::redirectStandarErrorToFile(
-    const std::string &errorFile) {
-  if (process_.get() && errorFile != "") {
-    process_->setStandardErrorFile(QString(errorFile.c_str()));
-    DEBUG(D_PRELOAD, "(LinuxPreloadingAction::launchApplication) std error "
-                     "redirected to file: "
-                         << errorFile);
-    return true;
-  }
-  return false;
+        const std::string &errorFile) {
+    if (process_.get() && errorFile != "") {
+        process_->setStandardErrorFile(QString(errorFile.c_str()));
+        DEBUG(D_PRELOAD, "(LinuxPreloadingAction::launchApplication) std error "
+              "redirected to file: "
+              << errorFile);
+        return true;
+    }
+    return false;
 }

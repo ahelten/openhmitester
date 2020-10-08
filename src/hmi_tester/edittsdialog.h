@@ -34,31 +34,31 @@ class EditTSDialog;
 }
 
 class EditTSDialog : public QDialog {
-  Q_OBJECT
-  // Q_DISABLE_COPY(EditTSDialog);
+    Q_OBJECT
+    // Q_DISABLE_COPY(EditTSDialog);
 
 public:
-  explicit EditTSDialog(DataModel::TestSuite *ts, QWidget *parent = 0);
-  virtual ~EditTSDialog();
+    explicit EditTSDialog(DataModel::TestSuite *ts, QWidget *parent = 0);
+    virtual ~EditTSDialog();
 
 private slots:
-  void on_pb_aut_clicked();
+    void on_pb_aut_clicked();
 
-  void on_buttonBox_accepted();
+    void on_buttonBox_accepted();
 
-  void on_buttonBox_rejected();
+    void on_buttonBox_rejected();
 
-  void on_le_tsName_editingFinished();
+    void on_le_tsName_editingFinished();
 
-  void on_pb_deleteTestcase_clicked();
+    void on_pb_deleteTestcase_clicked();
 
 private:
-  Ui::EditTSDialog *m_ui;
-  // QString _tsPath;
-  // QString _autPath;
-  // QString _tsName;
-  QSettings _settings;
-  DataModel::TestSuite *_ts;
+    Ui::EditTSDialog *m_ui;
+    // QString _tsPath;
+    // QString _autPath;
+    // QString _tsName;
+    QSettings _settings;
+    DataModel::TestSuite *_ts;
 };
 
 #endif // EditTSDialog_H

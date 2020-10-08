@@ -28,7 +28,7 @@ EventConsumer::EventConsumer()
 }
 
 
-void EventConsumer::sendNewTestItem(DataModel::TestItem& ti)
+void EventConsumer::sendNewTestItem(DataModel::TestItem &ti)
 {
     emit newTestItem(ti);
 }

@@ -29,32 +29,32 @@
 #include <QObject>
 
 PreloadingControl::PreloadingControl(EventConsumer *ec, EventExecutor *ex) {
-  // attach specific consumer
-  assert(ec);
-  test_thread_ = new QThread;
-  _event_consumer = ec;
-  // attach specific executor
-  assert(ex);
-  _event_executor = ex;
+    // attach specific consumer
+    assert(ec);
+    test_thread_ = new QThread;
+    _event_consumer = ec;
+    // attach specific executor
+    assert(ex);
+    _event_executor = ex;
 }
 
 ///
 /// preload init method that has to be called
 ///
 void PreloadingControl::initPreload() {
-  // create a new Preload Controller
-  PreloadController *pc =
-      new PreloadController(this, _event_consumer, _event_executor);
-  pc->initialize();
-  pc->moveToThread(test_thread_);
+    // create a new Preload Controller
+    PreloadController *pc =
+            new PreloadController(this, _event_consumer, _event_executor);
+    pc->initialize();
+    pc->moveToThread(test_thread_);
 
-  //  QObject::connect(test_thread_, SIGNAL(started()), pc, SLOT(process()));
-  //  QObject::connect(pc, SIGNAL(finished()), test_thread_, SLOT(quit()));
-  //  QObject::connect(pc, SIGNAL(finished()), pc, SLOT(deleteLater()));
-  //  QObject::connect(test_thread_, SIGNAL(finished()), test_thread_,
-  //                   SLOT(deleteLater()));
-  test_thread_->start();
+    //  QObject::connect(test_thread_, SIGNAL(started()), pc, SLOT(process()));
+    //  QObject::connect(pc, SIGNAL(finished()), test_thread_, SLOT(quit()));
+    //  QObject::connect(pc, SIGNAL(finished()), pc, SLOT(deleteLater()));
+    //  QObject::connect(test_thread_, SIGNAL(finished()), test_thread_,
+    //                   SLOT(deleteLater()));
+    test_thread_->start();
 
-  DEBUG(D_PRELOAD, "(PreloadingControl::initPreload) Preload Controller "
-                   "instance initiallized.");
+    DEBUG(D_PRELOAD, "(PreloadingControl::initPreload) Preload Controller "
+          "instance initiallized.");
 }

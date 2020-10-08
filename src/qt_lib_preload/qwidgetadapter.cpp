@@ -50,7 +50,7 @@ QWidgetAdapterManager::QWidgetAdapterManager()
 }
 
 //add adapter
-void QWidgetAdapterManager::addAdapter(QWidgetAdapter* qwa)
+void QWidgetAdapterManager::addAdapter(QWidgetAdapter *qwa)
 {
     assert(qwa);
     adapters_[qwa->className()] = qwa;
@@ -58,7 +58,7 @@ void QWidgetAdapterManager::addAdapter(QWidgetAdapter* qwa)
 
 //check if sensitive and returns an
 //adapter if true (null if not)
-QWidgetAdapter* QWidgetAdapterManager::isSensitive(QWidget* w)
+QWidgetAdapter *QWidgetAdapterManager::isSensitive(QWidget *w)
 {
     //get the name of the class
     std::string wclass = w->metaObject()->className();
@@ -69,7 +69,7 @@ QWidgetAdapter* QWidgetAdapterManager::isSensitive(QWidget* w)
     if (it != adapters_.end())
     {
         //and the widget can be set...
-        QWidgetAdapter* adapter = *it->second;
+        QWidgetAdapter *adapter = *it->second;
         if (adapter->setWidget(w))
         {
             return adapter;
@@ -90,9 +90,9 @@ QComboBoxAdapter::QComboBoxAdapter()
 }
 
 //config methods
-bool QComboBoxAdapter::setWidget(QWidget* w)
+bool QComboBoxAdapter::setWidget(QWidget *w)
 {
-    widget_ = dynamic_cast<QComboBox*>(w);
+    widget_ = dynamic_cast<QComboBox *>(w);
     return widget_;
 }
 
@@ -108,7 +108,7 @@ std::string QComboBoxAdapter::sensitiveValue()
     return boost::lexical_cast<std::string>(widget_->currentIndex());
 }
 
-void QComboBoxAdapter::applySensitiveValue(const std::string& s)
+void QComboBoxAdapter::applySensitiveValue(const std::string &s)
 {
     assert(widget_);
     widget_->setCurrentIndex(boost::lexical_cast<int>(s));
@@ -125,9 +125,9 @@ QFontComboBoxAdapter::QFontComboBoxAdapter()
 }
 
 //config methods
-bool QFontComboBoxAdapter::setWidget(QWidget* w)
+bool QFontComboBoxAdapter::setWidget(QWidget *w)
 {
-    widget_ = dynamic_cast<QFontComboBox*>(w);
+    widget_ = dynamic_cast<QFontComboBox *>(w);
     return widget_;
 }
 
@@ -147,7 +147,7 @@ std::string QAbstractSliderAdapter::sensitiveValue()
     return boost::lexical_cast<std::string>(widget_->value());
 }
 
-void QAbstractSliderAdapter::applySensitiveValue(const std::string& s)
+void QAbstractSliderAdapter::applySensitiveValue(const std::string &s)
 {
     assert(widget_);
     widget_->setValue(boost::lexical_cast<int>(s));
@@ -164,9 +164,9 @@ QDialAdapter::QDialAdapter()
 }
 
 //config methods
-bool QDialAdapter::setWidget(QWidget* w)
+bool QDialAdapter::setWidget(QWidget *w)
 {
-    widget_ = dynamic_cast<QDial*>(w);
+    widget_ = dynamic_cast<QDial *>(w);
     return widget_;
 }
 
@@ -186,9 +186,9 @@ QSpinBoxAdapter::QSpinBoxAdapter()
 }
 
 //config methods
-bool QSpinBoxAdapter::setWidget(QWidget* w)
+bool QSpinBoxAdapter::setWidget(QWidget *w)
 {
-    widget_ = dynamic_cast<QSpinBox*>(w);
+    widget_ = dynamic_cast<QSpinBox *>(w);
     return widget_;
 }
 
@@ -204,7 +204,7 @@ std::string QSpinBoxAdapter::sensitiveValue()
     return boost::lexical_cast<std::string>(widget_->value());
 }
 
-void QSpinBoxAdapter::applySensitiveValue(const std::string& s)
+void QSpinBoxAdapter::applySensitiveValue(const std::string &s)
 {
     assert(widget_);
     widget_->setValue(boost::lexical_cast<int>(s));
@@ -221,9 +221,9 @@ QDoubleSpinBoxAdapter::QDoubleSpinBoxAdapter()
 }
 
 //config methods
-bool QDoubleSpinBoxAdapter::setWidget(QWidget* w)
+bool QDoubleSpinBoxAdapter::setWidget(QWidget *w)
 {
-    widget_ = dynamic_cast<QDoubleSpinBox*>(w);
+    widget_ = dynamic_cast<QDoubleSpinBox *>(w);
     return widget_;
 }
 
@@ -239,7 +239,7 @@ std::string QDoubleSpinBoxAdapter::sensitiveValue()
     return boost::lexical_cast<std::string>(widget_->value());
 }
 
-void QDoubleSpinBoxAdapter::applySensitiveValue(const std::string& s)
+void QDoubleSpinBoxAdapter::applySensitiveValue(const std::string &s)
 {
     assert(widget_);
     widget_->setValue(boost::lexical_cast<double>(s));
@@ -257,9 +257,9 @@ QDateTimeEditAdapter::QDateTimeEditAdapter()
 
 
 //config methods
-bool QDateTimeEditAdapter::setWidget(QWidget* w)
+bool QDateTimeEditAdapter::setWidget(QWidget *w)
 {
-    widget_ = dynamic_cast<QDateTimeEdit*>(w);
+    widget_ = dynamic_cast<QDateTimeEdit *>(w);
     return widget_;
 }
 
@@ -276,7 +276,7 @@ std::string QDateTimeEditAdapter::sensitiveValue()
     return widget_->dateTime().toString(Qt::ISODate).toStdString();
 }
 
-void QDateTimeEditAdapter::applySensitiveValue(const std::string& s)
+void QDateTimeEditAdapter::applySensitiveValue(const std::string &s)
 {
     assert(widget_);
     widget_->dateTime().fromString(QString(s.c_str()),Qt::ISODate);
@@ -294,9 +294,9 @@ QDateEditAdapter::QDateEditAdapter()
 
 
 //config methods
-bool QDateEditAdapter::setWidget(QWidget* w)
+bool QDateEditAdapter::setWidget(QWidget *w)
 {
-    widget_ = dynamic_cast<QDateEdit*>(w);
+    widget_ = dynamic_cast<QDateEdit *>(w);
     return widget_;
 }
 
@@ -313,7 +313,7 @@ std::string QDateEditAdapter::sensitiveValue()
     return widget_->date().toString(Qt::ISODate).toStdString();
 }
 
-void QDateEditAdapter::applySensitiveValue(const std::string& s)
+void QDateEditAdapter::applySensitiveValue(const std::string &s)
 {
     assert(widget_);
     widget_->date().fromString(QString(s.c_str()),Qt::ISODate);
@@ -330,9 +330,9 @@ QTimeEditAdapter::QTimeEditAdapter()
 }
 
 //config methods
-bool QTimeEditAdapter::setWidget(QWidget* w)
+bool QTimeEditAdapter::setWidget(QWidget *w)
 {
-    widget_ = dynamic_cast<QTimeEdit*>(w);
+    widget_ = dynamic_cast<QTimeEdit *>(w);
     return widget_;
 }
 
@@ -348,7 +348,7 @@ std::string QTimeEditAdapter::sensitiveValue()
     return widget_->time().toString(Qt::ISODate).toStdString();
 }
 
-void QTimeEditAdapter::applySensitiveValue(const std::string& s)
+void QTimeEditAdapter::applySensitiveValue(const std::string &s)
 {
     assert(widget_);
     widget_->time().fromString(QString(s.c_str()),Qt::ISODate);

@@ -27,8 +27,8 @@
 #include <QLabel>
 
 GeneralInputDialog::GeneralInputDialog(QWidget *parent) :
-        QDialog(parent),
-        m_ui(new Ui::GeneralInputDialog)
+    QDialog(parent),
+    m_ui(new Ui::GeneralInputDialog)
 {
     m_ui->setupUi(this);
 }
@@ -41,18 +41,18 @@ GeneralInputDialog::~GeneralInputDialog()
 void GeneralInputDialog::changeEvent(QEvent *e)
 {
     switch (e->type()) {
-    case QEvent::LanguageChange:
-        m_ui->retranslateUi(this);
-        break;
-    default:
-        break;
+        case QEvent::LanguageChange:
+            m_ui->retranslateUi(this);
+            break;
+        default:
+            break;
     }
 }
 
 ///
 /// add element
 ///
-void GeneralInputDialog::addElement(const QString& text)
+void GeneralInputDialog::addElement(const QString &text)
 {
     QLineEdit *field = new QLineEdit();
     m_ui->formLayout->addRow(text, field);
@@ -62,7 +62,7 @@ void GeneralInputDialog::addElement(const QString& text)
 ///
 /// get data
 ///
-QString GeneralInputDialog::getData(const QString& text)
+QString GeneralInputDialog::getData(const QString &text)
 {
     return elements_[text]->text();
 }
@@ -70,12 +70,12 @@ QString GeneralInputDialog::getData(const QString& text)
 ///
 /// static utilities
 ///
-QStringList GeneralInputDialog::askForValues(const QStringList& elements)
+QStringList GeneralInputDialog::askForValues(const QStringList &elements)
 {
     GeneralInputDialog *gid = new GeneralInputDialog(/**/);
 
     //add elements
-    foreach(QString s, elements)
+    foreach (QString s, elements)
     {
         gid->addElement(s);
     }
@@ -87,7 +87,7 @@ QStringList GeneralInputDialog::askForValues(const QStringList& elements)
     QStringList results;
     if (result)//OK
     {
-        foreach(QString s, elements)
+        foreach (QString s, elements)
         {
             results << gid->getData(s);
         }

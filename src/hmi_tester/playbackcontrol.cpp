@@ -26,7 +26,7 @@
 #include "debug.h"
 #include <boost/ref.hpp>
 
-PlaybackControl::PlaybackControl(Comm *c, PlaybackObserver* pc)
+PlaybackControl::PlaybackControl(Comm *c, PlaybackObserver *pc)
     : comm_ (c), observer_ (pc)
 {
 }
@@ -41,7 +41,7 @@ PlaybackControl::~PlaybackControl()
 /// execution process control
 ///
 /// ///
-bool PlaybackControl::runTestCase(DataModel::TestCase* tc, float speed)
+bool PlaybackControl::runTestCase(DataModel::TestCase *tc, float speed)
 {
     // //execution thread should exist and be stoped
     // if (!executionThread_.get())
@@ -95,7 +95,7 @@ bool PlaybackControl::stopExecution()
 {
     //it should be running or paused
     if (executionThread_->isRunning()
-            || executionThread_->isPaused())
+        || executionThread_->isPaused())
     {
         DEBUG(D_PLAYBACK, "(PlaybackControl::stopExecution)");
         executionThread_->stop();
@@ -113,7 +113,7 @@ void PlaybackControl::applicationFinished()
 {
     //it should be running or paused
     if (executionThread_->isRunning()
-            || executionThread_->isPaused())
+        || executionThread_->isPaused())
     {
         executionThread_->applicationFinished();
 

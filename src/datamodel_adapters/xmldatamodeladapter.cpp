@@ -75,11 +75,10 @@ const QString ENDs = "/>\n";
 ///
 /// ///
 
-DataModel::TestSuite*
-        XMLDataModelAdapter::file2testSuite(const std::string& filename)
-        throw (DataModelAdapter::conversion_error_exception)
+DataModel::TestSuite *XMLDataModelAdapter::file2testSuite(const std::string &filename)
+throw (DataModelAdapter::conversion_error_exception)
 {
-    DataModel::TestSuite* tsuite = new DataModel::TestSuite();
+    DataModel::TestSuite *tsuite = new DataModel::TestSuite();
 
     ///1. create a DOM document from a file
     QDomDocument doc ( "mydocument" );
@@ -94,7 +93,8 @@ DataModel::TestSuite*
     if ( !doc.setContent ( &file ) )
     {
         file.close();
-        std::cout << "(XMLDataModelAdapter::file2testSuite) ERROR while setting the content from file " << filename << "." << std::endl;
+        std::cout << "(XMLDataModelAdapter::file2testSuite) ERROR while setting the content from file " << filename << "." <<
+                  std::endl;
         throw DataModelAdapter::conversion_error_exception();
     }
     file.close();
@@ -135,7 +135,7 @@ DataModel::TestSuite*
             //TestCase content
             else if ( e1.tagName() == TESTCASE )
             {
-                DataModel::TestCase* tcase = new DataModel::TestCase();
+                DataModel::TestCase *tcase = new DataModel::TestCase();
 
                 for ( QDomNode n2 = n1.firstChild(); !n2.isNull(); n2 = n2.nextSibling() )
                 {
@@ -164,7 +164,7 @@ DataModel::TestSuite*
                         //TestItem content
                         else if ( e2.tagName() == TESTITEM )
                         {
-                            DataModel::TestItem* titem = new DataModel::TestItem();
+                            DataModel::TestItem *titem = new DataModel::TestItem();
 
                             for ( QDomNode n3 = n2.firstChild(); !n3.isNull(); n3 = n3.nextSibling() )
                             {
@@ -234,8 +234,8 @@ DataModel::TestSuite*
 /// TestSuite to XML File
 ///
 /// ///
-void XMLDataModelAdapter::testSuite2file(const DataModel::TestSuite& ts,
-                                         const std::string& filename)
+void XMLDataModelAdapter::testSuite2file(const DataModel::TestSuite &ts,
+                                         const std::string &filename)
 throw (DataModelAdapter::conversion_error_exception)
 {
     //geting the content of the file
@@ -261,7 +261,7 @@ throw (DataModelAdapter::conversion_error_exception)
 /// TestBase
 ///
 
-QString XMLDataModelAdapter::_visit_TestBase (const DataModel::TestBase& tc)
+QString XMLDataModelAdapter::_visit_TestBase (const DataModel::TestBase &tc)
 {
     QString xml;
 
@@ -270,10 +270,10 @@ QString XMLDataModelAdapter::_visit_TestBase (const DataModel::TestBase& tc)
     ///
 
     DataModel::KeyValueMap::const_iterator it;
-    const DataModel::KeyValueMap& kv1 = tc.dataMap();
+    const DataModel::KeyValueMap &kv1 = tc.dataMap();
 
     //data
-    for(it= kv1.begin(); it != kv1.end(); ++it)
+    for (it= kv1.begin(); it != kv1.end(); ++it)
     {
         xml += BEGo + DATA_VALUE + " " +
                KEY + "=\"" + QString(it->first.c_str()) + "\"" + " " +
@@ -281,10 +281,10 @@ QString XMLDataModelAdapter::_visit_TestBase (const DataModel::TestBase& tc)
                ENDs;
     }
 
-    const DataModel::KeyValueMap& kv2 = tc.metadataMap();
+    const DataModel::KeyValueMap &kv2 = tc.metadataMap();
 
     //meta
-    for(it= kv2.begin(); it != kv2.end(); ++it)
+    for (it= kv2.begin(); it != kv2.end(); ++it)
     {
         xml += BEGo + META_VALUE + " " +
                KEY + "=\"" + QString(it->first.c_str()) + "\"" +
@@ -298,12 +298,12 @@ QString XMLDataModelAdapter::_visit_TestBase (const DataModel::TestBase& tc)
 ///
 /// TestSuite
 ///
-QString XMLDataModelAdapter::pre_TestSuite(const DataModel::TestSuite&)
+QString XMLDataModelAdapter::pre_TestSuite(const DataModel::TestSuite &)
 {
     return BEGo + TESTSUITE + ENDc;
 }
 
-QString XMLDataModelAdapter::visit_TestSuite(const DataModel::TestSuite& ts)
+QString XMLDataModelAdapter::visit_TestSuite(const DataModel::TestSuite &ts)
 {
     QString xml;
 
@@ -321,9 +321,9 @@ QString XMLDataModelAdapter::visit_TestSuite(const DataModel::TestSuite& ts)
     xml += _visit_TestBase (ts);
 
     // children
-    const DataModel::TestSuite::TestCaseList& tcl = ts.testCases();
+    const DataModel::TestSuite::TestCaseList &tcl = ts.testCases();
     DataModel::TestSuite::TestCaseList::const_iterator it2;
-    for(it2= tcl.begin(); it2 != tcl.end(); ++it2)
+    for (it2= tcl.begin(); it2 != tcl.end(); ++it2)
     {
         xml += pre_TestCase(*it2) + visit_TestCase(*it2) + post_TestCase(*it2);
     }
@@ -332,7 +332,7 @@ QString XMLDataModelAdapter::visit_TestSuite(const DataModel::TestSuite& ts)
     return xml;
 }
 
-QString XMLDataModelAdapter::post_TestSuite(const DataModel::TestSuite&)
+QString XMLDataModelAdapter::post_TestSuite(const DataModel::TestSuite &)
 {
     return BEGc + TESTSUITE + ENDc;
 }
@@ -340,12 +340,12 @@ QString XMLDataModelAdapter::post_TestSuite(const DataModel::TestSuite&)
 ///
 /// TestCase
 ///
-QString XMLDataModelAdapter::pre_TestCase(const DataModel::TestCase&)
+QString XMLDataModelAdapter::pre_TestCase(const DataModel::TestCase &)
 {
     return BEGo + TESTCASE + ENDc;
 }
 
-QString XMLDataModelAdapter::visit_TestCase(const DataModel::TestCase& tc)
+QString XMLDataModelAdapter::visit_TestCase(const DataModel::TestCase &tc)
 {
     QString xml;
 
@@ -358,9 +358,9 @@ QString XMLDataModelAdapter::visit_TestCase(const DataModel::TestCase& tc)
     xml += _visit_TestBase (tc);
 
     // children
-    const DataModel::TestCase::TestItemList& il = tc.testItemList();
+    const DataModel::TestCase::TestItemList &il = tc.testItemList();
     DataModel::TestCase::TestItemList::const_iterator it2;
-    for(it2= il.begin(); it2 != il.end(); ++it2)
+    for (it2= il.begin(); it2 != il.end(); ++it2)
     {
         xml += pre_TestItem(*it2) + visit_TestItem(*it2) + post_TestItem(*it2);
     }
@@ -369,7 +369,7 @@ QString XMLDataModelAdapter::visit_TestCase(const DataModel::TestCase& tc)
     return xml;
 }
 
-QString XMLDataModelAdapter::post_TestCase(const DataModel::TestCase&)
+QString XMLDataModelAdapter::post_TestCase(const DataModel::TestCase &)
 {
     return BEGc + TESTCASE + ENDc;
 }
@@ -377,12 +377,12 @@ QString XMLDataModelAdapter::post_TestCase(const DataModel::TestCase&)
 ///
 /// TestItem
 ///
-QString XMLDataModelAdapter::pre_TestItem(const DataModel::TestItem&)
+QString XMLDataModelAdapter::pre_TestItem(const DataModel::TestItem &)
 {
     return BEGo + TESTITEM + ENDc;
 }
 
-QString XMLDataModelAdapter::visit_TestItem(const DataModel::TestItem& ti)
+QString XMLDataModelAdapter::visit_TestItem(const DataModel::TestItem &ti)
 {
     QString xml;
 
@@ -408,7 +408,7 @@ QString XMLDataModelAdapter::visit_TestItem(const DataModel::TestItem& ti)
     return xml;
 }
 
-QString XMLDataModelAdapter::post_TestItem(const DataModel::TestItem&)
+QString XMLDataModelAdapter::post_TestItem(const DataModel::TestItem &)
 {
     return BEGc + TESTITEM + ENDc;
 }

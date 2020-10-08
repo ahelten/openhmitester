@@ -33,6 +33,7 @@ class WinPreloadingAction : public PreloadingAction
     Q_OBJECT
 
 public:
+    
     WinPreloadingAction();
 
 

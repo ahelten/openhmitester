@@ -32,27 +32,27 @@ class NewTCDialog;
 }
 
 class NewTCDialog : public QDialog {
-  Q_OBJECT
-  // Q_DISABLE_COPY(NewTCDialog);
+    Q_OBJECT
+    // Q_DISABLE_COPY(NewTCDialog);
 
 public:
-  explicit NewTCDialog(QWidget *parent = 0);
-  virtual ~NewTCDialog();
+    explicit NewTCDialog(QWidget *parent = 0);
+    virtual ~NewTCDialog();
 
 public:
-  QString &getTestcaseName();
+    QString &getTestcaseName();
 
 private slots:
 
-  void on_buttonBox_accepted();
+    void on_buttonBox_accepted();
 
-  void on_buttonBox_rejected();
+    void on_buttonBox_rejected();
 
-  void on_le_tcName_editingFinished();
+    void on_le_tcName_editingFinished();
 
 private:
-  Ui::NewTCDialog *m_ui;
-  QString _tcName;
+    Ui::NewTCDialog *m_ui;
+    QString _tcName;
 };
 
 #endif // NewTCDialog_H

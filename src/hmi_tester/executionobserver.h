@@ -27,8 +27,8 @@
 class PlaybackObserver {
 
 public:
-  virtual void completedPercentageNotification(int) = 0;
-  virtual void executionThreadTerminated(int) = 0;
+    virtual void completedPercentageNotification(int) = 0;
+    virtual void executionThreadTerminated(int) = 0;
 };
 
 #endif

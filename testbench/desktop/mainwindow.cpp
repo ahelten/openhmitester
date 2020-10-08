@@ -18,11 +18,11 @@ void MainWindow::changeEvent(QEvent *e)
 {
     QMainWindow::changeEvent(e);
     switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
+        case QEvent::LanguageChange:
+            ui->retranslateUi(this);
+            break;
+        default:
+            break;
     }
 }
 
@@ -117,7 +117,8 @@ void MainWindow::on_pushButton_7_clicked()
         ui->checkBox->setChecked(false);
         ui->checkBox_2->setChecked(false);
         ui->checkBox_3->setChecked(false);
-        ui->checkBox_4->setChecked(true);}
+        ui->checkBox_4->setChecked(true);
+    }
     else if (selected == 2)
     {
         ui->dial_5->setValue(50);
@@ -126,7 +127,8 @@ void MainWindow::on_pushButton_7_clicked()
         ui->checkBox->setChecked(true);
         ui->checkBox_2->setChecked(true);
         ui->checkBox_3->setChecked(true);
-        ui->checkBox_4->setChecked(true);}
+        ui->checkBox_4->setChecked(true);
+    }
     else if (selected == 3)
     {
         ui->dial_5->setValue(90);

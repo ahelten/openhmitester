@@ -52,8 +52,8 @@ const int CTI_PAUSE_RECORDING = 23;
 ///
 class ControlTestItem : public DataModel::TestItem {
 public:
-  // constructor
-  ControlTestItem();
+    // constructor
+    ControlTestItem();
 };
 
 ///
@@ -62,12 +62,12 @@ public:
 const std::string CTI_Error_Description = "desc";
 class CTI_Error : public ControlTestItem {
 public:
-  // constructor
-  CTI_Error();
+    // constructor
+    CTI_Error();
 
-  // error message
-  void description(const std::string &);
-  const std::string description();
+    // error message
+    void description(const std::string &);
+    const std::string description();
 };
 
 ///
@@ -75,8 +75,8 @@ public:
 ///
 class CTI_StartPlayback : public ControlTestItem {
 public:
-  // constructor
-  CTI_StartPlayback();
+    // constructor
+    CTI_StartPlayback();
 };
 
 ///
@@ -84,8 +84,8 @@ public:
 ///
 class CTI_StopPlayback : public ControlTestItem {
 public:
-  // constructor
-  CTI_StopPlayback();
+    // constructor
+    CTI_StopPlayback();
 };
 
 ///
@@ -93,8 +93,8 @@ public:
 ///
 class CTI_PausePlayback : public ControlTestItem {
 public:
-  // constructor
-  CTI_PausePlayback();
+    // constructor
+    CTI_PausePlayback();
 };
 
 ///
@@ -102,8 +102,8 @@ public:
 ///
 class CTI_StartRecording : public ControlTestItem {
 public:
-  // constructor
-  CTI_StartRecording();
+    // constructor
+    CTI_StartRecording();
 };
 
 ///
@@ -111,8 +111,8 @@ public:
 ///
 class CTI_StopRecording : public ControlTestItem {
 public:
-  // constructor
-  CTI_StopRecording();
+    // constructor
+    CTI_StopRecording();
 };
 
 ///
@@ -120,8 +120,8 @@ public:
 ///
 class CTI_PauseRecording : public ControlTestItem {
 public:
-  // constructor
-  CTI_PauseRecording();
+    // constructor
+    CTI_PauseRecording();
 };
 
 ///
@@ -129,8 +129,8 @@ public:
 ///
 class CTI_EventExecuted : public ControlTestItem {
 public:
-  // constructor
-  CTI_EventExecuted();
+    // constructor
+    CTI_EventExecuted();
 };
 
 } // namespace Control

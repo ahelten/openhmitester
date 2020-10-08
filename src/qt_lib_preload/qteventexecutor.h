@@ -50,17 +50,17 @@ public:
     ///
     /// this method is called when a new testItem arrives
     ///
-    virtual void handleNewTestItemReceived(DataModel::TestItem*);
+    virtual void handleNewTestItemReceived(DataModel::TestItem *);
 
     ///
     /// event executors
     ///
-    void executeMousePressEvent(QOE::QOE_MousePress*);
-    void executeMouseReleaseEvent(QOE::QOE_MouseRelease*);
-    void executeMouseDoubleEvent(QOE::QOE_MouseDouble*);
-    void executeKeyPressEvent(QOE::QOE_KeyPress*);
-    void executeCloseEvent(QOE::QOE_WindowClose*);
-    void executeWheelEvent(QOE::QOE_MouseWheel*);
+    void executeMousePressEvent(QOE::QOE_MousePress *);
+    void executeMouseReleaseEvent(QOE::QOE_MouseRelease *);
+    void executeMouseDoubleEvent(QOE::QOE_MouseDouble *);
+    void executeKeyPressEvent(QOE::QOE_KeyPress *);
+    void executeCloseEvent(QOE::QOE_WindowClose *);
+    void executeWheelEvent(QOE::QOE_MouseWheel *);
     //void executeKeyReleaseEvent ();
     //void executeShowEvent ();
     //void executeSpecialShowEvent ();
@@ -81,17 +81,17 @@ private:
     const int MOUSE_MOVE_DELAY_MS = 400;
     const int MOUSE_MOVE_STEPS = 18;
     QPoint _last_mouse_pos;
-    void _simulateMouseMove(const QPoint&, const QPoint&, QWidget *hoverOnWidget = NULL);
+    void _simulateMouseMove(const QPoint &, const QPoint &, QWidget *hoverOnWidget = NULL);
     //void _simulateMouseHover( QWidget*, const QPoint&, const QPoint&);
 
     ///
     /// execution support
     ///
-    QWidget* _getWidget(QOE::QOE_Base*);
-    void _preExecutionNoMouse(QOE::QOE_Base*, QWidget*);
-    void _preExecutionWithMouseMove(QOE::QOE_Base*, QWidget*);
-    void _preExecutionWithMouseHover(QOE::QOE_Base*, QWidget*);
-    void _postExecution(QOE::QOE_Base*, QWidget*);
+    QWidget *_getWidget(QOE::QOE_Base *);
+    void _preExecutionNoMouse(QOE::QOE_Base *, QWidget *);
+    void _preExecutionWithMouseMove(QOE::QOE_Base *, QWidget *);
+    void _preExecutionWithMouseHover(QOE::QOE_Base *, QWidget *);
+    void _postExecution(QOE::QOE_Base *, QWidget *);
 
     ///
     ///widget adapters manager

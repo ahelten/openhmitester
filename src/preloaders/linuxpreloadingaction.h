@@ -33,6 +33,7 @@ class LinuxPreloadingAction : public PreloadingAction
     Q_OBJECT
 
 public:
+
     LinuxPreloadingAction();
 
 

@@ -32,8 +32,8 @@
 #include <QFileInfo>
 
 NewTSDialog::NewTSDialog(QWidget *parent) :
-        QDialog(parent),
-        m_ui(new Ui::NewTSDialog)
+    QDialog(parent),
+    m_ui(new Ui::NewTSDialog)
 {
     m_ui->setupUi(this);
 }
@@ -47,17 +47,17 @@ NewTSDialog::~NewTSDialog()
 /// accessors
 ///
 
-QString& NewTSDialog::getTestsuiteName()
+QString &NewTSDialog::getTestsuiteName()
 {
     return _tsName;
 }
 
-QString& NewTSDialog::getTestsuitePath()
+QString &NewTSDialog::getTestsuitePath()
 {
     return _tsPath;
 }
 
-QString& NewTSDialog::getAUTPath()
+QString &NewTSDialog::getAUTPath()
 {
     return _autPath;
 }
@@ -89,10 +89,10 @@ void NewTSDialog::on_pb_aut_clicked()
 
     //ask for the binary
     QString aux = QtUtils::openFileDialog("Please, select the AUT (Application Under Test):",
-                                         lastAutDirectory,
-                                         "*");
+                                          lastAutDirectory,
+                                          "*");
 
-    if (aux != NULL && aux != ""){
+    if (aux != NULL && aux != "") {
         // check is is a valid binary
         if (!QtUtils::isExecutable(aux))
         {
@@ -117,10 +117,10 @@ void NewTSDialog::on_pb_tsPath_clicked()
     QString lastSaveDir = _settings.value(SETT_LAST_SAVE_DIR, QDir::homePath()).toString();
     //ask for the location
     QString aux = QtUtils::saveFileDialog("Please, select a path and a name to store the TestSuite:",
-                                   lastSaveDir + QDir::separator() + m_ui->le_tsName->text().toLower() + "." + OHT_FILE_EXTENSION,
-                                   "*." OHT_FILE_EXTENSION);
+                                          lastSaveDir + QDir::separator() + m_ui->le_tsName->text().toLower() + "." + OHT_FILE_EXTENSION,
+                                          "*." OHT_FILE_EXTENSION);
 
-    if (aux != NULL && aux != ""){
+    if (aux != NULL && aux != "") {
         _tsPath = aux;
         m_ui->le_tsPath->setText(_tsPath);
         QFileInfo fi(aux);
@@ -137,15 +137,15 @@ void NewTSDialog::on_buttonBox_accepted()
     bool error = false;
 
     // check valid values
-    if (_tsName == ""){
+    if (_tsName == "") {
         QtUtils::newErrorDialog("Test suite name must be a valid name.");
         error = true;
     }
-    if (_autPath == ""){
+    if (_autPath == "") {
         QtUtils::newErrorDialog("AUT must be a valid application to test.");
         error = true;
     }
-    if (_tsPath == ""){
+    if (_tsPath == "") {
         QtUtils::newErrorDialog("A valid path must be selected to store the test suite.");
         error = true;
     }

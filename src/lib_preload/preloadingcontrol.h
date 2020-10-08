@@ -29,17 +29,17 @@
 
 class PreloadingControl {
 public:
-  /// constructor
-  PreloadingControl(EventConsumer *ec, EventExecutor *ex);
-  virtual ~PreloadingControl() = default;
+    /// constructor
+    PreloadingControl(EventConsumer *ec, EventExecutor *ex);
+    virtual ~PreloadingControl() = default;
 
-  /// preload init method that has to be called
-  void initPreload();
+    /// preload init method that has to be called
+    void initPreload();
 
 private:
-  EventConsumer *_event_consumer;
-  EventExecutor *_event_executor;
-  QThread *test_thread_;
+    EventConsumer *_event_consumer;
+    EventExecutor *_event_executor;
+    QThread *test_thread_;
 };
 
 #endif // PRELOADINGCONTROL_H

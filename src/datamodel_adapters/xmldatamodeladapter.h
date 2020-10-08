@@ -33,29 +33,29 @@ public:
 
     virtual std::string id();
 
-    virtual DataModel::TestSuite* file2testSuite(const std::string& filename)
+    virtual DataModel::TestSuite *file2testSuite(const std::string &filename)
     throw (conversion_error_exception);
 
-    virtual void testSuite2file(const DataModel::TestSuite&,
-                                const std::string& filename) throw (conversion_error_exception);
+    virtual void testSuite2file(const DataModel::TestSuite &,
+                                const std::string &filename) throw (conversion_error_exception);
 
     // XML Visitors
-    QString pre_TestSuite(const DataModel::TestSuite&);
-    QString visit_TestSuite(const DataModel::TestSuite&);
-    QString post_TestSuite(const DataModel::TestSuite&);
+    QString pre_TestSuite(const DataModel::TestSuite &);
+    QString visit_TestSuite(const DataModel::TestSuite &);
+    QString post_TestSuite(const DataModel::TestSuite &);
 
-    QString pre_TestCase(const DataModel::TestCase&);
-    QString visit_TestCase(const DataModel::TestCase&);
-    QString post_TestCase(const DataModel::TestCase&);
+    QString pre_TestCase(const DataModel::TestCase &);
+    QString visit_TestCase(const DataModel::TestCase &);
+    QString post_TestCase(const DataModel::TestCase &);
 
-    QString pre_TestItem(const DataModel::TestItem&);
-    QString visit_TestItem(const DataModel::TestItem&);
-    QString post_TestItem(const DataModel::TestItem&);
+    QString pre_TestItem(const DataModel::TestItem &);
+    QString visit_TestItem(const DataModel::TestItem &);
+    QString post_TestItem(const DataModel::TestItem &);
 
 
 
 protected:
-    QString _visit_TestBase (const DataModel::TestBase& tc);
+    QString _visit_TestBase (const DataModel::TestBase &tc);
 
 };
 

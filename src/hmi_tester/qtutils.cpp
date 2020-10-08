@@ -124,9 +124,9 @@ void QtUtils::newInfoDialog ( const QString &s )
 /// ///
 
 ///returns the path of the selected file (open)
-QString QtUtils::openFileDialog ( const QString& title,
-                                  const QString& dir,
-                                  const QString& ext )
+QString QtUtils::openFileDialog ( const QString &title,
+                                  const QString &dir,
+                                  const QString &ext )
 {
     return QFileDialog::getOpenFileName ( 0, title,
                                           dir,
@@ -134,9 +134,9 @@ QString QtUtils::openFileDialog ( const QString& title,
 }
 
 ///returns the path of the selected file (save)
-QString QtUtils::saveFileDialog( const QString& title,
-                                 const QString& dir,
-                                 const QString& ext )
+QString QtUtils::saveFileDialog( const QString &title,
+                                 const QString &dir,
+                                 const QString &ext )
 {
     return QFileDialog::getSaveFileName ( 0, title,
                                           dir,
@@ -144,8 +144,8 @@ QString QtUtils::saveFileDialog( const QString& title,
 }
 
 ///returns the selected path
-QString QtUtils::selectPathDialog( const QString& title,
-                                   const QString& dir)
+QString QtUtils::selectPathDialog( const QString &title,
+                                   const QString &dir)
 {
     return QFileDialog::getExistingDirectory (0,
                                               title,

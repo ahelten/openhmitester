@@ -42,9 +42,9 @@ std::string WinPreloadingAction::libPreloadPath()
 
 ///
 bool WinPreloadingAction::launchApplication ( const std::string &binaryPath,
-                                                const std::string &preloadLibraryPath,
-                                                const std::string &outputFile,
-                                                const std::string &errorFile) throw (bin_error_exception, lib_error_exception)
+                                              const std::string &preloadLibraryPath,
+                                              const std::string &outputFile,
+                                              const std::string &errorFile) throw (bin_error_exception, lib_error_exception)
 {
     //checking if the binary exists
     if ( !QtUtils::isExecutable ( QString (binaryPath.c_str()) ) )
@@ -58,10 +58,10 @@ bool WinPreloadingAction::launchApplication ( const std::string &binaryPath,
     process_.reset (new QProcess (this));
 
     // create dirs for logs and redirect process output
-    if (outputFile != ""){
+    if (outputFile != "") {
         assert(redirectStandarOutputToFile(outputFile));
     }
-    if (errorFile != ""){
+    if (errorFile != "") {
         assert(redirectStandarErrorToFile(errorFile));
     }
 
@@ -107,7 +107,7 @@ bool WinPreloadingAction::stopApplication ()
 /// private methods
 ///
 
-bool WinPreloadingAction::redirectStandarOutputToFile(const std::string& outputFile)
+bool WinPreloadingAction::redirectStandarOutputToFile(const std::string &outputFile)
 {
     if ( process_.get() && outputFile != "" )
     {
@@ -119,7 +119,7 @@ bool WinPreloadingAction::redirectStandarOutputToFile(const std::string& outputF
     return false;
 }
 
-bool WinPreloadingAction::redirectStandarErrorToFile(const std::string& errorFile)
+bool WinPreloadingAction::redirectStandarErrorToFile(const std::string &errorFile)
 {
     if ( process_.get() && errorFile != "" )
     {

@@ -178,14 +178,14 @@ void QtEventConsumer::handleMousePressEvent ( QObject *obj, QEvent *event )
 {
     // check the object
     QWidget *widget = isValidWidget(obj);
-    if (!widget){
+    if (!widget) {
         DEBUG(D_CONSUMER,"(QtEventConsumer::handleMousePressEvent) No widget to handle");
         return;
     }
 
     DEBUG(D_CONSUMER,"(QtEventConsumer::handleMousePressEvent)");
 
-    QMouseEvent *me = dynamic_cast< QMouseEvent*> ( event );
+    QMouseEvent *me = dynamic_cast< QMouseEvent *> ( event );
 
     //create the event
     QOE::QOE_MousePress qoe;
@@ -209,14 +209,14 @@ void QtEventConsumer::handleMouseReleaseEvent ( QObject *obj, QEvent *event )
 {
     // check the object
     QWidget *widget = isValidWidget(obj);
-    if (!widget){
+    if (!widget) {
         DEBUG(D_CONSUMER,"(QtEventConsumer::handleMouseReleaseEvent) No widget to handle");
         return;
     }
 
     DEBUG(D_CONSUMER,"(QtEventConsumer::handleMouseReleaseEvent)");
 
-    QMouseEvent *me = dynamic_cast< QMouseEvent*> ( event );
+    QMouseEvent *me = dynamic_cast< QMouseEvent *> ( event );
 
     //create the event
     QOE::QOE_MouseRelease qoe;
@@ -240,14 +240,14 @@ void QtEventConsumer::handleMouseDoubleEvent ( QObject *obj, QEvent *event )
 {
     // check the object
     QWidget *widget = isValidWidget(obj);
-    if (!widget){
+    if (!widget) {
         DEBUG(D_CONSUMER,"(QtEventConsumer::handleMouseDoubleEvent) No widget to handle");
         return;
     }
 
     DEBUG(D_CONSUMER,"(QtEventConsumer::handleMouseDoubleEvent)");
 
-    QMouseEvent *me = dynamic_cast< QMouseEvent*> ( event );
+    QMouseEvent *me = dynamic_cast< QMouseEvent *> ( event );
 
     //create the event
     QOE::QOE_MouseDouble qoe;
@@ -271,7 +271,7 @@ void QtEventConsumer::handleKeyPressEvent ( QObject *obj, QEvent *event )
 {
     // check the object
     QWidget *widget = isValidWidget(obj);
-    if (!widget){
+    if (!widget) {
         DEBUG(D_CONSUMER,"(QtEventConsumer::handleKeyPressEvent) No widget to handle");
         return;
     }
@@ -307,7 +307,7 @@ void QtEventConsumer::handleCloseEvent ( QObject *obj, QEvent *event )
 {
     // check the object
     QWidget *widget = isValidWidget(obj);
-    if (!widget){
+    if (!widget) {
         DEBUG(D_CONSUMER,"(QtEventConsumer::handleCloseEvent) No widget to handle");
         return;
     }
@@ -329,14 +329,14 @@ void QtEventConsumer::handleWheelEvent ( QObject *obj, QEvent *event )
 {
     // check the object
     QWidget *widget = isValidWidget(obj);
-    if (!widget){
+    if (!widget) {
         DEBUG(D_CONSUMER,"(QtEventConsumer::handleWheelEvent) No widget to handle");
         return;
     }
 
     DEBUG(D_CONSUMER,"(QtEventConsumer::handleWheelEvent)");
 
-    QWheelEvent *we = dynamic_cast<QWheelEvent*> ( event );
+    QWheelEvent *we = dynamic_cast<QWheelEvent *> ( event );
 
     //create the event
     QOE::QOE_MouseWheel qoe;
@@ -367,13 +367,13 @@ void QtEventConsumer::handleWheelEvent ( QObject *obj, QEvent *event )
 ///handler supporters
 ///
 
-void QtEventConsumer::completeBasicData(QOE::QOE_Base& qoe, QWidget* w, QMouseEvent* e)
-{DEBUG(D_CONSUMER,"(QtEventConsumer::handleWheelEvent)");
+void QtEventConsumer::completeBasicData(QOE::QOE_Base &qoe, QWidget *w, QMouseEvent *e)
+{   DEBUG(D_CONSUMER,"(QtEventConsumer::handleWheelEvent)");
     // complete widget information...
     completeBasicData(qoe,w);
 
     // complete event information...
-    if (e != NULL){
+    if (e != NULL) {
         qoe.x(e->x());
         qoe.y(e->y());
         qoe.globalX(e->globalX());
@@ -382,10 +382,10 @@ void QtEventConsumer::completeBasicData(QOE::QOE_Base& qoe, QWidget* w, QMouseEv
 
 }
 
-void QtEventConsumer::completeBasicData(QOE::QOE_Base& qoe, QWidget* w)
+void QtEventConsumer::completeBasicData(QOE::QOE_Base &qoe, QWidget *w)
 {
     // complete widget information...
-    if (w != NULL){
+    if (w != NULL) {
         qoe.widget(QWidgetUtils::getWidgetPath(w).toStdString());
         qoe.widgetWidth(w->width());
         qoe.widgetHeight(w->height());
@@ -399,9 +399,9 @@ void QtEventConsumer::completeBasicData(QOE::QOE_Base& qoe, QWidget* w)
     }
 }
 
-void QtEventConsumer::completeSensitiveData(QOE::QOE_Base& qoe, QWidget* widget)
+void QtEventConsumer::completeSensitiveData(QOE::QOE_Base &qoe, QWidget *widget)
 {
-    QWA::QWidgetAdapter* qwa = qwaManager_.isSensitive(widget);
+    QWA::QWidgetAdapter *qwa = qwaManager_.isSensitive(widget);
     //if the widget is sensitive, set the value in the event
     if (qwa != NULL)
     {
@@ -422,15 +422,15 @@ void QtEventConsumer::completeSensitiveData(QOE::QOE_Base& qoe, QWidget* widget)
 /// validation methods
 ///
 
-QWidget* QtEventConsumer::isValidWidget(QObject *obj)
+QWidget *QtEventConsumer::isValidWidget(QObject *obj)
 {
     // check the object
-    if (!obj->isWidgetType()){
+    if (!obj->isWidgetType()) {
         return NULL;
     }
 
     // check the widget
-    QWidget* w = dynamic_cast<QWidget*>(obj);
+    QWidget *w = dynamic_cast<QWidget *>(obj);
     _d("W > " << QWidgetUtils::getWidgetPath(w).toStdString());
     if (!w) {
         DEBUG(D_CONSUMER,"(QtEventConsumer::isValidWidget) Widget is null");
@@ -455,20 +455,20 @@ QWidget* QtEventConsumer::isValidWidget(QObject *obj)
 }
 
 
-bool QtEventConsumer::isValidQOE(QOE::QOE_Base& qoe)
+bool QtEventConsumer::isValidQOE(QOE::QOE_Base &qoe)
 {
     // check widget name
-    if (qoe.widget() == ""){
+    if (qoe.widget() == "") {
         DEBUG(D_CONSUMER,"(QtEventConsumer::isValidQOE) Invalid QOE: empty widget");
         return false;
     }
 
     // check valid sizes
-    if (qoe.widgetWidth() <= 0){
+    if (qoe.widgetWidth() <= 0) {
         DEBUG(D_CONSUMER,"(QtEventConsumer::isValidQOE) Invalid QOE: invalid w.width " << qoe.widgetWidth());
         return false;
     }
-    if (qoe.widgetHeight() <= 0){
+    if (qoe.widgetHeight() <= 0) {
         DEBUG(D_CONSUMER,"(QtEventConsumer::isValidQOE) Invalid QOE: invalid w.height " << qoe.widgetHeight());
         return false;
     }
@@ -477,14 +477,14 @@ bool QtEventConsumer::isValidQOE(QOE::QOE_Base& qoe)
 }
 
 
-bool QtEventConsumer::isValidQOEMouse(QOE::QOE_Mouse& qoe)
+bool QtEventConsumer::isValidQOEMouse(QOE::QOE_Mouse &qoe)
 {
     // check valid pointing
-    if (qoe.x() <= 0 || qoe.x() >= qoe.widgetWidth()){
+    if (qoe.x() <= 0 || qoe.x() >= qoe.widgetWidth()) {
         DEBUG(D_CONSUMER,"(QtEventConsumer::isValidQOE) Invalid QOE: invalid x " << qoe.x() << "," << qoe.widgetWidth());
         return false;
     }
-    if (qoe.y() <= 0 || qoe.y() >= qoe.widgetHeight()){
+    if (qoe.y() <= 0 || qoe.y() >= qoe.widgetHeight()) {
         DEBUG(D_CONSUMER,"(QtEventConsumer::isValidQOE) Invalid QOE: invalid y " << qoe.y() << "," << qoe.widgetHeight());
         return false;
     }
@@ -492,13 +492,13 @@ bool QtEventConsumer::isValidQOEMouse(QOE::QOE_Mouse& qoe)
     return true;
 }
 
-bool QtEventConsumer::isValidQOEKey(QOE::QOE_Key& qoe)
+bool QtEventConsumer::isValidQOEKey(QOE::QOE_Key &qoe)
 {
     // nothing
     return true;
 }
 
-bool QtEventConsumer::isValidQOEWindow(QOE::QOE_Window& qoe)
+bool QtEventConsumer::isValidQOEWindow(QOE::QOE_Window &qoe)
 {
     // nothing
     return true;
@@ -513,19 +513,19 @@ bool QtEventConsumer::filterKeyEvent (Qt::Key k)
 {
     ///FIXME review the filter
     /*
-   ctrl 16777249 - 67108864;
-   alt 16777251 - 134217728;
-   altgr 16781571 - 0;
-   shift 16777248 - 33554432;
-   windows 16777299 - 0;
-   Mayús 16777252 - 0;
-   Fs:
-   F1: 16777264 - 0
-   F12: 16777275 - 0
-   esc: 16777216
-   <: 60
-   >: 62
-   */
+    ctrl 16777249 - 67108864;
+    alt 16777251 - 134217728;
+    altgr 16781571 - 0;
+    shift 16777248 - 33554432;
+    windows 16777299 - 0;
+    Mayús 16777252 - 0;
+    Fs:
+    F1: 16777264 - 0
+    F12: 16777275 - 0
+    esc: 16777216
+    <: 60
+    >: 62
+    */
     //Filter cases
     if ( k == 16777216 /*esc*/ ||
          k == 60 /*<*/ ||
@@ -540,7 +540,7 @@ bool QtEventConsumer::filterKeyEvent (Qt::Key k)
          k >= 16777276/*lower limit*/ ||
          k == 9472
          || k == 183
-         ) return false;
+       ) return false;
     //if not filtered...
     return true;
 }

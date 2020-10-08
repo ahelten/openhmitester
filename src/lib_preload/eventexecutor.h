@@ -39,7 +39,7 @@ public:
     ///
     /// this method is called when a new testItem arrives
     ///
-    virtual void handleNewTestItemReceived(DataModel::TestItem*) = 0;
+    virtual void handleNewTestItemReceived(DataModel::TestItem *) = 0;
 
     ///
     ///execution process control methods

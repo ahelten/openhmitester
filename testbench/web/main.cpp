@@ -50,12 +50,12 @@ static void showHelp(QCommandLineParser &parser, const QString errorMessage = QS
         str << "<p>" << errorMessage << "</p>";
     str << "<pre>" << parser.helpText() << "</pre></body></html>";
     QMessageBox box(errorMessage.isEmpty() ? QMessageBox::Information : QMessageBox::Warning,
-        QGuiApplication::applicationDisplayName(), text, QMessageBox::Ok);
+                    QGuiApplication::applicationDisplayName(), text, QMessageBox::Ok);
     box.setTextInteractionFlags(Qt::TextBrowserInteraction);
     box.exec();
 }
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 

@@ -39,173 +39,173 @@
 class HMITesterControl;
 
 class ProcessControl : public QObject,
-                       public PlaybackObserver,
-                       public RecordingObserver {
+    public PlaybackObserver,
+    public RecordingObserver {
 
-  Q_OBJECT
+    Q_OBJECT
 
-  ///
-  /// type definition
-  ///
+    ///
+    /// type definition
+    ///
 public:
-  // process state
-  typedef enum {
-    INIT,
-    STOP,
-    RECORD,
-    PLAY,
-    PAUSE_PLAY,
-    PAUSE_RECORD
-  } OHTProcessState;
+    // process state
+    typedef enum {
+        INIT,
+        STOP,
+        RECORD,
+        PLAY,
+        PAUSE_PLAY,
+        PAUSE_RECORD
+    } OHTProcessState;
 
-  // process context
-  typedef struct {
-    bool keepAlive;
-    float speed;
-    bool showTesterOnTop;
-  } OHTProcessContext;
-
-public:
-  ProcessControl(PreloadingAction *pa, DataModelAdapter *dma);
-  ~ProcessControl();
-
-  void initialize();
-
-  void setGUIReference(HMITesterControl *);
-  HMITesterControl *setGUIReference() const;
+    // process context
+    typedef struct {
+        bool keepAlive;
+        float speed;
+        bool showTesterOnTop;
+    } OHTProcessContext;
 
 public:
-  ///
-  /// ExecutionObserver implementation
-  ///
-  virtual void executionThreadTerminated(int);
-  virtual void completedPercentageNotification(int);
+    ProcessControl(PreloadingAction *pa, DataModelAdapter *dma);
+    ~ProcessControl();
 
-  ///
-  /// RecordingObserver implementation
-  ///
-  virtual void testRecordingFinished(DataModel::TestCase *);
-  virtual void testItemsReceivedCounter(int);
+    void initialize();
+
+    void setGUIReference(HMITesterControl *);
+    HMITesterControl *setGUIReference() const;
+
+public:
+    ///
+    /// ExecutionObserver implementation
+    ///
+    virtual void executionThreadTerminated(int);
+    virtual void completedPercentageNotification(int);
+
+    ///
+    /// RecordingObserver implementation
+    ///
+    virtual void testRecordingFinished(DataModel::TestCase *);
+    virtual void testItemsReceivedCounter(int);
 
 public slots:
 
-  ///
-  /// control to GUI
-  ///
+    ///
+    /// control to GUI
+    ///
 
-  ///
-  /// control from GUI
-  ///
+    ///
+    /// control from GUI
+    ///
 
-  /// processes
-  void playQueuedTestCases();
-  void pauseClicked();
-  void stopClicked();
-  void recClicked();
+    /// processes
+    void playQueuedTestCases();
+    void pauseClicked();
+    void stopClicked();
+    void recClicked();
 
-  /// test suite
-  DataModel::TestSuite *loadTestSuiteObject(const std::string &);
-  bool openTestSuite(const std::string &);
-  bool closeCurrentTestSuite();
-  bool newTestSuite(const std::string &file, const std::string &name,
-                    const std::string &binaryPath);
-  bool saveTestSuite(DataModel::TestSuite *ts, const std::string &file);
+    /// test suite
+    DataModel::TestSuite *loadTestSuiteObject(const std::string &);
+    bool openTestSuite(const std::string &);
+    bool closeCurrentTestSuite();
+    bool newTestSuite(const std::string &file, const std::string &name,
+                      const std::string &binaryPath);
+    bool saveTestSuite(DataModel::TestSuite *ts, const std::string &file);
 
-  /// test case
-  bool checkAndQueueTestCase(const std::string &);
-  bool deleteTestCase(const std::string &);
-  bool recordTestCase(const std::string &);
-  bool recordExistingTestCase(const std::string &);
+    /// test case
+    bool checkAndQueueTestCase(const std::string &);
+    bool deleteTestCase(const std::string &);
+    bool recordTestCase(const std::string &);
+    bool recordExistingTestCase(const std::string &);
 
-  /// process state
-  OHTProcessState state() const;
+    /// process state
+    OHTProcessState state() const;
 
-  /// process context
-  OHTProcessContext &context();
+    /// process context
+    OHTProcessContext &context();
 
-  ///
-  /// comm
-  ///
-  void slot_handleCommError(const std::string &);
+    ///
+    /// comm
+    ///
+    void slot_handleCommError(const std::string &);
 
 private slots:
 
-  ///
-  /// control from GUI
-  ///
+    ///
+    /// control from GUI
+    ///
 
-  /// on play
-  void onPlay_playClicked();
-  void onPlay_pauseClicked();
-  void onPlay_stopClicked();
-  void onPlay_recClicked();
+    /// on play
+    void onPlay_playClicked();
+    void onPlay_pauseClicked();
+    void onPlay_stopClicked();
+    void onPlay_recClicked();
 
-  /// on record
-  void onRecord_playClicked();
-  void onRecord_pauseClicked();
-  void onRecord_stopClicked();
-  void onRecord_recClicked();
+    /// on record
+    void onRecord_playClicked();
+    void onRecord_pauseClicked();
+    void onRecord_stopClicked();
+    void onRecord_recClicked();
 
-  ///
-  /// handled signals from preloading control
-  ///
+    ///
+    /// handled signals from preloading control
+    ///
 
-  void slot_handleApplicationClosed(int);
-  void slot_handlePreloadingError(const std::string &);
+    void slot_handleApplicationClosed(int);
+    void slot_handlePreloadingError(const std::string &);
 
-  ///
-  /// control signaling handle
-  ///
+    ///
+    /// control signaling handle
+    ///
 
-  void handleControlSignaling(DataModel::TestItem *);
-  void handle_CTI_Error(const std::string &message);
-  void handle_CTI_EventExecuted();
+    void handleControlSignaling(DataModel::TestItem *);
+    void handle_CTI_Error(const std::string &message);
+    void handle_CTI_EventExecuted();
 
 private:
-  ///
-  /// supporting methods
-  ///
+    ///
+    /// supporting methods
+    ///
 
-  void _setState(OHTProcessState);
+    void _setState(OHTProcessState);
 
-  ///
-  /// variables
-  ///
+    ///
+    /// variables
+    ///
 
-  // GUI
-  HMITesterControl *gui_reference_;
+    // GUI
+    HMITesterControl *gui_reference_;
 
-  // process controllers
-  std::unique_ptr<PlaybackControl> playback_control_;
-  std::unique_ptr<RecordingControl> recording_control_;
+    // process controllers
+    std::unique_ptr<PlaybackControl> playback_control_;
+    std::unique_ptr<RecordingControl> recording_control_;
 
-  // communication manager
-  std::unique_ptr<Comm> _comm;
+    // communication manager
+    std::unique_ptr<Comm> _comm;
 
-  // dataModel manager
-  DataModelManager *dataModel_manager_;
-  DataModelAdapter *dataModel_adapter_;
+    // dataModel manager
+    DataModelManager *dataModel_manager_;
+    DataModelAdapter *dataModel_adapter_;
 
-  // preloading action
-  PreloadingAction *preloading_action_;
+    // preloading action
+    PreloadingAction *preloading_action_;
 
-  // current testSuite
-  DataModel::TestSuite *_current_testsuite;
-  // current testCases
-  std::list<DataModel::TestCase *> _testcases_queue;
-  DataModel::TestCase *_current_testcase;
-  // current fileName
-  std::string current_filename_;
-  // current lib preload path
-  std::string current_libPreload_path_;
-  // current oht bin path
-  std::string current_oht_path_;
+    // current testSuite
+    DataModel::TestSuite *_current_testsuite;
+    // current testCases
+    std::list<DataModel::TestCase *> _testcases_queue;
+    DataModel::TestCase *_current_testcase;
+    // current fileName
+    std::string current_filename_;
+    // current lib preload path
+    std::string current_libPreload_path_;
+    // current oht bin path
+    std::string current_oht_path_;
 
-  // process state
-  OHTProcessState state_;
+    // process state
+    OHTProcessState state_;
 
-  // process context
-  OHTProcessContext context_;
+    // process context
+    OHTProcessContext context_;
 };
 
 #endif // PROCESSCONTROL_H

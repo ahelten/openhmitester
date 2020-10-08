@@ -32,49 +32,49 @@
 #include <utilclasses.h>
 
 class Comm : public QObject {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  Comm(int port, bool isServer);
 
-  bool resetAndStart();
-  bool stop();
+    Comm(int port, bool isServer);
+
+    bool resetAndStart();
+    bool stop();
 
 public:
-  MessageClientServer *messageServer();
-  MessageClientServer *messageClient();
+    MessageClientServer *messageServer();
+    MessageClientServer *messageClient();
 
 public slots:
 
-  void handleSendTestItem(const DataModel::TestItem &);
-  // DataModel::TestItem* handleReceivedTestItem ( const std::string& msg );
+    void handleSendTestItem(const DataModel::TestItem &);
+    // DataModel::TestItem* handleReceivedTestItem ( const std::string& msg );
 
-  void handleSendMessage(const QString &); // from client class (input method)
-  void
-  handleSendMessage(const std::string &); // from client class (input method)
-  void handleReceivedMessage(const QString &); // internal
+    void handleSendMessage(const QString &); // from client class (input method)
+    void handleSendMessage(const std::string &); // from client class (input method)
+    void handleReceivedMessage(const QString &); // internal
 
-  // handles the client connection
-  void handleNewClientConnected();
-  void handleClientDisconnected();
+    // handles the client connection
+    void handleNewClientConnected();
+    void handleClientDisconnected();
 
-  // handles errors
-  void handleError(const QString &);
+    // handles errors
+    void handleError(const QString &);
 
 signals:
-  void receivedTestItem(DataModel::TestItem *);
-  void receivedMessage(const QString &); // to client class (output method)
-  void OurReceivedMessage(QString);
-  void sendMessage(const QString &); // internal
-  void error(const std::string &);
+    void receivedTestItem(DataModel::TestItem *);
+    void receivedMessage(const QString &); // to client class (output method)
+    void OurReceivedMessage(QString);
+    void sendMessage(const QString &); // internal
+    void error(const std::string &);
 
 private:
-  // Pending events to process
-  std::deque<DataModel::TestItem> testItemQueue_;
-  std::unique_ptr<MessageClientServer> mcs_;
-  bool _isServer;
-  int _port;
-  bool clientConnected_;
+    // Pending events to process
+    std::deque<DataModel::TestItem> testItemQueue_;
+    std::unique_ptr<MessageClientServer> mcs_;
+    bool _isServer;
+    int _port;
+    bool clientConnected_;
 };
 
 #endif // COMM_H

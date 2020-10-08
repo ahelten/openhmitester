@@ -32,52 +32,52 @@
 #include <preloadingcontrol.h>
 
 class LIBPRELOADSHARED_EXPORT PreloadController : public QObject {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  // process state
-  typedef enum { STOP, RECORD, PLAY, PAUSE_PLAY, PAUSE_RECORD } ProcessState;
+    // process state
+    typedef enum { STOP, RECORD, PLAY, PAUSE_PLAY, PAUSE_RECORD } ProcessState;
 
-  /// process state
-  ProcessState state() const;
+    /// process state
+    ProcessState state() const;
 
 public:
-  PreloadController(PreloadingControl *pc, EventConsumer *ec,
-                    EventExecutor *ex);
-  ~PreloadController();
+    PreloadController(PreloadingControl *pc, EventConsumer *ec,
+                      EventExecutor *ex);
+    ~PreloadController();
 
-  /// init method
-  bool initialize();
+    /// init method
+    bool initialize();
 
 public slots:
-  // input method (comm signal handle)
-  void handleReceivedTestItem(DataModel::TestItem *);
+    // input method (comm signal handle)
+    void handleReceivedTestItem(DataModel::TestItem *);
 
-  // input method (control signaling)
-  void handleReceivedControl(Control::ControlTestItem *);
+    // input method (control signaling)
+    void handleReceivedControl(Control::ControlTestItem *);
 
-  void handleReceivedMessage(const QString &s);
+    void handleReceivedMessage(const QString &s);
 signals:
-  // output method (signal to comm)
-  void sendTestItem(const DataModel::TestItem &);
-  void receivedTestItem(DataModel::TestItem *);
+    // output method (signal to comm)
+    void sendTestItem(const DataModel::TestItem &);
+    void receivedTestItem(DataModel::TestItem *);
 
 private:
-  ///
-  /// processes control
-  ///
-  void capture_start();
-  void capture_pause();
-  void capture_stop();
-  void execution_start();
-  void execution_pause();
-  void execution_stop();
-  ProcessState state_;
+    ///
+    /// processes control
+    ///
+    void capture_start();
+    void capture_pause();
+    void capture_stop();
+    void execution_start();
+    void execution_pause();
+    void execution_stop();
+    ProcessState state_;
 
 private:
-  Comm *_comm;
-  EventConsumer *_ev_consumer;
-  EventExecutor *_ev_executor;
+    Comm *_comm;
+    EventConsumer *_ev_consumer;
+    EventExecutor *_ev_executor;
 };
 
 #endif // PRELOADCONTROLLER_H

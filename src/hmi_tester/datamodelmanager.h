@@ -31,28 +31,27 @@
 
 class DataModelManager {
 public:
-  class not_exists : public std::exception {
-    virtual const char *what() const throw() { return "conversion_error"; }
-  };
+    class not_exists : public std::exception {
+        virtual const char *what() const throw() { return "conversion_error"; }
+    };
 
-  typedef std::list<std::string> StringList;
-  typedef boost::ptr_map<std::string, DataModelAdapter> AdapterMap;
+    typedef std::list<std::string> StringList;
+    typedef boost::ptr_map<std::string, DataModelAdapter> AdapterMap;
 
 public:
-  DataModelManager();
-  ~DataModelManager();
+    DataModelManager();
+    ~DataModelManager();
 
-  // datamodel adapters management
-  void addDataModelAdapter(const std::string &key, DataModelAdapter *adapter);
-  DataModelAdapter *
-  getDataModelAdapter(const std::string &key) throw(not_exists);
-  StringList getDataModelAdapterKeys() const;
-  bool setCurrentDataModelAdapter(const std::string &key) throw(not_exists);
-  DataModelAdapter *getCurrentDataModelAdapter() const;
+    // datamodel adapters management
+    void addDataModelAdapter(const std::string &key, DataModelAdapter *adapter);
+    DataModelAdapter *getDataModelAdapter(const std::string &key) throw(not_exists);
+    StringList getDataModelAdapterKeys() const;
+    bool setCurrentDataModelAdapter(const std::string &key) throw(not_exists);
+    DataModelAdapter *getCurrentDataModelAdapter() const;
 
 protected:
-  DataModelAdapter *currentAdapter_;
-  AdapterMap adapters_;
+    DataModelAdapter *currentAdapter_;
+    AdapterMap adapters_;
 };
 
 #endif // DATAMODELMANAGER_H

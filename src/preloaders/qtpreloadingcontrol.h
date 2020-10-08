@@ -32,13 +32,13 @@ class QtPreloadingControl : public PreloadingControl
 
 public:
 
-    QtPreloadingControl(EventConsumer* ec, EventExecutor* ex);
+    QtPreloadingControl(EventConsumer *ec, EventExecutor *ex);
     ~QtPreloadingControl();
 
 private:
 
-    EventConsumer* _event_consumer;
-    EventExecutor* _event_executor;
+    EventConsumer *_event_consumer;
+    EventExecutor *_event_executor;
 
 
 public:

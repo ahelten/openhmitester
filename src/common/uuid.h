@@ -26,13 +26,13 @@
 typedef unsigned long long uuid_t;
 
 class uuid {
-  uuid_t impl_uuid_;
+    uuid_t impl_uuid_;
 
 public:
-  uuid();
+    uuid();
 
-  uuid_t uuid_new();
-  void update(uuid_t);
+    uuid_t uuid_new();
+    void update(uuid_t);
 };
 
 #ifdef __cplusplus

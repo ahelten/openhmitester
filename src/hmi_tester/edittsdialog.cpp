@@ -35,28 +35,28 @@
 
 EditTSDialog::EditTSDialog(DataModel::TestSuite *ts, QWidget *parent)
     : QDialog(parent), m_ui(new Ui::EditTSDialog) {
-  m_ui->setupUi(this);
+    m_ui->setupUi(this);
 
-  // add ts original data to the GUI
-  _ts = ts;
-  QString aux;
+    // add ts original data to the GUI
+    _ts = ts;
+    QString aux;
 
-  aux = QString(_ts->name().c_str());
-  m_ui->le_tsName->setText(aux);
+    aux = QString(_ts->name().c_str());
+    m_ui->le_tsName->setText(aux);
 
-  aux = QString(_ts->appId().c_str());
-  m_ui->le_aut->setText(aux);
+    aux = QString(_ts->appId().c_str());
+    m_ui->le_aut->setText(aux);
 
-  QStringList tclist;
-  DataModel::TestSuite::TestCaseList::const_iterator it =
-      _ts->testCases().begin();
-  while (it != _ts->testCases().end()) {
-    tclist << QString(it->name().c_str());
-    it++;
-  }
-  QStringListModel *tclist_model = new QStringListModel();
-  tclist_model->setStringList(tclist);
-  m_ui->lv_testcases->setModel(tclist_model);
+    QStringList tclist;
+    DataModel::TestSuite::TestCaseList::const_iterator it =
+            _ts->testCases().begin();
+    while (it != _ts->testCases().end()) {
+        tclist << QString(it->name().c_str());
+        it++;
+    }
+    QStringListModel *tclist_model = new QStringListModel();
+    tclist_model->setStringList(tclist);
+    m_ui->lv_testcases->setModel(tclist_model);
 }
 
 EditTSDialog::~EditTSDialog() { delete m_ui; }
@@ -66,64 +66,64 @@ EditTSDialog::~EditTSDialog() { delete m_ui; }
 /// \param arg1
 ///
 void EditTSDialog::on_le_tsName_editingFinished() {
-  QString s = m_ui->le_tsName->text();
+    QString s = m_ui->le_tsName->text();
 
-  // set name
-  if (s != "")
-    _ts->name(s.toStdString());
-  else
-    m_ui->le_tsName->setText(QString(_ts->name().c_str()));
+    // set name
+    if (s != "")
+        _ts->name(s.toStdString());
+    else
+        m_ui->le_tsName->setText(QString(_ts->name().c_str()));
 }
 
 ///
 /// \brief select AUT binary
 ///
 void EditTSDialog::on_pb_aut_clicked() {
-  _settings.beginGroup("EditTSDialog");
-  QString lastAutDirectory;
-  lastAutDirectory =
-      _settings.value(SETT_LAST_AUT_DIR, QDir::homePath()).toString();
-  // ask for the binary
-  QString aux = QtUtils::openFileDialog(
-      "Please, select the AUT (Application Under Test):", lastAutDirectory,
-      "*");
+    _settings.beginGroup("EditTSDialog");
+    QString lastAutDirectory;
+    lastAutDirectory =
+            _settings.value(SETT_LAST_AUT_DIR, QDir::homePath()).toString();
+    // ask for the binary
+    QString aux = QtUtils::openFileDialog(
+                          "Please, select the AUT (Application Under Test):", lastAutDirectory,
+                          "*");
 
-  if (aux != NULL && aux != "") {
-    // check is is a valid binary
-    if (!QtUtils::isExecutable(aux)) {
-      QtUtils::newErrorDialog("The file selected is not a valid binary.");
-      return;
+    if (aux != NULL && aux != "") {
+        // check is is a valid binary
+        if (!QtUtils::isExecutable(aux)) {
+            QtUtils::newErrorDialog("The file selected is not a valid binary.");
+            return;
+        }
+        // if it is valid...
+        _ts->appId(aux.toStdString());
+        m_ui->le_aut->setText(aux);
+        QFileInfo fi(aux);
+        _settings.setValue(SETT_LAST_AUT_DIR, fi.absolutePath());
     }
-    // if it is valid...
-    _ts->appId(aux.toStdString());
-    m_ui->le_aut->setText(aux);
-    QFileInfo fi(aux);
-    _settings.setValue(SETT_LAST_AUT_DIR, fi.absolutePath());
-  }
-  _settings.endGroup();
+    _settings.endGroup();
 }
 
 ///
 /// \brief EditTSDialog accepted
 ///
 void EditTSDialog::on_buttonBox_accepted() {
-  bool error = false;
+    bool error = false;
 
-  // check valid values
-  if (_ts->name() == "") {
-    QtUtils::newErrorDialog("Test suite name must be a valid name.");
-    error = true;
-  }
-  if (_ts->appId() == "") {
-    QtUtils::newErrorDialog("AUT must be a valid application to test.");
-    error = true;
-  }
+    // check valid values
+    if (_ts->name() == "") {
+        QtUtils::newErrorDialog("Test suite name must be a valid name.");
+        error = true;
+    }
+    if (_ts->appId() == "") {
+        QtUtils::newErrorDialog("AUT must be a valid application to test.");
+        error = true;
+    }
 
-  if (error)
-    return;
+    if (error)
+        return;
 
-  // if everything is valid...
-  done(1);
+    // if everything is valid...
+    done(1);
 }
 
 ///
@@ -135,26 +135,26 @@ void EditTSDialog::on_buttonBox_rejected() { done(0); }
 /// \brief delete testcase from testsuite
 ///
 void EditTSDialog::on_pb_deleteTestcase_clicked() {
-  // get name of testcase to delete
-  QString tcname = m_ui->lv_testcases->model()
-                       ->data(m_ui->lv_testcases->currentIndex())
-                       .toString();
+    // get name of testcase to delete
+    QString tcname = m_ui->lv_testcases->model()
+                     ->data(m_ui->lv_testcases->currentIndex())
+                     .toString();
 
-  // show warning
-  QString msg = "You are going to delete test case '";
-  msg += tcname;
-  msg += "'";
-  bool result = QtUtils::showOkCancelDialog(msg);
+    // show warning
+    QString msg = "You are going to delete test case '";
+    msg += tcname;
+    msg += "'";
+    bool result = QtUtils::showOkCancelDialog(msg);
 
-  if (result) {
-    // delete from gui model
-    m_ui->lv_testcases->model()->removeRows(
-        m_ui->lv_testcases->currentIndex().row(), 1);
+    if (result) {
+        // delete from gui model
+        m_ui->lv_testcases->model()->removeRows(
+                m_ui->lv_testcases->currentIndex().row(), 1);
 
-    // delete from testsuite
-    _ts->deleteTestCase(tcname.toStdString());
+        // delete from testsuite
+        _ts->deleteTestCase(tcname.toStdString());
 
-    DEBUG(D_GUI, "(EditTSDialog::on_pb_deleteTestcase_clicked) Removed: "
-                     << tcname.toStdString());
-  }
+        DEBUG(D_GUI, "(EditTSDialog::on_pb_deleteTestcase_clicked) Removed: "
+              << tcname.toStdString());
+    }
 }

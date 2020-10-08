@@ -35,247 +35,247 @@
 
 namespace QWA
 {
-    ///
-    /// Adapter base class
-    ///
-    class QWidgetAdapter
-    {
-    public:
+///
+/// Adapter base class
+///
+class QWidgetAdapter
+{
+public:
 
-        //link a widget to the adapter
-        //returns false if it is a wrong widget
-        virtual bool setWidget(QWidget*) = 0;
+    //link a widget to the adapter
+    //returns false if it is a wrong widget
+    virtual bool setWidget(QWidget *) = 0;
 
-        //gets the adapter if the widget
-        //is sensitive
-        //returns NULL if no adapter available (not sensitive)
-        virtual std::string className() = 0;
+    //gets the adapter if the widget
+    //is sensitive
+    //returns NULL if no adapter available (not sensitive)
+    virtual std::string className() = 0;
 
-        //adapter methods
-        virtual std::string sensitiveValue() = 0;
-        virtual void applySensitiveValue(const std::string&) = 0;
+    //adapter methods
+    virtual std::string sensitiveValue() = 0;
+    virtual void applySensitiveValue(const std::string &) = 0;
 
-    protected:
+protected:
 
-        //the name of the supported class
-        std::string className_;
-    };
+    //the name of the supported class
+    std::string className_;
+};
 
-    ///
-    /// Adapter manager
-    ///
-    class QWidgetAdapterManager
-    {
-    public:
+///
+/// Adapter manager
+///
+class QWidgetAdapterManager
+{
+public:
 
-        //constructor
-        QWidgetAdapterManager();
+    //constructor
+    QWidgetAdapterManager();
 
-        //add adapter
-        void addAdapter(QWidgetAdapter*);
+    //add adapter
+    void addAdapter(QWidgetAdapter *);
 
-        //check if sensitive and returns an
-        //adapter if true (null if not)
-        QWidgetAdapter* isSensitive(QWidget*);
+    //check if sensitive and returns an
+    //adapter if true (null if not)
+    QWidgetAdapter *isSensitive(QWidget *);
 
-    private:
+private:
 
-        //adapter set
-        typedef boost::ptr_map<std::string, QWidgetAdapter* > AdapterSet;
-        AdapterSet adapters_;
-    };
+    //adapter set
+    typedef boost::ptr_map<std::string, QWidgetAdapter * > AdapterSet;
+    AdapterSet adapters_;
+};
 
-    ///
-    /// QComboBoxAdapter
-    ///
-    class QComboBoxAdapter : public QWidgetAdapter
-    {
-    public:
+///
+/// QComboBoxAdapter
+///
+class QComboBoxAdapter : public QWidgetAdapter
+{
+public:
 
-        //constructor
-        QComboBoxAdapter();
+    //constructor
+    QComboBoxAdapter();
 
-        //config methods
-        virtual bool setWidget(QWidget*);
-        virtual std::string className();
+    //config methods
+    virtual bool setWidget(QWidget *);
+    virtual std::string className();
 
-        //adapter methods
-        virtual std::string sensitiveValue();
-        virtual void applySensitiveValue(const std::string&);
+    //adapter methods
+    virtual std::string sensitiveValue();
+    virtual void applySensitiveValue(const std::string &);
 
-    private:
-        //widget reference
-        QComboBox* widget_;
-    };
+private:
+    //widget reference
+    QComboBox *widget_;
+};
 
-    ///
-    /// QFontComboBoxAdapter
-    ///
-    class QFontComboBoxAdapter : public QComboBoxAdapter
-    {
-    public:
+///
+/// QFontComboBoxAdapter
+///
+class QFontComboBoxAdapter : public QComboBoxAdapter
+{
+public:
 
-        //constructor
-        QFontComboBoxAdapter();
+    //constructor
+    QFontComboBoxAdapter();
 
-        //config methods
-        virtual bool setWidget(QWidget*);
-        virtual std::string className();
+    //config methods
+    virtual bool setWidget(QWidget *);
+    virtual std::string className();
 
-    private:
-        //widget reference
-        QFontComboBox* widget_;
-    };
+private:
+    //widget reference
+    QFontComboBox *widget_;
+};
 
-    ///
-    /// QAbstractSliderAdapter
-    ///
-    class QAbstractSliderAdapter : public QWidgetAdapter
-    {
-    public:
+///
+/// QAbstractSliderAdapter
+///
+class QAbstractSliderAdapter : public QWidgetAdapter
+{
+public:
 
-        //config methods
-        virtual bool setWidget(QWidget*) = 0;
-        virtual std::string className() = 0;
+    //config methods
+    virtual bool setWidget(QWidget *) = 0;
+    virtual std::string className() = 0;
 
-        //adapter methods
-        virtual std::string sensitiveValue();
-        virtual void applySensitiveValue(const std::string&);
+    //adapter methods
+    virtual std::string sensitiveValue();
+    virtual void applySensitiveValue(const std::string &);
 
-    protected:
-        //widget reference
-        QAbstractSlider* widget_;
-    };
+protected:
+    //widget reference
+    QAbstractSlider *widget_;
+};
 
-    ///
-    /// QDialAdapter
-    ///
-    class QDialAdapter : public QAbstractSliderAdapter
-    {
-    public:
+///
+/// QDialAdapter
+///
+class QDialAdapter : public QAbstractSliderAdapter
+{
+public:
 
-        //constructor
-        QDialAdapter();
+    //constructor
+    QDialAdapter();
 
-        //config methods
-        virtual bool setWidget(QWidget*);
-        virtual std::string className();
-    };
+    //config methods
+    virtual bool setWidget(QWidget *);
+    virtual std::string className();
+};
 
-    ///
-    /// QSpinBoxAdapter
-    ///
-    class QSpinBoxAdapter : public QWidgetAdapter
-    {
-    public:
+///
+/// QSpinBoxAdapter
+///
+class QSpinBoxAdapter : public QWidgetAdapter
+{
+public:
 
-        //constructor
-        QSpinBoxAdapter();
+    //constructor
+    QSpinBoxAdapter();
 
-        //config methods
-        virtual bool setWidget(QWidget*);
-        virtual std::string className();
+    //config methods
+    virtual bool setWidget(QWidget *);
+    virtual std::string className();
 
-        //adapter methods
-        virtual std::string sensitiveValue();
-        virtual void applySensitiveValue(const std::string&);
+    //adapter methods
+    virtual std::string sensitiveValue();
+    virtual void applySensitiveValue(const std::string &);
 
-    private:
-        //widget reference
-        QSpinBox* widget_;
-    };
+private:
+    //widget reference
+    QSpinBox *widget_;
+};
 
-    ///
-    /// QSpinBoxAdapter
-    ///
-    class QDoubleSpinBoxAdapter : public QWidgetAdapter
-    {
-    public:
+///
+/// QSpinBoxAdapter
+///
+class QDoubleSpinBoxAdapter : public QWidgetAdapter
+{
+public:
 
-        //constructor
-        QDoubleSpinBoxAdapter();
+    //constructor
+    QDoubleSpinBoxAdapter();
 
-        //config methods
-        virtual bool setWidget(QWidget*);
-        virtual std::string className();
+    //config methods
+    virtual bool setWidget(QWidget *);
+    virtual std::string className();
 
-        //adapter methods
-        virtual std::string sensitiveValue();
-        virtual void applySensitiveValue(const std::string&);
+    //adapter methods
+    virtual std::string sensitiveValue();
+    virtual void applySensitiveValue(const std::string &);
 
-    private:
-        //widget reference
-        QDoubleSpinBox* widget_;
-    };
+private:
+    //widget reference
+    QDoubleSpinBox *widget_;
+};
 
-    ///
-    /// QDateTimeAdapter
-    ///
-    class QDateTimeEditAdapter : public QWidgetAdapter
-    {
-    public:
+///
+/// QDateTimeAdapter
+///
+class QDateTimeEditAdapter : public QWidgetAdapter
+{
+public:
 
-        //constructor
-        QDateTimeEditAdapter();
+    //constructor
+    QDateTimeEditAdapter();
 
-        //config methods
-        virtual bool setWidget(QWidget*);
-        virtual std::string className();
+    //config methods
+    virtual bool setWidget(QWidget *);
+    virtual std::string className();
 
-        //adapter methods
-        virtual std::string sensitiveValue();
-        virtual void applySensitiveValue(const std::string&);
+    //adapter methods
+    virtual std::string sensitiveValue();
+    virtual void applySensitiveValue(const std::string &);
 
-    private:
-        //widget reference
-        QDateTimeEdit* widget_;
-    };
+private:
+    //widget reference
+    QDateTimeEdit *widget_;
+};
 
-    ///
-    /// QDateAdapter
-    ///
-    class QDateEditAdapter : public QWidgetAdapter
-    {
-    public:
+///
+/// QDateAdapter
+///
+class QDateEditAdapter : public QWidgetAdapter
+{
+public:
 
-        //constructor
-        QDateEditAdapter();
+    //constructor
+    QDateEditAdapter();
 
-        //config methods
-        virtual bool setWidget(QWidget*);
-        virtual std::string className();
+    //config methods
+    virtual bool setWidget(QWidget *);
+    virtual std::string className();
 
-        //adapter methods
-        virtual std::string sensitiveValue();
-        virtual void applySensitiveValue(const std::string&);
+    //adapter methods
+    virtual std::string sensitiveValue();
+    virtual void applySensitiveValue(const std::string &);
 
-    private:
-        //widget reference
-        QDateEdit* widget_;
-    };
+private:
+    //widget reference
+    QDateEdit *widget_;
+};
 
-    ///
-    /// QDateTimeAdapter
-    ///
-    class QTimeEditAdapter : public QWidgetAdapter
-    {
-    public:
+///
+/// QDateTimeAdapter
+///
+class QTimeEditAdapter : public QWidgetAdapter
+{
+public:
 
-        //constructor
-        QTimeEditAdapter();
+    //constructor
+    QTimeEditAdapter();
 
-        //config methods
-        virtual bool setWidget(QWidget*);
-        virtual std::string className();
+    //config methods
+    virtual bool setWidget(QWidget *);
+    virtual std::string className();
 
-        //adapter methods
-        virtual std::string sensitiveValue();
-        virtual void applySensitiveValue(const std::string&);
+    //adapter methods
+    virtual std::string sensitiveValue();
+    virtual void applySensitiveValue(const std::string &);
 
-    private:
-        //widget reference
-        QTimeEdit* widget_;
-    };
+private:
+    //widget reference
+    QTimeEdit *widget_;
+};
 }
 
 #endif // QWIDGETADAPTER_H

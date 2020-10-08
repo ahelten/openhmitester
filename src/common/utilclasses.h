@@ -35,81 +35,81 @@
 
 class QCircularByteArray_ : public QByteArray {
 public:
-  QCircularByteArray_() {}
-  ~QCircularByteArray_() {}
+    QCircularByteArray_() {}
+    ~QCircularByteArray_() {}
 
-  /// DATA METHODS
-  bool addData(QByteArray ba) {
-    append(ba);
-    return true;
-  }
-
-  /// STRING METHODS
-  QString getOneString() { return getOneString('\0'); }
-
-  QString getOneString(char separator) {
-    // buscamos la primera aparición de separator
-    int index = deepIndexOf(separator);
-    // caso de que no se encuentre
-    if (index == -1) {
-      return "";
+    /// DATA METHODS
+    bool addData(QByteArray ba) {
+        append(ba);
+        return true;
     }
 
-    int resultSize = index + 1;
-    // devolvemos el trozo correspondiente
-    // eliminandlo del buffer original
-    return getOneString(resultSize);
-  }
+    /// STRING METHODS
+    QString getOneString() { return getOneString('\0'); }
 
-  QString getOneString(int size) {
-    // comprobacion inicial
-    if (QByteArray::size() < size)
-      return "";
-    // cortamos el trozo correspondiente
-    QByteArray result = left(size);
-    // eliminamos ese trozo del buffer_
-    remove(0, size);
-    // devolvemos convertido en cadena
-    return QString(result);
-  }
+    QString getOneString(char separator) {
+        // buscamos la primera aparición de separator
+        int index = deepIndexOf(separator);
+        // caso de que no se encuentre
+        if (index == -1) {
+            return "";
+        }
 
-  QString getAllCompleteStrings() { return getAllCompleteStrings('\0'); }
-
-  QString getAllCompleteStrings(char separator) {
-    // buscamos la ultima aparición de separator
-    int index = deepLastIndexOf(separator);
-    // caso de que no se encuentre
-    if (index == -1)
-      return "";
-
-    int resultSize = index + 1;
-    // devolvemos el trozo correspondiente
-    // eliminandlo del buffer original
-    return getOneString(resultSize);
-  }
-
-  QString toString() {
-    QString res(data());
-    return res;
-  }
-
-  int deepIndexOf(char sep) {
-    for (int i = 0; i < size(); i++) {
-      // qDebug() << "buffer[" << i << "]=" << at(i);
-      if (at(i) == sep)
-        return i;
+        int resultSize = index + 1;
+        // devolvemos el trozo correspondiente
+        // eliminandlo del buffer original
+        return getOneString(resultSize);
     }
-    return -1;
-  }
 
-  int deepLastIndexOf(char sep) {
-    int index = -1;
-    for (int i = 0; i < size(); i++) {
-      if (at(i) == sep)
-        index = i;
+    QString getOneString(int size) {
+        // comprobacion inicial
+        if (QByteArray::size() < size)
+            return "";
+        // cortamos el trozo correspondiente
+        QByteArray result = left(size);
+        // eliminamos ese trozo del buffer_
+        remove(0, size);
+        // devolvemos convertido en cadena
+        return QString(result);
     }
-    return index;
-  }
+
+    QString getAllCompleteStrings() { return getAllCompleteStrings('\0'); }
+
+    QString getAllCompleteStrings(char separator) {
+        // buscamos la ultima aparición de separator
+        int index = deepLastIndexOf(separator);
+        // caso de que no se encuentre
+        if (index == -1)
+            return "";
+
+        int resultSize = index + 1;
+        // devolvemos el trozo correspondiente
+        // eliminandlo del buffer original
+        return getOneString(resultSize);
+    }
+
+    QString toString() {
+        QString res(data());
+        return res;
+    }
+
+    int deepIndexOf(char sep) {
+        for (int i = 0; i < size(); i++) {
+            // qDebug() << "buffer[" << i << "]=" << at(i);
+            if (at(i) == sep)
+                return i;
+        }
+        return -1;
+    }
+
+    int deepLastIndexOf(char sep) {
+        int index = -1;
+        for (int i = 0; i < size(); i++) {
+            if (at(i) == sep)
+                index = i;
+        }
+        return index;
+    }
 
 private:
 };

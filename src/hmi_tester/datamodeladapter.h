@@ -29,21 +29,21 @@
 
 class DataModelAdapter {
 public:
-  // conversion error exception
-  class conversion_error_exception : public std::exception {
-    virtual const char *what() const throw() { return "conversion_error"; }
-  };
+    // conversion error exception
+    class conversion_error_exception : public std::exception {
+        virtual const char *what() const throw() { return "conversion_error"; }
+    };
 
-  // id method
-  virtual std::string id() = 0;
+    // id method
+    virtual std::string id() = 0;
 
-  // transformation methods
-  virtual DataModel::TestSuite *file2testSuite(
-      const std::string &filename) throw(conversion_error_exception) = 0;
+    // transformation methods
+    virtual DataModel::TestSuite *file2testSuite(
+            const std::string &filename) throw(conversion_error_exception) = 0;
 
-  virtual void testSuite2file(
-      const DataModel::TestSuite &,
-      const std::string &filename) throw(conversion_error_exception) = 0;
+    virtual void testSuite2file(
+            const DataModel::TestSuite &,
+            const std::string &filename) throw(conversion_error_exception) = 0;
 };
 
 #endif // DATAMODELADAPTER_H

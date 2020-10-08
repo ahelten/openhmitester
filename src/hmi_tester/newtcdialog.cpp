@@ -29,8 +29,8 @@
 #include <QLabel>
 
 NewTCDialog::NewTCDialog(QWidget *parent) :
-        QDialog(parent),
-        m_ui(new Ui::NewTCDialog)
+    QDialog(parent),
+    m_ui(new Ui::NewTCDialog)
 {
     m_ui->setupUi(this);
 }
@@ -44,7 +44,7 @@ NewTCDialog::~NewTCDialog()
 /// accessors
 ///
 
-QString& NewTCDialog::getTestcaseName()
+QString &NewTCDialog::getTestcaseName()
 {
     return _tcName;
 }
@@ -75,7 +75,7 @@ void NewTCDialog::on_buttonBox_accepted()
     bool error = false;
 
     // check valid values
-    if (_tcName == ""){
+    if (_tcName == "") {
         QtUtils::newErrorDialog("Test case name must be a valid name.");
         error = true;
     }

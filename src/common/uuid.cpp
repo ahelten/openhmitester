@@ -29,13 +29,13 @@
 uuid U;
 
 uuid::uuid() {
-  time_t val = time(NULL);
-  impl_uuid_ = static_cast<uuid_t>(val) + static_cast<uuid_t>(clock());
+    time_t val = time(NULL);
+    impl_uuid_ = static_cast<uuid_t>(val) + static_cast<uuid_t>(clock());
 }
 
 uuid_t uuid::uuid_new() { return impl_uuid_++; }
 
 void uuid::update(uuid_t n) {
-  if (n > impl_uuid_)
-    impl_uuid_ = n + 1;
+    if (n > impl_uuid_)
+        impl_uuid_ = n + 1;
 }

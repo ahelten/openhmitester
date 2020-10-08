@@ -33,102 +33,102 @@
 namespace DataModel {
 namespace xml {
 
-    // template <typename T>
-    // class serializer: public T
-    // {
-    //     const T& t_;
-    // public:
-    //     serializer (const T& t)
-    //         : t_ (t)
-    //     {
-    //     }
+// template <typename T>
+// class serializer: public T
+// {
+//     const T& t_;
+// public:
+//     serializer (const T& t)
+//         : t_ (t)
+//     {
+//     }
 
-    //     friend class boost::serialization::access;
-    //     template<class Archive>
-    //     void serialize(Archive & ar, const unsigned int version)
-    //     {
-    //         // ar & dataMap_;
-    //         // ar & metadataMap_;
-    //     }
-    // };
+//     friend class boost::serialization::access;
+//     template<class Archive>
+//     void serialize(Archive & ar, const unsigned int version)
+//     {
+//         // ar & dataMap_;
+//         // ar & metadataMap_;
+//     }
+// };
 
 
-    // // Partial specialization for TestItem.
-    // template <>
-    // class serializer<DataModel::TestItem>: public DataModel::TestItem
-    // {
-    //     const DataModel::TestItem& t_;
-    // public:
-    //     serializer (const DataModel::TestItem& t)
-    //         : t_ (t)
-    //     {}
+// // Partial specialization for TestItem.
+// template <>
+// class serializer<DataModel::TestItem>: public DataModel::TestItem
+// {
+//     const DataModel::TestItem& t_;
+// public:
+//     serializer (const DataModel::TestItem& t)
+//         : t_ (t)
+//     {}
 
-    //     friend class boost::serialization::access;
-    //     template<class Archive>
-    //     void serialize(Archive & ar, const unsigned int version)
-    //     {
-    //         ar & t_.type_;
-    //         ar & t_.subtype_;
-    //     }
-    // };
+//     friend class boost::serialization::access;
+//     template<class Archive>
+//     void serialize(Archive & ar, const unsigned int version)
+//     {
+//         ar & t_.type_;
+//         ar & t_.subtype_;
+//     }
+// };
 
-    ///
-    /// test item
-    ///
-    class TestItem : public DataModel::TestItem
+///
+/// test item
+///
+class TestItem : public DataModel::TestItem
+{
+    // TODO: UUID needed.
+
+public:
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive &ar, const unsigned int version)
     {
-        // TODO: UUID needed.
+        ar &BOOST_SERIALIZATION_NVP (dataMap_)
+        & BOOST_SERIALIZATION_NVP (metadataMap_)
 
-    public:
-        friend class boost::serialization::access;
-        template<class Archive>
-        void serialize(Archive & ar, const unsigned int version)
-        {
-            ar & BOOST_SERIALIZATION_NVP (dataMap_)
-                & BOOST_SERIALIZATION_NVP (metadataMap_)
+        & BOOST_SERIALIZATION_NVP (type_)
+        & BOOST_SERIALIZATION_NVP (subtype_);
+    }
+};
 
-                & BOOST_SERIALIZATION_NVP (type_)
-                & BOOST_SERIALIZATION_NVP (subtype_);
-        }
-    };
+///
+/// test case
+///
+class TestCase : public DataModel::TestCase
+{
+    // TODO: TestCase name and other data?
 
-    ///
-    /// test case
-    ///
-    class TestCase : public DataModel::TestCase
+public:
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive &ar, const unsigned int version)
     {
-        // TODO: TestCase name and other data?
+        ar &BOOST_SERIALIZATION_NVP (dataMap_)
+        & BOOST_SERIALIZATION_NVP (metadataMap_)
 
-    public:
-        friend class boost::serialization::access;
-        template<class Archive>
-        void serialize(Archive & ar, const unsigned int version)
-        {
-            ar & BOOST_SERIALIZATION_NVP (dataMap_)
-                & BOOST_SERIALIZATION_NVP (metadataMap_)
+        & BOOST_SERIALIZATION_NVP (testItems_);
+    }
+};
 
-                & BOOST_SERIALIZATION_NVP (testItems_);
-        }
-    };
+///
+/// test suite
+///
+class TestSuite : virtual public DataModel::TestSuite
+{
+    // TODO: TestSuite name and other data?
 
-    ///
-    /// test suite
-    ///
-    class TestSuite : virtual public DataModel::TestSuite
+public:
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive &ar, const unsigned int version)
     {
-        // TODO: TestSuite name and other data?
+        ar &BOOST_SERIALIZATION_NVP (dataMap_)
+        & BOOST_SERIALIZATION_NVP (metadataMap_)
 
-    public:
-        friend class boost::serialization::access;
-        template<class Archive>
-        void serialize(Archive & ar, const unsigned int version)
-        {
-            ar & BOOST_SERIALIZATION_NVP (dataMap_)
-                & BOOST_SERIALIZATION_NVP (metadataMap_)
-
-                & BOOST_SERIALIZATION_NVP (testCases_);
-        }
-    };
+        & BOOST_SERIALIZATION_NVP (testCases_);
+    }
+};
 
 }
 }

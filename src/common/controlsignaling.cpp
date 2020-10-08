@@ -41,11 +41,11 @@ CTI_Error::CTI_Error() { subtype(CTI_ERROR); }
 
 // error message
 void CTI_Error::description(const std::string &text) {
-  addData(CTI_Error_Description, text);
+    addData(CTI_Error_Description, text);
 }
 
 const std::string CTI_Error::description() {
-  return getData(CTI_Error_Description);
+    return getData(CTI_Error_Description);
 }
 
 ///

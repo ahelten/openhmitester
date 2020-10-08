@@ -23,8 +23,8 @@
 
 #include "recordingcontrol.h"
 
-RecordingControl::RecordingControl(Comm* c, RecordingObserver* ro)
-        : comm_ (c), observer_ (ro)
+RecordingControl::RecordingControl(Comm *c, RecordingObserver *ro)
+    : comm_ (c), observer_ (ro)
 {
     //item manager to this
     itemManager_.reset (new ItemManager(comm_, observer_));
@@ -40,7 +40,7 @@ RecordingControl::~RecordingControl()
 /// recording process control
 ///
 /// ///
-void RecordingControl::recordTestCase(DataModel::TestCase* tc)
+void RecordingControl::recordTestCase(DataModel::TestCase *tc)
 {
     itemManager_->recordTestCase(tc);
 }

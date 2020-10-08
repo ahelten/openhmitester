@@ -36,52 +36,52 @@
 /// ///////////////////////////////////////////
 
 Comm::Comm(int port, bool isServer) {
-  _port = port;
-  _isServer = isServer;
+    _port = port;
+    _isServer = isServer;
 }
 
 bool Comm::resetAndStart() {
-  // creating the client/server
-  mcs_.reset(new MessageClientServer(this, _port, _isServer));
+    // creating the client/server
+    mcs_.reset(new MessageClientServer(this, _port, _isServer));
 
-  // connecting to its signals
-  connect(this, SIGNAL(sendMessage(const QString &)), mcs_.get(),
-          SLOT(writeMessage(const QString &)));
-  connect(mcs_.get(), SIGNAL(receivedMessage(const QString &)), this,
-          SLOT(handleReceivedMessage(const QString &)));
-  connect(mcs_.get(), SIGNAL(newClientConnected()), this,
-          SLOT(handleNewClientConnected()));
-  connect(mcs_.get(), SIGNAL(clientDisconnected()), this,
-          SLOT(handleClientDisconnected()));
+    // connecting to its signals
+    connect(this, SIGNAL(sendMessage(const QString &)), mcs_.get(),
+            SLOT(writeMessage(const QString &)));
+    connect(mcs_.get(), SIGNAL(receivedMessage(const QString &)), this,
+            SLOT(handleReceivedMessage(const QString &)));
+    connect(mcs_.get(), SIGNAL(newClientConnected()), this,
+            SLOT(handleNewClientConnected()));
+    connect(mcs_.get(), SIGNAL(clientDisconnected()), this,
+            SLOT(handleClientDisconnected()));
 
-  // connecting to error management
-  connect(mcs_.get(), SIGNAL(error(const QString &)), this,
-          SLOT(handleError(const QString &)));
+    // connecting to error management
+    connect(mcs_.get(), SIGNAL(error(const QString &)), this,
+            SLOT(handleError(const QString &)));
 
-  // if it is a server...
-  if (_isServer) {
-    DEBUG(D_COMM, "(Comm::Comm) Created new message server on port " << _port);
-  }
-  // if it is a client...
-  else {
-    DEBUG(D_COMM, "(Comm::Comm) Created new client on port " << _port);
-  }
+    // if it is a server...
+    if (_isServer) {
+        DEBUG(D_COMM, "(Comm::Comm) Created new message server on port " << _port);
+    }
+    // if it is a client...
+    else {
+        DEBUG(D_COMM, "(Comm::Comm) Created new client on port " << _port);
+    }
 
-  clientConnected_ = false;
-  testItemQueue_.clear();
+    clientConnected_ = false;
+    testItemQueue_.clear();
 
-  DEBUG(D_COMM, "(Comm::Comm) COMM STARTED");
+    DEBUG(D_COMM, "(Comm::Comm) COMM STARTED");
 
-  return true;
+    return true;
 }
 
 bool Comm::stop() {
-  mcs_.reset(0);
-  clientConnected_ = false;
-  testItemQueue_.clear();
+    mcs_.reset(0);
+    clientConnected_ = false;
+    testItemQueue_.clear();
 
-  DEBUG(D_COMM, "(Comm::Comm) COMM STOPED");
-  return true;
+    DEBUG(D_COMM, "(Comm::Comm) COMM STOPED");
+    return true;
 }
 
 ///
@@ -90,88 +90,88 @@ bool Comm::stop() {
 void Comm::handleSendMessage(const QString &s) { emit sendMessage(s); }
 
 void Comm::handleSendMessage(const std::string &s) {
-  emit sendMessage(QString(s.c_str()));
+    emit sendMessage(QString(s.c_str()));
 }
 
 ///
 /// send message handler
 ///
 void Comm::handleSendTestItem(const DataModel::TestItem &ti) {
-  DEBUG(D_COMM, "(Comm::handleSendTestItem)");
+    DEBUG(D_COMM, "(Comm::handleSendTestItem)");
 
-  // If the client is not connected, store the event
-  if (_isServer && !clientConnected_) {
-    testItemQueue_.push_back(ti);
-    DEBUG(D_COMM, "(Comm::handleSendTestItem) Item in the queue.");
-  } else {
-    // This step wouldn't be neccessary when we use correct sockets as streams
-    std::ostringstream oss;
-    // Create the test archive using a string as a buffer
-    boost::archive::text_oarchive oa(oss);
-    // write class instance to archive
-    oa << ti;
-    DEBUG(D_COMM, "(Comm::handleSendTestItem) Item serialized.");
+    // If the client is not connected, store the event
+    if (_isServer && !clientConnected_) {
+        testItemQueue_.push_back(ti);
+        DEBUG(D_COMM, "(Comm::handleSendTestItem) Item in the queue.");
+    } else {
+        // This step wouldn't be neccessary when we use correct sockets as streams
+        std::ostringstream oss;
+        // Create the test archive using a string as a buffer
+        boost::archive::text_oarchive oa(oss);
+        // write class instance to archive
+        oa << ti;
+        DEBUG(D_COMM, "(Comm::handleSendTestItem) Item serialized.");
 
-    emit sendMessage(QString(oss.str().c_str()));
+        emit sendMessage(QString(oss.str().c_str()));
 
-    DEBUG(D_COMM, "(Comm::handleSendTestItem) Item sent.");
-  }
+        DEBUG(D_COMM, "(Comm::handleSendTestItem) Item sent.");
+    }
 }
 
 ///
 /// new received message handler
 ///
 void Comm::handleReceivedMessage(const QString &s) {
-  qDebug() << __PRETTY_FUNCTION__;
-  std::istringstream iss(s.toStdString());
-  // Create the test archive using a string as a buffer
-  boost::archive::text_iarchive ia(iss);
-  // write class instance to archive
-  DataModel::TestItem *ti = new DataModel::TestItem();
-  ia >> *ti;
+    qDebug() << __PRETTY_FUNCTION__;
+    std::istringstream iss(s.toStdString());
+    // Create the test archive using a string as a buffer
+    boost::archive::text_iarchive ia(iss);
+    // write class instance to archive
+    DataModel::TestItem *ti = new DataModel::TestItem();
+    ia >> *ti;
 
-  DEBUG(D_COMM,
-        "(Comm::handleReceivedMessage) Emiting new received  TestItem.");
-  emit receivedTestItem(ti);
+    DEBUG(D_COMM,
+          "(Comm::handleReceivedMessage) Emiting new received  TestItem.");
+    emit receivedTestItem(ti);
 
-  emit OurReceivedMessage(s);
+    emit OurReceivedMessage(s);
 }
 
 ///
 /// handles the new client connection
 ///
 void Comm::handleNewClientConnected() {
-  DEBUG(D_COMM, "(Comm::handleNewClientConnected)");
-  assert(clientConnected_ == false); // FIXME remove this assert
-  clientConnected_ = true;
+    DEBUG(D_COMM, "(Comm::handleNewClientConnected)");
+    assert(clientConnected_ == false); // FIXME remove this assert
+    clientConnected_ = true;
 
-  // checks if there are stored items to be sent
-  if (!testItemQueue_.size())
-    return;
-  do {
-    handleSendTestItem(testItemQueue_.front());
-    testItemQueue_.pop_front();
-    DEBUG(D_COMM, "(Comm::handleNewClientConnected) One stored TestItem sent.");
-  } while (testItemQueue_.size());
+    // checks if there are stored items to be sent
+    if (!testItemQueue_.size())
+        return;
+    do {
+        handleSendTestItem(testItemQueue_.front());
+        testItemQueue_.pop_front();
+        DEBUG(D_COMM, "(Comm::handleNewClientConnected) One stored TestItem sent.");
+    } while (testItemQueue_.size());
 
-  DEBUG(D_COMM, "(Comm::handleNewClientConnected) Stored TestItems sent.");
+    DEBUG(D_COMM, "(Comm::handleNewClientConnected) Stored TestItems sent.");
 }
 
 void Comm::handleClientDisconnected() {
-  DEBUG(D_COMM, "(Comm::handleClientDisconnected)");
-  assert(clientConnected_ == true); // FIXME remove this assert
+    DEBUG(D_COMM, "(Comm::handleClientDisconnected)");
+    assert(clientConnected_ == true); // FIXME remove this assert
 
-  // reset comm state for the next client
-  clientConnected_ = false;
-  testItemQueue_.clear();
+    // reset comm state for the next client
+    clientConnected_ = false;
+    testItemQueue_.clear();
 }
 
 ///
 /// error handling
 ///
 void Comm::handleError(const QString &s) {
-  DEBUG(D_COMM, "(Comm::handleError) ERROR: " + s.toStdString() + ".");
-  emit error(s.toStdString());
+    DEBUG(D_COMM, "(Comm::handleError) ERROR: " + s.toStdString() + ".");
+    emit error(s.toStdString());
 }
 
 ///

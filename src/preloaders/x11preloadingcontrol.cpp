@@ -29,7 +29,7 @@
 #include <X11/Xlib.h>
 #endif
 
-PreloadingControl* X11PreloadingControl::pc = NULL;
+PreloadingControl *X11PreloadingControl::pc = NULL;
 
 X11PreloadingControl::X11PreloadingControl(EventConsumer *ec, EventExecutor *ex)
     : PreloadingControl(ec, ex)
@@ -57,8 +57,8 @@ bool X11PreloadingControl::do_preload()
 #endif
 
         // create specific consumers and executor
-        EventConsumer* ec = new QtEventConsumer();
-        EventExecutor* ex = new QtEventExecutor();
+        EventConsumer *ec = new QtEventConsumer();
+        EventExecutor *ex = new QtEventExecutor();
 
         //create a control instance
         pc = new X11PreloadingControl(ec,ex);
@@ -107,9 +107,9 @@ void QObject::timerEvent ( QTimerEvent * )
 
 
 #if QT_VERSION >= 0x050000
-bool QWidget::nativeEvent(const QByteArray & eventType, void * message, long * result)
+bool QWidget::nativeEvent(const QByteArray &eventType, void *message, long *result)
 #else
-bool QWidget::x11Event ( XEvent * event )
+bool QWidget::x11Event ( XEvent *event )
 #endif
 {
     X11PreloadingControl::do_preload();

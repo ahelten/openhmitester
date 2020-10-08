@@ -32,163 +32,163 @@
 
 PreloadController::PreloadController(PreloadingControl *pc, EventConsumer *ec,
                                      EventExecutor *ex) {
-  _ev_consumer = ec;
-  _ev_executor = ex;
+    _ev_consumer = ec;
+    _ev_executor = ex;
 }
 
 PreloadController::~PreloadController() {
-  if (_comm != NULL) {
-    _comm->stop();
-    delete _comm;
-  }
+    if (_comm != NULL) {
+        _comm->stop();
+        delete _comm;
+    }
 }
 
 ///
 /// init method
 ///
 bool PreloadController::initialize() {
-  // create and start comm
-  _comm = new Comm(TCP_PORT, false);
-  _comm->resetAndStart();
+    // create and start comm
+    _comm = new Comm(TCP_PORT, false);
+    _comm->resetAndStart();
 
-  // install consumer
-  _ev_consumer->install();
+    // install consumer
+    _ev_consumer->install();
 
-  // install executor
-  _ev_executor->install();
+    // install executor
+    _ev_executor->install();
 
-  ///
-  /// signals connection
-  ///
+    ///
+    /// signals connection
+    ///
 
-  // signals between comm and preloadController
-  connect(this, SIGNAL(sendTestItem(const DataModel::TestItem &)), _comm,
-          SLOT(handleSendTestItem(const DataModel::TestItem &)));
-  //  connect(_comm, SIGNAL(receivedTestItem(DataModel::TestItem *)), this,
-  //          SLOT(handleReceivedTestItem(DataModel::TestItem *)),
-  //          Qt::BlockingQueuedConnection);
+    // signals between comm and preloadController
+    connect(this, SIGNAL(sendTestItem(const DataModel::TestItem &)), _comm,
+            SLOT(handleSendTestItem(const DataModel::TestItem &)));
+    //  connect(_comm, SIGNAL(receivedTestItem(DataModel::TestItem *)), this,
+    //          SLOT(handleReceivedTestItem(DataModel::TestItem *)),
+    //          Qt::BlockingQueuedConnection);
 
-  connect(_comm, SIGNAL(OurReceivedMessage(QString)),
-          SLOT(handleReceivedMessage(QString)));
+    connect(_comm, SIGNAL(OurReceivedMessage(QString)),
+            SLOT(handleReceivedMessage(QString)));
 
-  // signals between eventConsumer and comm
-  connect(_ev_consumer, SIGNAL(newTestItem(const DataModel::TestItem &)), _comm,
-          SLOT(handleSendTestItem(const DataModel::TestItem &)));
+    // signals between eventConsumer and comm
+    connect(_ev_consumer, SIGNAL(newTestItem(const DataModel::TestItem &)), _comm,
+            SLOT(handleSendTestItem(const DataModel::TestItem &)));
 
-  ///
-  /// process state control
-  ///
-  state_ = STOP;
+    ///
+    /// process state control
+    ///
+    state_ = STOP;
 
-  return true;
+    return true;
 }
 
 void PreloadController::handleReceivedMessage(const QString &s) {
-  qDebug() << __PRETTY_FUNCTION__;
-  std::istringstream iss(s.toStdString());
-  // Create the test archive using a string as a buffer
-  boost::archive::text_iarchive ia(iss);
-  // write class instance to archive
-  DataModel::TestItem *ti = new DataModel::TestItem();
-  ia >> *ti;
+    qDebug() << __PRETTY_FUNCTION__;
+    std::istringstream iss(s.toStdString());
+    // Create the test archive using a string as a buffer
+    boost::archive::text_iarchive ia(iss);
+    // write class instance to archive
+    DataModel::TestItem *ti = new DataModel::TestItem();
+    ia >> *ti;
 
-  DEBUG(D_COMM, "(Comm::handleReceivedMessage) Emiting new received TestItem.");
+    DEBUG(D_COMM, "(Comm::handleReceivedMessage) Emiting new received TestItem.");
 
 //  emit receivedTestItem(ti);
 
-  handleReceivedTestItem(ti);
+    handleReceivedTestItem(ti);
 }
 
 ///
 /// state info
 ///
 PreloadController::ProcessState PreloadController::state() const {
-  return state_;
+    return state_;
 }
 
 ///
 /// input method (comm signal handle)
 ///
 void PreloadController::handleReceivedTestItem(DataModel::TestItem *ti) {
-  DEBUG(D_PRELOAD, "(PreloadController::handleReceivedTestItem)");
-  // if it is a control item...
-  if (ti->type() == Control::CTI_TYPE) {
-    handleReceivedControl(static_cast<Control::ControlTestItem *>(ti));
-    DEBUG(D_PRELOAD,
-          "(PreloadController::handleReceivedTestItem) Control event handled.");
-  }
-  // if not...
-  else {
-    // if play process is enabled redirect the event
-    if (state() == PLAY) {
-      _ev_executor->handleNewTestItemReceived(ti);
-      // TODO delete the item here????
-      DEBUG(D_PRELOAD,
-            "(PreloadController::handleReceivedTestItem) Event handled. Type = "
-                << ti->type() << " Subtype = " << ti->subtype());
-
-      // and send a control event to synchronize the process
-      Control::CTI_EventExecuted cti;
-      _comm->handleSendTestItem(cti);
-      DEBUG(D_PRELOAD, "(PreloadController::handleReceivedTestItem) Event "
-                       "executed notified.");
+    DEBUG(D_PRELOAD, "(PreloadController::handleReceivedTestItem)");
+    // if it is a control item...
+    if (ti->type() == Control::CTI_TYPE) {
+        handleReceivedControl(static_cast<Control::ControlTestItem *>(ti));
+        DEBUG(D_PRELOAD,
+              "(PreloadController::handleReceivedTestItem) Control event handled.");
     }
-  }
+    // if not...
+    else {
+        // if play process is enabled redirect the event
+        if (state() == PLAY) {
+            _ev_executor->handleNewTestItemReceived(ti);
+            // TODO delete the item here????
+            DEBUG(D_PRELOAD,
+                  "(PreloadController::handleReceivedTestItem) Event handled. Type = "
+                  << ti->type() << " Subtype = " << ti->subtype());
+
+            // and send a control event to synchronize the process
+            Control::CTI_EventExecuted cti;
+            _comm->handleSendTestItem(cti);
+            DEBUG(D_PRELOAD, "(PreloadController::handleReceivedTestItem) Event "
+                  "executed notified.");
+        }
+    }
 }
 
 ///
 /// input method (control signaling)
 ///
 void PreloadController::handleReceivedControl(Control::ControlTestItem *cti) {
-  DEBUG(D_PRELOAD, "(PreloadController::handleReceivedControl)");
-  ///
-  /// depending on the subtype...
-  ///
+    DEBUG(D_PRELOAD, "(PreloadController::handleReceivedControl)");
+    ///
+    /// depending on the subtype...
+    ///
 
-  // 10 -> playback
-  // const int CTI_START_PLAYBACK = 11;
-  if (cti->subtype() == Control::CTI_START_PLAYBACK) {
-    state_ = PLAY;
-    DEBUG(D_PRELOAD,
-          "(PreloadController::handleReceivedControl) STATE: Start playback.");
-    execution_start();
-  }
-  // const int CTI_STOP_PLAYBACK = 12;
-  else if (cti->subtype() == Control::CTI_STOP_PLAYBACK) {
-    state_ = STOP;
-    DEBUG(D_PRELOAD,
-          "(PreloadController::handleReceivedControl) STATE: Stop playback.");
-    execution_stop();
-  }
-  // const int CTI_PAUSE_PLAYBACK = 13;
-  else if (cti->subtype() == Control::CTI_PAUSE_PLAYBACK) {
-    state_ = PAUSE_PLAY;
-    DEBUG(D_PRELOAD,
-          "(PreloadController::handleReceivedControl) STATE: Pause playback.");
-    execution_pause();
-  }
-  // 20 -> recording
-  // const int CTI_START_RECORDING = 21;
-  else if (cti->subtype() == Control::CTI_START_RECORDING) {
-    state_ = RECORD;
-    DEBUG(D_PRELOAD,
-          "(PreloadController::handleReceivedControl) STATE: Start recording.");
-    capture_start();
-  }
-  // const int CTI_STOP_RECORDING = 22;
-  else if (cti->subtype() == Control::CTI_STOP_RECORDING) {
-    state_ = STOP;
-    DEBUG(D_PRELOAD,
-          "(PreloadController::handleReceivedControl) STATE: Stop recording.");
-    capture_stop();
-  }
-  // const int CTI_PAUSE_RECORDING = 23;
-  else if (cti->subtype() == Control::CTI_PAUSE_RECORDING) {
-    state_ = PAUSE_RECORD;
-    DEBUG(D_PRELOAD,
-          "(PreloadController::handleReceivedControl) STATE: Pause recording.");
-    capture_pause();
-  }
+    // 10 -> playback
+    // const int CTI_START_PLAYBACK = 11;
+    if (cti->subtype() == Control::CTI_START_PLAYBACK) {
+        state_ = PLAY;
+        DEBUG(D_PRELOAD,
+              "(PreloadController::handleReceivedControl) STATE: Start playback.");
+        execution_start();
+    }
+    // const int CTI_STOP_PLAYBACK = 12;
+    else if (cti->subtype() == Control::CTI_STOP_PLAYBACK) {
+        state_ = STOP;
+        DEBUG(D_PRELOAD,
+              "(PreloadController::handleReceivedControl) STATE: Stop playback.");
+        execution_stop();
+    }
+    // const int CTI_PAUSE_PLAYBACK = 13;
+    else if (cti->subtype() == Control::CTI_PAUSE_PLAYBACK) {
+        state_ = PAUSE_PLAY;
+        DEBUG(D_PRELOAD,
+              "(PreloadController::handleReceivedControl) STATE: Pause playback.");
+        execution_pause();
+    }
+    // 20 -> recording
+    // const int CTI_START_RECORDING = 21;
+    else if (cti->subtype() == Control::CTI_START_RECORDING) {
+        state_ = RECORD;
+        DEBUG(D_PRELOAD,
+              "(PreloadController::handleReceivedControl) STATE: Start recording.");
+        capture_start();
+    }
+    // const int CTI_STOP_RECORDING = 22;
+    else if (cti->subtype() == Control::CTI_STOP_RECORDING) {
+        state_ = STOP;
+        DEBUG(D_PRELOAD,
+              "(PreloadController::handleReceivedControl) STATE: Stop recording.");
+        capture_stop();
+    }
+    // const int CTI_PAUSE_RECORDING = 23;
+    else if (cti->subtype() == Control::CTI_PAUSE_RECORDING) {
+        state_ = PAUSE_RECORD;
+        DEBUG(D_PRELOAD,
+              "(PreloadController::handleReceivedControl) STATE: Pause recording.");
+        capture_pause();
+    }
 }
 
 ///

@@ -29,7 +29,7 @@
 #include <QString>
 
 namespace Ui {
-    class GeneralInputDialog;
+class GeneralInputDialog;
 }
 
 class GeneralInputDialog : public QDialog {
@@ -41,13 +41,13 @@ public:
     virtual ~GeneralInputDialog();
 
     //add element
-    void addElement(const QString&);
+    void addElement(const QString &);
 
     //getData methods
-    QString getData(const QString&);
+    QString getData(const QString &);
 
     //static utilities
-    static QStringList askForValues(const QStringList&);
+    static QStringList askForValues(const QStringList &);
 
 protected:
     virtual void changeEvent(QEvent *e);
@@ -56,7 +56,7 @@ private:
     Ui::GeneralInputDialog *m_ui;
 
     //input map
-    boost::ptr_map<QString, QLineEdit*> elements_;
+    boost::ptr_map<QString, QLineEdit *> elements_;
 };
 
 #endif // GENERALINPUTDIALOG_H
