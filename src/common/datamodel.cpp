@@ -143,7 +143,7 @@ DataModel::TestCase *TestSuite::getTestCase(const std::string &name) throw(not_f
     TestCaseMap::iterator it = tcMap_.find(name);
 
     if (it == tcMap_.end()) {
-        LOG_ERR("getTestCase() throw");
+        LOG_ERR("throwing not_found exception");
 
         throw not_found();
     }

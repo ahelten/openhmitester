@@ -43,7 +43,7 @@ PlaybackControl::~PlaybackControl()
 /// ///
 bool PlaybackControl::runTestCase(DataModel::TestCase *tc, float speed)
 {
-    // //execution thread should exist and be stoped
+    // //execution thread should exist and be stopped
     // if (!executionThread_.get())
     // {
     //     DEBUG(D_ERROR, "(PlaybackControl::runTestCase) ERROR: Execution Thread is NULL.");

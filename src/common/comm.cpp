@@ -60,17 +60,17 @@ bool Comm::resetAndStart() {
 
     // if it is a server...
     if (_isServer) {
-        DEBUG(D_COMM, "(Comm::Comm) Created new message server on port " << _port);
+        DEBUG(D_COMM, "Created new message server on port " << _port);
     }
     // if it is a client...
     else {
-        DEBUG(D_COMM, "(Comm::Comm) Created new client on port " << _port);
+        DEBUG(D_COMM, "Created new client on port " << _port);
     }
 
     clientConnected_ = false;
     testItemQueue_.clear();
 
-    DEBUG(D_COMM, "(Comm::Comm) COMM STARTED");
+    DEBUG(D_COMM, "COMM STARTED");
 
     return true;
 }
@@ -80,7 +80,7 @@ bool Comm::stop() {
     clientConnected_ = false;
     testItemQueue_.clear();
 
-    DEBUG(D_COMM, "(Comm::Comm) COMM STOPED");
+    DEBUG(D_COMM, "COMM STOPPED");
     return true;
 }
 
@@ -97,12 +97,12 @@ void Comm::handleSendMessage(const std::string &s) {
 /// send message handler
 ///
 void Comm::handleSendTestItem(const DataModel::TestItem &ti) {
-    DEBUG(D_COMM, "(Comm::handleSendTestItem)");
+    DEBUG(D_COMM, "enter");
 
     // If the client is not connected, store the event
     if (_isServer && !clientConnected_) {
         testItemQueue_.push_back(ti);
-        DEBUG(D_COMM, "(Comm::handleSendTestItem) Item in the queue.");
+        DEBUG(D_COMM, "Item in the queue");
     } else {
         // This step wouldn't be neccessary when we use correct sockets as streams
         std::ostringstream oss;
@@ -110,11 +110,11 @@ void Comm::handleSendTestItem(const DataModel::TestItem &ti) {
         boost::archive::text_oarchive oa(oss);
         // write class instance to archive
         oa << ti;
-        DEBUG(D_COMM, "(Comm::handleSendTestItem) Item serialized.");
+        DEBUG(D_COMM, "Item serialized");
 
         emit sendMessage(QString(oss.str().c_str()));
 
-        DEBUG(D_COMM, "(Comm::handleSendTestItem) Item sent.");
+        DEBUG(D_COMM, "Item sent");
     }
 }
 
@@ -122,7 +122,7 @@ void Comm::handleSendTestItem(const DataModel::TestItem &ti) {
 /// new received message handler
 ///
 void Comm::handleReceivedMessage(const QString &s) {
-    LOG_DBG("enter");
+    DEBUG(D_COMM, "enter");
     std::istringstream iss(s.toStdString());
     // Create the test archive using a string as a buffer
     boost::archive::text_iarchive ia(iss);
@@ -130,8 +130,7 @@ void Comm::handleReceivedMessage(const QString &s) {
     DataModel::TestItem *ti = new DataModel::TestItem();
     ia >> *ti;
 
-    DEBUG(D_COMM,
-          "(Comm::handleReceivedMessage) Emiting new received  TestItem.");
+    DEBUG(D_COMM, "Emitting new received TestItem");
     emit receivedTestItem(ti);
 
     emit OurReceivedMessage(s);
@@ -141,7 +140,7 @@ void Comm::handleReceivedMessage(const QString &s) {
 /// handles the new client connection
 ///
 void Comm::handleNewClientConnected() {
-    DEBUG(D_COMM, "(Comm::handleNewClientConnected)");
+    DEBUG(D_COMM, "enter");
     assert(clientConnected_ == false); // FIXME remove this assert
     clientConnected_ = true;
 
@@ -151,14 +150,14 @@ void Comm::handleNewClientConnected() {
     do {
         handleSendTestItem(testItemQueue_.front());
         testItemQueue_.pop_front();
-        DEBUG(D_COMM, "(Comm::handleNewClientConnected) One stored TestItem sent.");
+        DEBUG(D_COMM, "One stored TestItem sent");
     } while (testItemQueue_.size());
 
-    DEBUG(D_COMM, "(Comm::handleNewClientConnected) Stored TestItems sent.");
+    DEBUG(D_COMM, "Stored TestItems sent");
 }
 
 void Comm::handleClientDisconnected() {
-    DEBUG(D_COMM, "(Comm::handleClientDisconnected)");
+    DEBUG(D_COMM, "enter");
     assert(clientConnected_ == true); // FIXME remove this assert
 
     // reset comm state for the next client
@@ -170,7 +169,7 @@ void Comm::handleClientDisconnected() {
 /// error handling
 ///
 void Comm::handleError(const QString &s) {
-    DEBUG(D_COMM, "(Comm::handleError) ERROR: " + s.toStdString() + ".");
+    DEBUG(D_COMM, "ERROR: " + s.toStdString());
     emit error(s.toStdString());
 }
 

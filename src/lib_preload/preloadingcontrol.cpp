@@ -91,6 +91,5 @@ void PreloadingControl::initPreload() {
     //                   SLOT(deleteLater()));
     test_thread_->start();
 
-    DEBUG(D_PRELOAD, "(PreloadingControl::initPreload) Preload Controller "
-          "instance initiallized.");
+    DEBUG(D_PRELOAD, "Preload Controller instance initiallized");
 }

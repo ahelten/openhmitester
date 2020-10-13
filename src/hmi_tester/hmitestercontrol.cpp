@@ -185,7 +185,7 @@ void HMITesterControl::_initializeMenu() {
 /// ///
 
 void HMITesterControl::tb_play_clicked() {
-    DEBUG(D_GUI, "(HMITesterControl::tb_play_clicked)");
+    DEBUG(D_GUI, "play clicked");
 
     // if the state == STOP it has to provide the
     // test case to play
@@ -212,11 +212,9 @@ void HMITesterControl::tb_play_clicked() {
                 tcName = _playlistMenu_agroup->actions().at(i)->text();
                 ok = _processControl->checkAndQueueTestCase(tcName.toStdString());
                 if (!ok) {
-                    DEBUG(D_ERROR, "(HMITesterControl::tb_play_clicked) Row playback. "
-                          "Test case not found.");
+                    DEBUG(D_ERROR, "Row playback. Test case not found.");
                 } else {
-                    DEBUG(D_GUI, "(HMITesterControl::tb_play_clicked) Queuing testcase "
-                          << i + 1 << "/" << total_tc);
+                    DEBUG(D_GUI, "Queuing testcase " << i + 1 << "/" << total_tc);
                 }
             }
             // play test cases
@@ -234,9 +232,7 @@ void HMITesterControl::tb_play_clicked() {
             }
 
             // indicate that the play button has been pressed
-            DEBUG(
-                    D_GUI,
-                    "(HMITesterControl::tb_play_clicked) Start Play or Resume process.");
+            DEBUG(D_GUI, "Start Play or Resume process");
             _processControl->playQueuedTestCases();
         }
 
@@ -248,18 +244,18 @@ void HMITesterControl::tb_play_clicked() {
 }
 
 void HMITesterControl::tb_pause_clicked() {
-    DEBUG(D_GUI, "(HMITesterControl::tb_pause_clicked)");
+    DEBUG(D_GUI, "pause clicked");
     _processControl->pauseClicked();
     _set_statusbar_text("Paused");
 }
 
 void HMITesterControl::tb_stop_clicked() {
-    DEBUG(D_GUI, "(HMITesterControl::tb_stop_clicked)");
+    DEBUG(D_GUI, "stop clicked");
     _processControl->stopClicked();
 }
 
 void HMITesterControl::tb_rec_clicked() {
-    DEBUG(D_GUI, "(HMITesterControl::tb_rec_clicked)");
+    DEBUG(D_GUI, "record clicked");
 
     // if it is a new Test Case recording...
     if (_processControl->state() == ProcessControl::STOP) {
@@ -298,8 +294,7 @@ void HMITesterControl::tb_rec_clicked() {
             }
 
             // everything ok? go on with recording
-            DEBUG(D_GUI,
-                  "(HMITesterControl::tb_rec_clicked) Starting record process.");
+            DEBUG(D_GUI, "Starting record process");
             _processControl->recClicked();
         }
         // if rejected...
@@ -316,7 +311,7 @@ void HMITesterControl::tb_rec_clicked() {
 /// ///
 
 void HMITesterControl::action_open_triggered() {
-    DEBUG(D_GUI, "(HMITesterControl::action_open_triggered)");
+    DEBUG(D_GUI, "enter");
 
     _settings.beginGroup("HMITesterControl");
     QString lastOpenDir =
@@ -349,7 +344,7 @@ void HMITesterControl::action_open_triggered() {
 }
 
 void HMITesterControl::action_edit_triggered() {
-    DEBUG(D_GUI, "(HMITesterControl::action_edit_triggered)");
+    DEBUG(D_GUI, "enter");
     _settings.beginGroup("HMITesterControl");
     QString lastOpenDir =
             _settings.value(SETT_LAST_OPEN_DIR, QDir::homePath()).toString();
@@ -394,7 +389,7 @@ void HMITesterControl::action_edit_triggered() {
 }
 
 void HMITesterControl::action_new_triggered() {
-    DEBUG(D_GUI, "(HMITesterControl::action_new_triggered)");
+    DEBUG(D_GUI, "enter");
 
     // ask for new testsuite data
     NewTSDialog newtsd;
@@ -421,7 +416,7 @@ void HMITesterControl::action_new_triggered() {
 }
 
 void HMITesterControl::action_close_triggered() {
-    DEBUG(D_GUI, "(HMITesterControl::action_close_triggered)");
+    DEBUG(D_GUI, "enter");
 
     // close the testSuite
     bool ok = _processControl->closeCurrentTestSuite();
@@ -432,37 +427,37 @@ void HMITesterControl::action_close_triggered() {
 }
 
 void HMITesterControl::action_exit_triggered() {
-    DEBUG(D_GUI, "(HMITesterControl::action_exit_triggered)");
+    DEBUG(D_GUI, "enter");
     exit(0);
 }
 
 void HMITesterControl::action_speed1x_triggered() {
-    DEBUG(D_GUI, "(HMITesterControl::action_speed1x_triggered)");
+    DEBUG(D_GUI, "enter");
     _processControl->context().speed = 1;
 }
 
 void HMITesterControl::action_speed05x_triggered() {
-    DEBUG(D_GUI, "(HMITesterControl::action_speed05x_triggered)");
+    DEBUG(D_GUI, "enter");
     _processControl->context().speed = 0.5;
 }
 
 void HMITesterControl::action_speed2x_triggered() {
-    DEBUG(D_GUI, "(HMITesterControl::action_speed2x_triggered)");
+    DEBUG(D_GUI, "enter");
     _processControl->context().speed = 2;
 }
 
 void HMITesterControl::action_speed4x_triggered() {
-    DEBUG(D_GUI, "(HMITesterControl::action_speed4x_triggered)");
+    DEBUG(D_GUI, "enter");
     _processControl->context().speed = 4;
 }
 
 void HMITesterControl::action_keepAlive_triggered(bool b) {
-    DEBUG(D_GUI, "(HMITesterControl::action_keepAlive_triggered)");
+    DEBUG(D_GUI, "enter");
     _processControl->context().keepAlive = b;
 }
 
 void HMITesterControl::action_showTesterOnTop_triggered(bool b) {
-    DEBUG(D_GUI, "(HMITesterControl::action_showTesterOnTop_triggered)");
+    DEBUG(D_GUI, "enter");
     _processControl->context().showTesterOnTop = b;
 
     QWidget *w = this;
@@ -485,7 +480,7 @@ void HMITesterControl::action_showTesterOnTop_triggered(bool b) {
 /// ///
 
 void HMITesterControl::action_global_shortcut_triggered() {
-    DEBUG(D_GUI, "(HMITesterControl::action_global_shortcut_triggered)");
+    DEBUG(D_GUI, "enter");
     _d("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx");
 }
 
@@ -496,13 +491,13 @@ void HMITesterControl::action_global_shortcut_triggered() {
 /// ///
 
 void HMITesterControl::_playTestCaseSelected_triggered(bool) {
-    DEBUG(D_GUI, "(HMITesterControl::PlayTestCaseSelected_triggered)");
+    DEBUG(D_GUI, "enter");
     // nothing is performed here
     // tb_play_clicked();
 }
 
 void HMITesterControl::updateTestSuiteInfo(DataModel::TestSuite *ts) {
-    DEBUG(D_GUI, "(HMITesterControl::updateTestSuiteInfo)");
+    DEBUG(D_GUI, "enter");
     // asserts
     assert(_menu_File);
     assert(_menu_Config);

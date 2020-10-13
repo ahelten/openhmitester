@@ -47,9 +47,7 @@ MessageClientServer::MessageClientServer(QObject *parent, uint port,
     if (isServer) {
         // starting listening process
         if (!this->listen(QHostAddress(SERVER_IP), _port)) {
-            DEBUG(D_ERROR,
-                  "(MessageClientServer::MessageClientServer) Unable to start server "
-                  << SERVER_IP << "::" << _port
+            DEBUG(D_ERROR, "Unable to start server " << SERVER_IP << "::" << _port
                   << " ERROR = " << this->errorString().toStdString());
             close();
             return;
@@ -58,9 +56,7 @@ MessageClientServer::MessageClientServer(QObject *parent, uint port,
         // connect(this, SIGNAL(newConnection()), /**/ this,
         // SIGNAL(newClientConnected()));
 
-        DEBUG(D_COMM, "(MessageClientServer::MessageClientServer) Server listening "
-              "on address "
-              << SERVER_IP << "::" << _port);
+        DEBUG(D_COMM, "Server listening on address " << SERVER_IP << "::" << _port);
     }
 
     ///
@@ -71,22 +67,18 @@ MessageClientServer::MessageClientServer(QObject *parent, uint port,
         currentSocket_.reset(new QTcpSocket(this));
         connect(currentSocket_.get(), SIGNAL(error(QAbstractSocket::SocketError)),
                 this, SLOT(displayError(QAbstractSocket::SocketError)));
-        connect(currentSocket_.get(), SIGNAL(readyRead()), this,
-                SLOT(readMessage()));
+        connect(currentSocket_.get(), SIGNAL(readyRead()), this, SLOT(readMessage()));
 
         // connecting to the server
-        DEBUG(D_COMM,
-              "(MessageClientServer::MessageClientServer) Connecting to address "
-              << SERVER_IP << " and port " << _port << ".");
+        DEBUG(D_COMM, "Connecting to address " << SERVER_IP << " and port " << _port);
         currentSocket_->connectToHost(QHostAddress(SERVER_IP), _port);
-        if (currentSocket_->waitForConnected(2000))
-            DEBUG(D_COMM, "(MessageClientServer::MessageClientServer) Client "
-                  "successfully connected.");
-        else
-
-            DEBUG(D_COMM, "(MessageClientServer::MessageClientServer) Error while "
-                  "connecting client. Code = " +
+        if (currentSocket_->waitForConnected(2000)) {
+            DEBUG(D_COMM, "Client successfully connected");
+        }
+        else {
+            DEBUG(D_COMM, "Error while connecting client. Code = " +
                   QString::number(currentSocket_->error()).toStdString());
+        }
     }
 }
 
@@ -101,8 +93,7 @@ void MessageClientServer::incomingConnection(qintptr socketDescriptor)
 void MessageClientServer::incomingConnection(int socketDescriptor)
 #endif
 {
-    DEBUG(D_COMM, "(MessageClientServer::incomingConnection) Socket = " +
-          QString::number(socketDescriptor).toStdString());
+    DEBUG(D_COMM, "Socket = " + QString::number(socketDescriptor).toStdString());
 
     // FIXME: It only accepts one connection and erases
     // the previous ones. Have to fix this.
@@ -124,8 +115,7 @@ void MessageClientServer::incomingConnection(int socketDescriptor)
     // send the signal
     emit newClientConnected();
 
-    DEBUG(D_COMM,
-          "(MessageClientServer::incomingConnection) New incomming client.");
+    DEBUG(D_COMM, "New incomming client");
 }
 
 //
@@ -136,28 +126,23 @@ void MessageClientServer::writeMessage(const QString &s) {
     // s.toStdString());  writing a new message into the socket
     assert(currentSocket_.get());
     if (!_writeSocket(currentSocket_.get(), s)) {
-        DEBUG(D_ERROR,
-              "(MessageClientServer::writeMessage) Error while writting sockect.");
-        emit error(
-                "(MessageClientServer::writeMessage) Error writing into the socket.");
+        DEBUG(D_ERROR, "Error while writting sockect");
+        emit error("MessageClientServer::writeMessage) Error writing into the socket.");
     }
 
-    DEBUG(D_COMM,
-          "(MessageClientServer::writeMessage) Message written into the socket.");
+    DEBUG(D_COMM, "Message written into the socket");
 }
 
 //
 // reading data from the client
 //
 void MessageClientServer::readMessage() {
-    DEBUG(D_COMM, "(MessageClientServer::readMessage)");
+    DEBUG(D_COMM, "enter");
     // if we cannot read...
     assert(currentSocket_.get());
     if (!_readSocket(currentSocket_.get(), &buffer_)) {
-        DEBUG(D_ERROR,
-              "(MessageClientServer::readMessage) Error reading from the socket.");
-        emit error(
-                "(MessageClientServer::readMessage) Error reading from the socket.");
+        DEBUG(D_ERROR, "Error reading from the socket");
+        emit error("(MessageClientServer::readMessage) Error reading from the socket.");
     }
     // if we can, we store the data into the buffer and emit complete messages
     else {
@@ -166,14 +151,14 @@ void MessageClientServer::readMessage() {
         while (message != "") {
             // DEBUG(D_COMM, "(MessageClientServer::readMessage) One message
             // received:");  DEBUG(D_COMM, "(MessageClientServer::readMessage) " <<
-            // message.toStdString());  emiting the received message signal
+            // message.toStdString());  emitting the received message signal
             emit receivedMessage(message);
-            DEBUG(D_COMM, "(MessageClientServer::readMessage) Message emited.");
+            DEBUG(D_COMM, "Message emitted");
             // reading the next message (if it exists)
             message = buffer_.getOneString();
         }
     }
-    DEBUG(D_COMM, "(MessageClientServer::readMessage) Exit");
+    DEBUG(D_COMM, "Exit");
 }
 
 ///
@@ -231,7 +216,7 @@ void MessageClientServer::handleClientDisconnected() {
 ///
 bool MessageClientServer::_readSocket(QTcpSocket *s,
                                       QCircularByteArray_ *buffer) {
-    DEBUG(D_COMM, "(readSocket)");
+    DEBUG(D_COMM, "enter");
     assert(buffer);
     assert(s);
     // if it is connected and bytes available...
@@ -241,12 +226,12 @@ bool MessageClientServer::_readSocket(QTcpSocket *s,
             QByteArray data = s->readAll();
             assert(buffer->addData(data));
 
-            DEBUG(D_COMM, "(readSocket) adding data to the buffer.");
+            DEBUG(D_COMM, "adding data to the buffer");
         }
         // return OK
         return true;
     } else {
-        DEBUG(D_COMM, "(readSocket) Error while reading from the socket.");
+        DEBUG(D_COMM, "Error while reading from the socket");
         // return KO
         return false;
     }
@@ -256,7 +241,7 @@ bool MessageClientServer::_readSocket(QTcpSocket *s,
 /// write in socket
 ///
 bool MessageClientServer::_writeSocket(QTcpSocket *s, const QString &message) {
-    DEBUG(D_COMM, "(writeSocket)");
+    DEBUG(D_COMM, "enter");
     assert(message != ""); // FIXME: remove this assert
     // if it is connected...
     if (s && s->state() == QAbstractSocket::ConnectedState) {
@@ -266,13 +251,12 @@ bool MessageClientServer::_writeSocket(QTcpSocket *s, const QString &message) {
         std::string msg = message.toStdString();
         s->write(msg.c_str(), msg.size() + 1);
 
-        DEBUG(D_COMM, "(writeSocket) Written.");
+        DEBUG(D_COMM, "Written");
         s->flush();
         // return OK
         return true;
     } else {
-        DEBUG(D_ERROR, "(writeSocket) Error while writing into the socket. Socket "
-              "NULL or not connected.");
+        DEBUG(D_ERROR, "Error while writing into the socket. Socket NULL or not connected");
         // return KO
         return false;
     }
@@ -283,10 +267,8 @@ bool MessageClientServer::_writeSocket(QTcpSocket *s, const QString &message) {
 ///
 ClientSocket::ClientSocket(int sock, QObject *parent) : QTcpSocket(parent) {
     // trying to connect
-    if (!setSocketDescriptor(sock, QAbstractSocket::ConnectedState,
-                             QIODevice::ReadWrite)) {
-        emit error("(ClientSocket::ClientSocket) Error connecting to the socket "
-                   "descriptor.");
+    if (!setSocketDescriptor(sock, QAbstractSocket::ConnectedState, QIODevice::ReadWrite)) {
+        emit error("(ClientSocket::ClientSocket) Error connecting to the socket descriptor.");
         return;
     }
 }

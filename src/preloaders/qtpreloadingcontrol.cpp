@@ -46,8 +46,7 @@ QtPreloadingControl::~QtPreloadingControl() {
 
 bool QtPreloadingControl::Do_preload() {
     if (!pc) {
-        DEBUG(D_PRELOAD,
-              "(QtPreloadingControl::do_preload) Initializing hooking process.");
+        DEBUG(D_PRELOAD, "Initializing hooking process");
 
 #if LINUX_OHT
         // sinchronizing X11 threads
@@ -60,10 +59,7 @@ bool QtPreloadingControl::Do_preload() {
 
         // call the initialize method
         pc->initPreload();
-        DEBUG(D_PRELOAD,
-              "(QtPreloadingControl::do_preload) Hooking process finished.");
-
-        std::cout << "Waking up..." << std::endl;
+        DEBUG(D_PRELOAD, "Hooking process finished... waking up...");
 
         return true;
     }
@@ -81,8 +77,7 @@ bool QtPreloadingControl::Do_preload() {
   replace the original implementation and add the
 */
 
-bool QWidget::nativeEvent(const QByteArray &eventType, void *message,
-                          long *result) {
+bool QWidget::nativeEvent(const QByteArray &eventType, void *message, long *result) {
     QtPreloadingControl::Do_preload();
     return false;
 }

@@ -39,7 +39,7 @@ QtEventExecutor::QtEventExecutor() : EventExecutor() {
 ///
 void QtEventExecutor::install() {
     // it does not an installation process
-    DEBUG(D_EXECUTOR, "(QtEventExecutor::install) Event Executor installed.");
+    DEBUG(D_EXECUTOR, "Event Executor installed.");
 }
 
 ///
@@ -82,18 +82,16 @@ void QtEventExecutor::handleNewTestItemReceived(DataModel::TestItem *ti) {
     /// process control
     ///
 
-    // if process is stoped...
+    // if process is stopped...
     if (f_executing_ == false) {
         // no event executing
-        DEBUG(D_EXECUTOR, "(QtEventExecutor::handleNewTestItemReceived) Stop "
-              "state. No event executing.");
+        DEBUG(D_EXECUTOR, "Stop state. No event executing.");
         return;
     }
     // if process is paused...
     else if (f_executing_ && f_paused_) {
         // no event executing
-        DEBUG(D_EXECUTOR, "(QtEventExecutor::handleNewTestItemReceived) Pause "
-              "state. No event executing.");
+        DEBUG(D_EXECUTOR, "Pause state. No event executing.");
         return;
     }
     // if process is executing...
@@ -146,23 +144,22 @@ void QtEventExecutor::executeMousePressEvent(QOE::QOE_MousePress *qoe) {
 
     QWidget *widget = _getWidget(qoe);
     if (widget == NULL) {
-        DEBUG(D_ERROR, "(QtEventExecutor::executeMousePressEvent) Missing Widget: "
-              << qoe->widget());
+        DEBUG(D_ERROR, "Problem getting Widget: " << qoe->widget());
     }
     else {
-        QTDEBUGT(D_EXECUTOR, "(QtEventExecutor::executeMousePressEvent):" << widget);
+        QTDEBUGT(D_EXECUTOR, "Retrieved widget:" << widget);
     }
 
     /// Note that the widget might be NULL. Please, be careful!!
 
-    QTDEBUG("(QtEventExecutor::executeMousePressEvent) Pre execution:" << widget);
+    QTDEBUG("Pre execution:" << widget);
     _preExecutionWithMouseMove(qoe, widget);
-    QTDEBUGT(D_EXECUTOR, "(QtEventExecutor::executeMousePressEvent) Execute:" << widget);
+    QTDEBUGT(D_EXECUTOR, "Execute:" << widget);
     qoe->execute(widget);
-    QTDEBUGT(D_EXECUTOR, "(QtEventExecutor::executeMousePressEvent) Post execution:" << widget);
+    QTDEBUGT(D_EXECUTOR, "Post execution:" << widget);
     _postExecution(qoe, widget);
 
-    QTDEBUGT(D_EXECUTOR, "(QtEventExecutor::executeMousePressEvent) Exit:" << widget);
+    QTDEBUGT(D_EXECUTOR, "Exit:" << widget);
 }
 
 void QtEventExecutor::executeMouseReleaseEvent(QOE::QOE_MouseRelease *qoe) {
@@ -170,11 +167,10 @@ void QtEventExecutor::executeMouseReleaseEvent(QOE::QOE_MouseRelease *qoe) {
     // get the widget
     QWidget *widget = _getWidget(qoe);
     if (widget == NULL) {
-        DEBUG(D_ERROR, "(QtEventExecutor::executeMouseReleaseEvent) Missing Widget: "
-              << qoe->widget());
+        DEBUG(D_ERROR, "Problem getting Widget: " << qoe->widget());
     }
     else {
-        QTDEBUGT(D_EXECUTOR, "(QtEventExecutor::executeMouseReleaseEvent):" << widget);
+        QTDEBUGT(D_EXECUTOR, "Retrieved widget:" << widget);
     }
 
     _preExecutionWithMouseMove(qoe, widget);
@@ -187,11 +183,10 @@ void QtEventExecutor::executeMouseDoubleEvent(QOE::QOE_MouseDouble *qoe) {
     // get the widget
     QWidget *widget = _getWidget(qoe);
     if (widget == NULL) {
-        DEBUG(D_ERROR, "(QtEventExecutor::executeMouseDoubleEvent) Missing Widget: "
-              << qoe->widget());
+        DEBUG(D_ERROR, "Problem getting Widget: " << qoe->widget());
     }
     else {
-        QTDEBUGT(D_EXECUTOR, "(QtEventExecutor::executeMouseDoubleEvent):" << widget);
+        QTDEBUGT(D_EXECUTOR, "Retrieved widget:" << widget);
     }
 
     _preExecutionWithMouseMove(qoe, widget);
@@ -203,11 +198,11 @@ void QtEventExecutor::executeKeyPressEvent(QOE::QOE_KeyPress *qoe) {
     // get the widget
     QWidget *widget = _getWidget(qoe);
     if (widget == NULL) {
-        DEBUG(D_ERROR, "(QtEventExecutor::executeKeyPressEvent) Missing Widget: "
+        DEBUG(D_ERROR, "Problem getting Widget: "
               << qoe->widget());
     }
     else {
-        QTDEBUGT(D_EXECUTOR, "(QtEventExecutor::executeKeyPressEvent):" << widget);
+        QTDEBUGT(D_EXECUTOR, "Retrieved widget:" << widget);
     }
 
     _preExecutionNoMouse(qoe, widget);
@@ -219,11 +214,10 @@ void QtEventExecutor::executeCloseEvent(QOE::QOE_WindowClose *qoe) {
     // get the widget
     QWidget *widget = _getWidget(qoe);
     if (widget == NULL) {
-        DEBUG(D_ERROR, "(QtEventExecutor::executeWindowCloseEvent) Missing Widget: "
-              << qoe->widget());
+        DEBUG(D_ERROR, "Problem getting Widget: " << qoe->widget());
     }
     else {
-        QTDEBUGT(D_EXECUTOR,"(QtEventExecutor::executeCloseEvent):" << widget);
+        QTDEBUGT(D_EXECUTOR, "Retrieved widget:" << widget);
     }
 
     _preExecutionNoMouse(qoe, widget);
@@ -235,11 +229,10 @@ void QtEventExecutor::executeWheelEvent(QOE::QOE_MouseWheel *qoe) {
     // get the widget
     QWidget *widget = _getWidget(qoe);
     if (widget == NULL) {
-        DEBUG(D_ERROR, "(QtEventExecutor::executeWheelEvent) Missing Widget: "
-              << qoe->widget());
+        DEBUG(D_ERROR, "Problem getting Widget: " << qoe->widget());
     }
     else {
-        QTDEBUGT(D_EXECUTOR, "(QtEventExecutor::executeWheelEvent):" << widget);
+        QTDEBUGT(D_EXECUTOR, "Retrieved widget:" << widget);
     }
 
     _preExecutionWithMouseMove(qoe, widget);

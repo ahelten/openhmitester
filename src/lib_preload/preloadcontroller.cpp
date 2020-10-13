@@ -84,7 +84,7 @@ bool PreloadController::initialize() {
 }
 
 void PreloadController::handleReceivedMessage(const QString &s) {
-    LOG_DBG("enter");
+    DEBUG(D_COMM, "enter");
     std::istringstream iss(s.toStdString());
     // Create the test archive using a string as a buffer
     boost::archive::text_iarchive ia(iss);
@@ -92,7 +92,7 @@ void PreloadController::handleReceivedMessage(const QString &s) {
     DataModel::TestItem *ti = new DataModel::TestItem();
     ia >> *ti;
 
-    DEBUG(D_COMM, "(Comm::handleReceivedMessage) Emiting new received TestItem.");
+    DEBUG(D_COMM, "Emitting new received TestItem");
 
 //  emit receivedTestItem(ti);
 
@@ -110,12 +110,11 @@ PreloadController::ProcessState PreloadController::state() const {
 /// input method (comm signal handle)
 ///
 void PreloadController::handleReceivedTestItem(DataModel::TestItem *ti) {
-    DEBUG(D_PRELOAD, "(PreloadController::handleReceivedTestItem)");
+    DEBUG(D_PRELOAD, "enter");
     // if it is a control item...
     if (ti->type() == Control::CTI_TYPE) {
         handleReceivedControl(static_cast<Control::ControlTestItem *>(ti));
-        DEBUG(D_PRELOAD,
-              "(PreloadController::handleReceivedTestItem) Control event handled.");
+        DEBUG(D_PRELOAD, "Control event handled");
     }
     // if not...
     else {
@@ -123,15 +122,13 @@ void PreloadController::handleReceivedTestItem(DataModel::TestItem *ti) {
         if (state() == PLAY) {
             _ev_executor->handleNewTestItemReceived(ti);
             // TODO delete the item here????
-            DEBUG(D_PRELOAD,
-                  "(PreloadController::handleReceivedTestItem) Event handled. Type = "
-                  << ti->type() << " Subtype = " << ti->subtype());
+            DEBUG(D_PRELOAD, "Event handled. Type = " << ti->type() << " Subtype = " <<
+                  ti->subtype());
 
             // and send a control event to synchronize the process
             Control::CTI_EventExecuted cti;
             _comm->handleSendTestItem(cti);
-            DEBUG(D_PRELOAD, "(PreloadController::handleReceivedTestItem) Event "
-                  "executed notified.");
+            DEBUG(D_PRELOAD, "Event executed notified");
         }
     }
 }
@@ -140,7 +137,7 @@ void PreloadController::handleReceivedTestItem(DataModel::TestItem *ti) {
 /// input method (control signaling)
 ///
 void PreloadController::handleReceivedControl(Control::ControlTestItem *cti) {
-    DEBUG(D_PRELOAD, "(PreloadController::handleReceivedControl)");
+    DEBUG(D_PRELOAD, "enter");
     ///
     /// depending on the subtype...
     ///
@@ -149,44 +146,38 @@ void PreloadController::handleReceivedControl(Control::ControlTestItem *cti) {
     // const int CTI_START_PLAYBACK = 11;
     if (cti->subtype() == Control::CTI_START_PLAYBACK) {
         state_ = PLAY;
-        DEBUG(D_PRELOAD,
-              "(PreloadController::handleReceivedControl) STATE: Start playback.");
+        DEBUG(D_PRELOAD, "STATE: Start playback.");
         execution_start();
     }
     // const int CTI_STOP_PLAYBACK = 12;
     else if (cti->subtype() == Control::CTI_STOP_PLAYBACK) {
         state_ = STOP;
-        DEBUG(D_PRELOAD,
-              "(PreloadController::handleReceivedControl) STATE: Stop playback.");
+        DEBUG(D_PRELOAD, "STATE: Stop playback.");
         execution_stop();
     }
     // const int CTI_PAUSE_PLAYBACK = 13;
     else if (cti->subtype() == Control::CTI_PAUSE_PLAYBACK) {
         state_ = PAUSE_PLAY;
-        DEBUG(D_PRELOAD,
-              "(PreloadController::handleReceivedControl) STATE: Pause playback.");
+        DEBUG(D_PRELOAD, "STATE: Pause playback.");
         execution_pause();
     }
     // 20 -> recording
     // const int CTI_START_RECORDING = 21;
     else if (cti->subtype() == Control::CTI_START_RECORDING) {
         state_ = RECORD;
-        DEBUG(D_PRELOAD,
-              "(PreloadController::handleReceivedControl) STATE: Start recording.");
+        DEBUG(D_PRELOAD, "STATE: Start recording.");
         capture_start();
     }
     // const int CTI_STOP_RECORDING = 22;
     else if (cti->subtype() == Control::CTI_STOP_RECORDING) {
         state_ = STOP;
-        DEBUG(D_PRELOAD,
-              "(PreloadController::handleReceivedControl) STATE: Stop recording.");
+        DEBUG(D_PRELOAD, "STATE: Stop recording.");
         capture_stop();
     }
     // const int CTI_PAUSE_RECORDING = 23;
     else if (cti->subtype() == Control::CTI_PAUSE_RECORDING) {
         state_ = PAUSE_RECORD;
-        DEBUG(D_PRELOAD,
-              "(PreloadController::handleReceivedControl) STATE: Pause recording.");
+        DEBUG(D_PRELOAD, "STATE: Pause recording.");
         capture_pause();
     }
 }

@@ -55,7 +55,7 @@ ItemManager::~ItemManager() {}
 ///
 /// ///
 void ItemManager::recordTestCase(DataModel::TestCase *tc) {
-    DEBUG(D_RECORDING, "(ItemManager::recordTestCase)");
+    DEBUG(D_RECORDING, "enter");
     // current test case reference
     assert(tc);
     currentTestCase_ = tc;
@@ -69,18 +69,17 @@ void ItemManager::recordTestCase(DataModel::TestCase *tc) {
     // reseting counter
     rtiCounter_ = 0;
 
-    DEBUG(D_RECORDING, "(ItemManager::recordTestCase) Flags updated.");
+    DEBUG(D_RECORDING, "Flags updated");
 
     // sending "START RECORDING COMMAND"
     Control::CTI_StartRecording cti;
     comm_->handleSendTestItem(cti);
 
-    DEBUG(D_RECORDING,
-          "(ItemManager::recordTestCase) CTI_StartRecording posted.");
+    DEBUG(D_RECORDING, "CTI_StartRecording posted");
 }
 
 void ItemManager::pauseRecording() {
-    DEBUG(D_RECORDING, "(ItemManager::pauseRecording)");
+    DEBUG(D_RECORDING, "enter");
     f_paused_ = true;
     f_recording_ = false;
 
@@ -90,7 +89,7 @@ void ItemManager::pauseRecording() {
 }
 
 void ItemManager::resumeRecording() {
-    DEBUG(D_RECORDING, "(ItemManager::resumeRecording)");
+    DEBUG(D_RECORDING, "enter");
     f_paused_ = true;
     f_recording_ = false;
 
@@ -101,7 +100,7 @@ void ItemManager::resumeRecording() {
 
 void ItemManager::stopRecording() {
 
-    DEBUG(D_RECORDING, "(ItemManager::stopRecording)");
+    DEBUG(D_RECORDING, "enter");
     // updating flags and pointer
     f_terminate_ = true;
     f_recording_ = false;
@@ -115,14 +114,14 @@ void ItemManager::stopRecording() {
     Control::CTI_StopRecording cti;
     comm_->handleSendTestItem(cti);
 
-    // emiting the recording process finished signal
+    // emitting the recording process finished signal
     observer_->testRecordingFinished(currentTestCase_);
 }
 
 void ItemManager::applicationFinished() {
     // if the process is recording
     if (f_recording_) {
-        DEBUG(D_RECORDING, "(ItemManager::applicationFinished)");
+        DEBUG(D_RECORDING, "Application finished");
         // updating flags and pointer
         f_terminate_ = true;
         f_recording_ = false;
@@ -132,7 +131,7 @@ void ItemManager::applicationFinished() {
         // reseting counter
         rtiCounter_ = 0;
 
-        // emiting the recording process finished signal
+        // emitting the recording process finished signal
         observer_->testRecordingFinished(currentTestCase_);
     }
 }
@@ -152,20 +151,17 @@ bool ItemManager::isPaused() { return f_paused_; }
 ///
 /// ///
 void ItemManager::handleNewTestItem(DataModel::TestItem *ti) {
-    LOG_DBG("enter");
-    DEBUG(D_RECORDING, "(ItemManager::handleNewTestItem)");
+    DEBUG(D_RECORDING, "enter");
     // if it is in recording process...
     if (isRecording() && currentTestCase_) {
-        DEBUG(D_RECORDING, "(ItemManager::handleNewTestItem) Adding new TestItem "
-              "to the current TestCase.");
-        DEBUG(D_RECORDING,
-              "(ItemManager::handleNewTestItem) TestItem type = " << ti->type());
+        DEBUG(D_RECORDING, "Adding new TestItem to the current TestCase.");
+        DEBUG(D_RECORDING, "TestItem type = " << ti->type());
 
         // add the to a new TestItem
         currentTestCase_->addTestItem(ti);
         // updating counter
         rtiCounter_++;
-        // emiting rtiCounter signal
+        // emitting rtiCounter signal
         observer_->testItemsReceivedCounter(rtiCounter_);
     }
 }

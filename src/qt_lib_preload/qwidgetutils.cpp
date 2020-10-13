@@ -45,9 +45,7 @@ QWidget *QWidgetUtils::getAbsoluteWidget(QStringList path) {
     assert(path.size());
     QString name = path.back();
     if (name == "") {
-        std::cout << "(QWidgetUtils::getAbsoluteWidget) ERROR. The name of the "
-                  "widget is empty."
-                  << std::endl;
+        LOG_ERR("The name of the widget is empty");
         return NULL;
     }
     path.pop_back();
@@ -64,8 +62,7 @@ QWidget *QWidgetUtils::getAbsoluteWidget(QStringList path) {
     // DEBUGc("(QWidgetUtils::getAbsoluteWidget) OK");
     // if there are no selected widgets...
     if (qws.size() == 0) {
-        DEBUGc("(QWidgetUtils::getAbsoluteWidget) ERROR. There are no selected "
-               "widgets.");
+        LOG_ERR("There are no selected widgets");
         return NULL;
     }
     // DEBUGc("(QWidgetUtils::getAbsoluteWidget) OK");
@@ -137,9 +134,7 @@ QWidget *QWidgetUtils::getAbsoluteWidget(QStringList path) {
 
     // there has to be only one element at the list
     if (qws.size() != 1) {
-        std::cout << "(QWidgetUtils::getAbsoluteWidget) ERROR. None or more than "
-                  "one widget selected. Result = "
-                  << qws.size() << std::endl;
+        LOG_ERR("None or more than one widget selected, widget count: " << qws.size());
         return NULL;
     }
 

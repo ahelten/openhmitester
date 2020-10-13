@@ -70,16 +70,11 @@ void ProcessControl::initialize() {
     current_libPreload_path_ =
             current_oht_path_ + preloading_action_->libPreloadPath();
 
-    DEBUG(D_GUI, "(ProcessControl::initializeForm) Finding preload lib at: "
-          << current_libPreload_path_);
-
     if (QtUtils::fileExists(QString(current_libPreload_path_.c_str()))) {
-        DEBUG(D_GUI, "(ProcessControl::initializeForm) Preload lib found.");
+        DEBUG(D_GUI, "Preload lib found at:\n\t" << current_libPreload_path_);
+
     } else {
-        DEBUG(D_GUI,
-              "(ProcessControl::initializeForm) Failed Preload lib checking.");
-        DEBUG(D_GUI, "(ProcessControl::initializeForm) libpath = "
-              << current_libPreload_path_);
+        DEBUG(D_GUI, "Failed Preload lib checking using path:\n\t" << current_libPreload_path_);
         QtUtils::newErrorDialog(QString("Preload Library not found at: ") +
                                 QString(current_libPreload_path_.c_str()));
         assert(0);
@@ -151,13 +146,12 @@ void ProcessControl::playQueuedTestCases() {
 }
 
 void ProcessControl::onPlay_playClicked() {
-    DEBUG(D_PLAYBACK, "(ProcessControl::onPlay_playClicked)");
+    DEBUG(D_PLAYBACK, "enter");
     // if the execution is starting...
     if (state_ == STOP) {
         // in no pending test cases to execute...
         if (_testcases_queue.size() < 1) {
-            DEBUG(D_ERROR,
-                  "(ProcessControl::onPlay_playClicked) No test cases to play.");
+            DEBUG(D_ERROR, "No test cases to play");
             return;
         }
 
@@ -182,21 +176,18 @@ void ProcessControl::onPlay_playClicked() {
 
             // if not launched properly...
             if (!ok) {
-                DEBUG(D_ERROR, "(ProcessControl::onPlay_playClicked) Error while "
-                      "launching the application.");
+                DEBUG(D_ERROR, "Error while launching the application");
                 return;
             }
 
             // start playback process
-            DEBUG(D_PLAYBACK,
-                  "(ProcessControl::onPlay_playClicked) Starting playback process.");
+            DEBUG(D_PLAYBACK, "Starting playback process");
             ok = playback_control_->runTestCase(_current_testcase, context_.speed);
             if (!ok) {
                 // stop the app
                 preloading_action_->stopApplication();
 
-                DEBUG(D_ERROR, "(ProcessControl::onPlay_playClicked) Error while "
-                      "starting test case execution.");
+                DEBUG(D_ERROR, "Error while starting test case execution");
                 return;
             }
 
@@ -204,16 +195,14 @@ void ProcessControl::onPlay_playClicked() {
             // update the state
             _setState(PLAY);
 
-            DEBUG(D_PLAYBACK, "(ProcessControl::onPlay_playClicked) Playback process "
-                  "started. TestCase: "
+            DEBUG(D_PLAYBACK, "Playback process started. TestCase: "
                   << _current_testcase->name());
             return;
 
         }
         // if not, invalid action
         else {
-            DEBUG(D_ERROR, "(ProcessControl::onPlay_playClicked) Current test case "
-                  "is not valid.");
+            DEBUG(D_ERROR, "Current test case is not valid");
         }
     }
     // or it is being resumed..
@@ -230,7 +219,7 @@ void ProcessControl::onPlay_playClicked() {
 }
 
 void ProcessControl::onRecord_playClicked() {
-    DEBUG(D_RECORDING, "(ProcessControl::onRecord_playClicked)");
+    DEBUG(D_RECORDING, "clicked");
     assert(0); // FIXME remove this assert
 }
 
@@ -253,7 +242,7 @@ void ProcessControl::pauseClicked() {
 }
 
 void ProcessControl::onPlay_pauseClicked() {
-    DEBUG(D_PLAYBACK, "(ProcessControl::onPlay_pauseClicked)");
+    DEBUG(D_PLAYBACK, "clicked");
     playback_control_->pauseExecution();
 
     // update the state
@@ -261,7 +250,7 @@ void ProcessControl::onPlay_pauseClicked() {
 }
 
 void ProcessControl::onRecord_pauseClicked() {
-    DEBUG(D_RECORDING, "(ProcessControl::onRecord_pauseClicked)");
+    DEBUG(D_RECORDING, "clicked");
     recording_control_->pauseRecording();
 
     // update the state
@@ -290,21 +279,20 @@ void ProcessControl::stopClicked() {
 }
 
 void ProcessControl::onPlay_stopClicked() {
-    DEBUG(D_PLAYBACK, "(ProcessControl::onPlay_stopClicked)");
+    DEBUG(D_PLAYBACK, "clicked");
     playback_control_->stopExecution();
 
     // application is already killed above
 }
 
 void ProcessControl::onRecord_stopClicked() {
-    DEBUG(D_RECORDING, "(ProcessControl::onRecord_stopClicked)");
+    DEBUG(D_RECORDING, "clicked");
     recording_control_->stopRecording();
 
     // kill the application if enabled
     if (context_.keepAlive == false) {
         preloading_action_->stopApplication();
-        DEBUG(D_BOTH, "(ProcessControl::onRecord_stopClicked) Keep alive disabled. "
-              "Application stoped.");
+        DEBUG(D_BOTH, "Keep alive disabled. Application stopped.");
     }
 }
 
@@ -324,12 +312,12 @@ void ProcessControl::recClicked() {
 }
 
 void ProcessControl::onPlay_recClicked() {
-    DEBUG(D_PLAYBACK, "(ProcessControl::onPlay_recClicked)");
+    DEBUG(D_PLAYBACK, "clicked");
     assert(0); // FIXME remove this assert
 }
 
 void ProcessControl::onRecord_recClicked() {
-    DEBUG(D_RECORDING, "(ProcessControl::onRecord_recClicked) Start.");
+    DEBUG(D_RECORDING, "clicked");
     // if the recording is beginning...
     if (state_ == STOP) {
         // if the current test case has been set...
@@ -346,12 +334,11 @@ void ProcessControl::onRecord_recClicked() {
 
             // if not is launched properly...
             if (!ok) {
-                DEBUG(D_ERROR, "(ProcessControl::onRecord_recClicked) Error while "
-                      "launching the application.");
+                DEBUG(D_ERROR, "Error while launching the application");
                 return;
             }
 
-            DEBUG(D_RECORDING, "(ProcessControl::onRecord_recClicked) App launched.");
+            DEBUG(D_RECORDING, "App launched");
 
             // update the state
             _setState(RECORD);
@@ -359,14 +346,11 @@ void ProcessControl::onRecord_recClicked() {
             // start recording process
             recording_control_->recordTestCase(_current_testcase);
 
-            DEBUG(D_RECORDING,
-                  "(ProcessControl::onRecord_recClicked) Recording process started.");
+            DEBUG(D_RECORDING, "Recording process started");
         }
         // if not, invalid action
         else {
-            DEBUG(D_ERROR, "(ProcessControl::onRecord_recClicked) Error while "
-                  "starting TestCase recording->");
-            assert(0); // FIXME remove this assert
+            DEBUG(D_ERROR, "Error while starting TestCase recording->");
         }
     }
     // or if it is being resumed..
@@ -392,15 +376,13 @@ DataModel::TestSuite *ProcessControl::loadTestSuiteObject(const std::string &fil
     }
     // if a conversion error occurs...
     catch (DataModelAdapter::conversion_error_exception &) {
-        DEBUG(
-                D_ERROR,
-                "(ProcessControl::loadTestSuiteObject) Error converting from a file.");
+        DEBUG(D_ERROR, "Error converting from a file");
         return NULL;
     }
 }
 
 bool ProcessControl::openTestSuite(const std::string &file) {
-    DEBUG(D_BOTH, "(ProcessControl::openTestSuite)");
+    DEBUG(D_BOTH, "open test suite");
 
     /// get the testSuite object from the file
     DataModel::TestSuite *ts = loadTestSuiteObject(file);
@@ -410,8 +392,7 @@ bool ProcessControl::openTestSuite(const std::string &file) {
     // check if the binary exists    //FIXME remove Qt from here
     bool ok = QtUtils::isExecutableCP(QString(ts->appId().c_str()));
     if (!ok) {
-        DEBUG(D_ERROR, "(ProcessControl::openTestSuite) Error: The file specified "
-              "is not a valid or existing binary.");
+        DEBUG(D_ERROR, "Error: The file specified is not a valid or existing binary");
         return false;
     }
 
@@ -434,7 +415,7 @@ bool ProcessControl::openTestSuite(const std::string &file) {
 }
 
 bool ProcessControl::closeCurrentTestSuite() {
-    DEBUG(D_BOTH, "(ProcessControl::closeCurrentTestSuite)");
+    DEBUG(D_BOTH, "close current test suite");
 
     /// delete current testsuite object
     if (_current_testsuite) {
@@ -469,11 +450,10 @@ bool ProcessControl::newTestSuite(const std::string &file,
 
     // dump the testSuite to a file
     if (!saveTestSuite(_current_testsuite, file)) {
-        DEBUG(D_ERROR,
-              "(ProcessControl::newTestSuite) Error saving the testsuite file.");
+        DEBUG(D_ERROR, "Error saving the testsuite file");
         return false;
     }
-    DEBUG(D_BOTH, "(ProcessControl::newTestSuite) TestSuite file updated.");
+    DEBUG(D_BOTH, "TestSuite file updated");
 
     // save the current fileName
     current_filename_ = file;
@@ -505,7 +485,7 @@ bool ProcessControl::saveTestSuite(DataModel::TestSuite *ts,
 
 /// test case
 bool ProcessControl::checkAndQueueTestCase(const std::string &tcName) {
-    DEBUG(D_PLAYBACK, "(ProcessControl::playTestCase)");
+    DEBUG(D_PLAYBACK, "enter");
     // if the testSuite is valid...
     if (_current_testsuite) {
         DataModel::TestCase *tc = NULL;
@@ -524,7 +504,7 @@ bool ProcessControl::checkAndQueueTestCase(const std::string &tcName) {
 }
 
 bool ProcessControl::deleteTestCase(const std::string &tcName) {
-    DEBUG(D_BOTH, "(ProcessControl::deleteTestCase)");
+    DEBUG(D_BOTH, "deleting test case");
 
     // if the testSuite is valid...
     if (_current_testsuite) {
@@ -534,8 +514,7 @@ bool ProcessControl::deleteTestCase(const std::string &tcName) {
 
             // update the file
             if (!saveTestSuite(_current_testsuite, current_filename_)) {
-                DEBUG(D_ERROR, "(ProcessControl::deleteTestCase) Error saving the "
-                      "testsuite file.");
+                DEBUG(D_ERROR, "Error saving the testsuite file");
                 return false;
             }
 
@@ -544,8 +523,7 @@ bool ProcessControl::deleteTestCase(const std::string &tcName) {
 
             return true;
         } catch (DataModel::not_found &) {
-            DEBUG(D_ERROR,
-                  "(ProcessControl::deleteTestCase) The Test Case does not exists.");
+            DEBUG(D_ERROR, "The Test Case does not exist");
             return false;
         }
     }
@@ -553,14 +531,13 @@ bool ProcessControl::deleteTestCase(const std::string &tcName) {
 }
 
 bool ProcessControl::recordTestCase(const std::string &tcName) {
-    DEBUG(D_RECORDING, "(ProcessControl::recordTestCase)");
+    DEBUG(D_RECORDING, "recording a test case");
     // if the testSuite is valid...
     if (_current_testsuite) {
         // and the test case exists...
         if (_current_testsuite->existsTestCase(tcName)) {
             // return false because the testCase exists
-            DEBUG(D_ERROR,
-                  "(ProcessControl::recordTestCase) The TestCase already exists.");
+            DEBUG(D_ERROR, "The TestCase already exists");
             return false;
         }
         // if it does not exist
@@ -573,9 +550,7 @@ bool ProcessControl::recordTestCase(const std::string &tcName) {
             // create a new testCase to be recorded
             _current_testcase = new DataModel::TestCase();
             _current_testcase->name(tcName);
-            DEBUG(
-                    D_RECORDING,
-                    "(ProcessControl::recordTestCase) Created new TestCase: " << tcName);
+            DEBUG(D_RECORDING, "Created new TestCase: " << tcName);
             return true;
         }
     }
@@ -583,7 +558,7 @@ bool ProcessControl::recordTestCase(const std::string &tcName) {
 }
 
 bool ProcessControl::recordExistingTestCase(const std::string &tcName) {
-    DEBUG(D_RECORDING, "(ProcessControl::recordExistingTestCase)");
+    DEBUG(D_RECORDING, "record existing test case");
 
     // if the testSuite is valid...
     if (_current_testsuite) {
@@ -594,9 +569,7 @@ bool ProcessControl::recordExistingTestCase(const std::string &tcName) {
             // create a new testCase to be recorded
             _current_testcase = new DataModel::TestCase();
             _current_testcase->name(tcName);
-            DEBUG(D_RECORDING,
-                  "(ProcessControl::recordExistingTestCase) Redefining TestCase: "
-                  << tcName);
+            DEBUG(D_RECORDING, "Redefining TestCase: " << tcName);
 
             return true;
         } catch (DataModel::not_found &) {
@@ -622,7 +595,7 @@ ProcessControl::OHTProcessContext &ProcessControl::context() {
 /// comm
 ///
 void ProcessControl::slot_handleCommError(const std::string &s) {
-    DEBUG(D_ERROR, "(ProcessControl::slot_handleCommError) " << s);
+    DEBUG(D_ERROR, "error: " << s);
 }
 
 /// ///
@@ -636,18 +609,17 @@ void ProcessControl::executionThreadTerminated(int i) {
     /// Note that that the AUT may be STILL RUNNING, so we can decide
     /// if it is closed or not.
 
-    DEBUG(D_PLAYBACK, "(ProcessControl::executionThreadTerminated) Code = " << i);
+    DEBUG(D_PLAYBACK, "Thread exit code: " << i);
 
     // not kill the application if enabled
     if (context_.keepAlive == false) {
         preloading_action_->stopApplication();
-        DEBUG(D_BOTH, "(ProcessControl::stopClicked) Keep alive disabled. "
-              "Application stoped.");
+        DEBUG(D_BOTH, "Keep alive disabled. Application stopped.");
     }
 }
 
 void ProcessControl::completedPercentageNotification(int i) {
-    DEBUG(D_PLAYBACK, "(ProcessControl::completedPercentageNotification)");
+    DEBUG(D_PLAYBACK, "value: " << i);
     gui_reference_->setForm_playbackStatus(i);
 }
 
@@ -658,7 +630,7 @@ void ProcessControl::completedPercentageNotification(int i) {
 /// ///
 
 void ProcessControl::testRecordingFinished(DataModel::TestCase *tc) {
-    DEBUG(D_RECORDING, "(ProcessControl::testRecordingFinished)");
+    DEBUG(D_RECORDING, "finished recording");
 
     // add the test case to the test suite
     _current_testsuite->addTestCase(_current_testcase);
@@ -668,16 +640,14 @@ void ProcessControl::testRecordingFinished(DataModel::TestCase *tc) {
 
     // dump the testSuite to a file
     if (!saveTestSuite(_current_testsuite, current_filename_)) {
-        DEBUG(D_ERROR, "(ProcessControl::testRecordingFinished) Error saving the "
-              "testsuite file.");
+        DEBUG(D_ERROR, "Error saving the testsuite file");
         return;
     }
-    DEBUG(D_BOTH,
-          "(ProcessControl::testRecordingFinished) TestSuite file updated.");
+    DEBUG(D_BOTH, "TestSuite file updated");
 }
 
 void ProcessControl::testItemsReceivedCounter(int i) {
-    DEBUG(D_RECORDING, "(ProcessControl::testItemsReceivedCounter)");
+    DEBUG(D_RECORDING, "items received counter: " << i);
     gui_reference_->setForm_recordingStatus(i);
 }
 
@@ -694,12 +664,11 @@ void ProcessControl::slot_handleApplicationClosed(int i) {
     ///  - execution thread alive -> it was because an error
     ///  - execution thread finished -> normal execution
 
-    DEBUG(D_BOTH, "(ProcessControl::slot_handleApplicationClosed) Code = " << i);
+    DEBUG(D_BOTH, "Application exit code: " << i);
 
     // if playing... notify
     if (state_ == PLAY) {
-        DEBUG(D_BOTH,
-              "(ProcessControl::slot_handleApplicationClosed) Stop playback.");
+        DEBUG(D_BOTH, "Stop playback.");
         playback_control_->applicationFinished(); // calls executionThreadTerminated
         // update the state
         _setState(STOP);
@@ -707,16 +676,14 @@ void ProcessControl::slot_handleApplicationClosed(int i) {
         // stop communications
         _comm->stop();
 
-        DEBUG(D_BOTH, "(ProcessControl::slot_handleApplicationClosed) Check for "
-              "pending testcases.");
+        DEBUG(D_BOTH, "Check for pending testcases");
         // if queued test cases, go with them
         if (_testcases_queue.size() > 0)
             playQueuedTestCases();
     }
     // if recording... notify
     else if (state_ == RECORD) {
-        DEBUG(D_BOTH,
-              "(ProcessControl::slot_handleApplicationClosed) Stop recording.");
+        DEBUG(D_BOTH, "Stop recording");
         recording_control_->applicationFinished();
         // set stop state
         _setState(STOP);
@@ -727,7 +694,7 @@ void ProcessControl::slot_handleApplicationClosed(int i) {
 }
 
 void ProcessControl::slot_handlePreloadingError(const std::string &s) {
-    DEBUG(D_ERROR, "(ProcessControl::preloading_handleErrorNotification) " + s);
+    DEBUG(D_ERROR, "error: " << s);
 }
 
 /// ///
@@ -737,37 +704,33 @@ void ProcessControl::slot_handlePreloadingError(const std::string &s) {
 /// ///
 
 void ProcessControl::handleControlSignaling(DataModel::TestItem *ti) {
-    LOG_DBG("enter");
-    DEBUG(D_BOTH, "(ProcessControl::handleControlSignaling)");
+    DEBUG(D_BOTH, "enter");
 
     // if this event has a signaling type...
     if (ti->type() == Control::CTI_TYPE) {
         /// 0 -> control signaling OHT > PM
         // CTI_ERROR = 0;
         if (ti->subtype() == Control::CTI_ERROR) {
-            DEBUG(D_BOTH, "(ProcessControl::handleControlSignaling) ERROR.");
             Control::CTI_Error *cti = static_cast<Control::CTI_Error *>(ti);
+            DEBUG(D_BOTH, "ERROR: " << cti->description());
             handle_CTI_Error(cti->description());
         }
         // 90 -> control signaling PM > OHT
         // CTI_EVENT_EXECUTED = 91;
         else if (ti->subtype() == Control::CTI_EVENT_EXECUTED) {
-            DEBUG(D_BOTH, "(ProcessControl::handleControlSignaling) Event Executed.");
+            DEBUG(D_BOTH, "Event Executed");
             handle_CTI_EventExecuted();
         }
     }
 }
 
 void ProcessControl::handle_CTI_Error(const std::string &message) {
-    DEBUG(D_BOTH, "(ProcessControl::handle_CTI_Error)");
-    DEBUG(D_BOTH, "(ProcessControl::handle_CTI_Error) Received error message "
-          "from Preload Module"
-          << message);
+    DEBUG(D_BOTH, "Received error message from Preload Module: " << message);
     // TODO
 }
 
 void ProcessControl::handle_CTI_EventExecuted() {
-    DEBUG(D_PLAYBACK, "(ProcessControl::handle_CTI_EventExecuted)");
+    DEBUG(D_PLAYBACK, "enter");
     playback_control_->handleEventExecutedOnPreloadModule();
 }
 

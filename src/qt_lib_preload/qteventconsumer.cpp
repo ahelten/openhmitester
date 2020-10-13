@@ -44,7 +44,7 @@ void QtEventConsumer::install()
     //intall the consumer as an event filter
     //in the tested application
     QApplication::instance()->installEventFilter (this);
-    DEBUG(D_CONSUMER,"(QtEventConsumer::install) Event Consumer installed.");
+    DEBUG(D_CONSUMER, "Event Consumer installed.");
 }
 ///
 ///capture process control methods
@@ -99,7 +99,7 @@ bool QtEventConsumer::eventFilter ( QObject *obj, QEvent *event )
     /// process control
     ///
 
-    //if process is stoped...
+    //if process is stopped...
     if (f_recording_ == false)
     {
         //no event handling
@@ -117,7 +117,7 @@ bool QtEventConsumer::eventFilter ( QObject *obj, QEvent *event )
     //no widget or event provided
     else if (obj == NULL || event == NULL)
     {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::eventFilter) No widget or event provided.");
+        DEBUG(D_CONSUMER, "No widget or event provided.");
         return false;
     }
     //object is not a widget or window
@@ -179,13 +179,12 @@ void QtEventConsumer::handleMousePressEvent ( QObject *obj, QEvent *event )
     // check the object
     QWidget *widget = isValidWidget(obj);
     if (!widget) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::handleMousePressEvent) No widget to handle");
+        DEBUG(D_CONSUMER, "No widget to handle");
         return;
     }
 
-    DEBUG(D_CONSUMER,"(QtEventConsumer::handleMousePressEvent)");
-
     QMouseEvent *me = dynamic_cast< QMouseEvent *> ( event );
+    QTDEBUGT(D_CONSUMER, "widget:" << widget << "event: " << me);
 
     //create the event
     QOE::QOE_MousePress qoe;
@@ -210,13 +209,12 @@ void QtEventConsumer::handleMouseReleaseEvent ( QObject *obj, QEvent *event )
     // check the object
     QWidget *widget = isValidWidget(obj);
     if (!widget) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::handleMouseReleaseEvent) No widget to handle");
+        DEBUG(D_CONSUMER, "No widget to handle");
         return;
     }
 
-    DEBUG(D_CONSUMER,"(QtEventConsumer::handleMouseReleaseEvent)");
-
     QMouseEvent *me = dynamic_cast< QMouseEvent *> ( event );
+    QTDEBUGT(D_CONSUMER, "widget:" << widget << "event: " << me);
 
     //create the event
     QOE::QOE_MouseRelease qoe;
@@ -241,13 +239,12 @@ void QtEventConsumer::handleMouseDoubleEvent ( QObject *obj, QEvent *event )
     // check the object
     QWidget *widget = isValidWidget(obj);
     if (!widget) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::handleMouseDoubleEvent) No widget to handle");
+        DEBUG(D_CONSUMER, "No widget to handle");
         return;
     }
 
-    DEBUG(D_CONSUMER,"(QtEventConsumer::handleMouseDoubleEvent)");
-
     QMouseEvent *me = dynamic_cast< QMouseEvent *> ( event );
+    QTDEBUGT(D_CONSUMER, "widget:" << widget << "event: " << me);
 
     //create the event
     QOE::QOE_MouseDouble qoe;
@@ -272,13 +269,12 @@ void QtEventConsumer::handleKeyPressEvent ( QObject *obj, QEvent *event )
     // check the object
     QWidget *widget = isValidWidget(obj);
     if (!widget) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::handleKeyPressEvent) No widget to handle");
+        DEBUG(D_CONSUMER, "No widget to handle");
         return;
     }
 
-    DEBUG(D_CONSUMER,"(QtEventConsumer::handleKeyPressEvent)");
-
     QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *> ( event );
+    QTDEBUGT(D_CONSUMER, "widget:" << widget << "event: " << keyEvent);
 
     //if it is a recognized key
     if ( filterKeyEvent ( static_cast<Qt::Key> ( keyEvent->key() ) ) )
@@ -308,11 +304,11 @@ void QtEventConsumer::handleCloseEvent ( QObject *obj, QEvent *event )
     // check the object
     QWidget *widget = isValidWidget(obj);
     if (!widget) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::handleCloseEvent) No widget to handle");
+        DEBUG(D_CONSUMER, "No widget to handle");
         return;
     }
 
-    DEBUG(D_CONSUMER,"(QtEventConsumer::handleCloseEvent)");
+    QTDEBUGT(D_CONSUMER, "closing widget:" << widget);
 
     //create the event
     QOE::QOE_WindowClose qoe;
@@ -330,13 +326,12 @@ void QtEventConsumer::handleWheelEvent ( QObject *obj, QEvent *event )
     // check the object
     QWidget *widget = isValidWidget(obj);
     if (!widget) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::handleWheelEvent) No widget to handle");
+        DEBUG(D_CONSUMER, "No widget to handle");
         return;
     }
 
-    DEBUG(D_CONSUMER,"(QtEventConsumer::handleWheelEvent)");
-
     QWheelEvent *we = dynamic_cast<QWheelEvent *> ( event );
+    QTDEBUGT(D_CONSUMER, "widget:" << widget << "event: " << we);
 
     //create the event
     QOE::QOE_MouseWheel qoe;
@@ -368,7 +363,7 @@ void QtEventConsumer::handleWheelEvent ( QObject *obj, QEvent *event )
 ///
 
 void QtEventConsumer::completeBasicData(QOE::QOE_Base &qoe, QWidget *w, QMouseEvent *e)
-{   DEBUG(D_CONSUMER,"(QtEventConsumer::handleWheelEvent)");
+{   DEBUG(D_CONSUMER, "enter");
     // complete widget information...
     completeBasicData(qoe,w);
 
@@ -433,18 +428,15 @@ QWidget *QtEventConsumer::isValidWidget(QObject *obj)
     QWidget *w = dynamic_cast<QWidget *>(obj);
     _d("W > " << QWidgetUtils::getWidgetPath(w).toStdString());
     if (!w) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::isValidWidget) Widget is null");
-        DEBUG(D_CONSUMER,"(QtEventConsumer::isValidWidget)  -> " + QWidgetUtils::getWidgetPath(w).toStdString());
+        DEBUG(D_CONSUMER, "Widget is null  -> " + QWidgetUtils::getWidgetPath(w).toStdString());
         return NULL;
     }
     else if (!w->isVisible()) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::isValidWidget) Widget is not visible");
-        DEBUG(D_CONSUMER,"(QtEventConsumer::isValidWidget)  -> " + QWidgetUtils::getWidgetPath(w).toStdString());
+        DEBUG(D_CONSUMER, "Widget is not visible  -> " + QWidgetUtils::getWidgetPath(w).toStdString());
         return NULL;
     }
     else if (!w->isEnabled()) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::isValidWidget) Widget is not enabled");
-        DEBUG(D_CONSUMER,"(QtEventConsumer::isValidWidget)  -> " + QWidgetUtils::getWidgetPath(w).toStdString());
+        DEBUG(D_CONSUMER, "Widget is not enabled  -> " + QWidgetUtils::getWidgetPath(w).toStdString());
         return NULL;
     }
 
@@ -459,17 +451,17 @@ bool QtEventConsumer::isValidQOE(QOE::QOE_Base &qoe)
 {
     // check widget name
     if (qoe.widget() == "") {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::isValidQOE) Invalid QOE: empty widget");
+        DEBUG(D_CONSUMER, "Invalid QOE: empty widget");
         return false;
     }
 
     // check valid sizes
     if (qoe.widgetWidth() <= 0) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::isValidQOE) Invalid QOE: invalid w.width " << qoe.widgetWidth());
+        DEBUG(D_CONSUMER, "Invalid QOE: invalid w.width " << qoe.widgetWidth());
         return false;
     }
     if (qoe.widgetHeight() <= 0) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::isValidQOE) Invalid QOE: invalid w.height " << qoe.widgetHeight());
+        DEBUG(D_CONSUMER, "Invalid QOE: invalid w.height " << qoe.widgetHeight());
         return false;
     }
 
@@ -481,11 +473,11 @@ bool QtEventConsumer::isValidQOEMouse(QOE::QOE_Mouse &qoe)
 {
     // check valid pointing
     if (qoe.x() <= 0 || qoe.x() >= qoe.widgetWidth()) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::isValidQOE) Invalid QOE: invalid x " << qoe.x() << "," << qoe.widgetWidth());
+        DEBUG(D_CONSUMER, "Invalid QOE: invalid x " << qoe.x() << "," << qoe.widgetWidth());
         return false;
     }
     if (qoe.y() <= 0 || qoe.y() >= qoe.widgetHeight()) {
-        DEBUG(D_CONSUMER,"(QtEventConsumer::isValidQOE) Invalid QOE: invalid y " << qoe.y() << "," << qoe.widgetHeight());
+        DEBUG(D_CONSUMER, "Invalid QOE: invalid y " << qoe.y() << "," << qoe.widgetHeight());
         return false;
     }
 

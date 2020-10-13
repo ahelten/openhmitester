@@ -28,20 +28,30 @@
 #include <sstream>
 #include <chrono>
 #include <iomanip>
+#include <QDebug>
 #include <qlogging.h>
 
 ///
 /// custom debug
 ///
 
-#define DEBUG_ENABLED (D_ERROR | D_PLAYBACK | D_RECORDING)
+enum Debug_t
+{
+    D_NONE      = 0,
+    D_ERROR     = 1 << 0,
+    D_PLAYBACK  = 1 << 1,
+    D_RECORDING = 1 << 2,
+    D_BOTH      = 1 << 3,
+    D_PRELOAD   = 1 << 4,
+    D_EXECUTOR  = 1 << 5,
+    D_CONSUMER  = 1 << 6,
+    D_GUI       = 1 << 7,
+    D_COMM      = 1 << 8,
+    D_ALL       = 0xFFFFFFFF,
+};
 
-#undef qDebug
-#define qDebug() QMessageLogger(__FILE__, __LINE__, __FUNCTION__).debug()
-#undef qWarning
-#define qWarning() QMessageLogger(__FILE__, __LINE__, __FUNCTION__).warning()
-#undef qCritical
-#define qCritical() QMessageLogger(__FILE__, __LINE__, __FUNCTION__).critical()
+//#define DEBUG_ENABLED (D_ERROR | D_PLAYBACK | D_RECORDING)
+#define DEBUG_ENABLED (D_ALL)
 
 /// The number of nano seconds in a second
 static const uint32_t NSECS_IN_A_SEC = 1000000000;
@@ -67,7 +77,16 @@ inline std::string timeNow()
     return ret;
 }
 
-#define _NAME   "HMI-Tester: "
+#define _NAME   "HMI-Tester--> "
+
+
+#undef qDebug
+#define qDebug() QMessageLogger(__FILE__, __LINE__, __FUNCTION__).debug()
+#undef qWarning
+#define qWarning() QMessageLogger(__FILE__, __LINE__, __FUNCTION__).warning()
+#undef qCritical
+#define qCritical() QMessageLogger(__FILE__, __LINE__, __FUNCTION__).critical()
+
 
 /// Uses qDebug() so things like QWidgets are displayed with useful info
 #define QTDEBUG(content)                                                        \
@@ -95,26 +114,7 @@ do {                                                                            
   }                                                                             \
 } while(false)
 
-///
-/// parameterized debug
-///
 
-// Debug types enabled are values > 0
-// Debug types disabled are values == 0
-// Debug types enabled should have different values than D_ERROR, therefore
-// the OHT framework can differentiate between errors and other debug outputs
-
-#define D_ERROR 1
-#define D_PLAYBACK 2
-#define D_RECORDING 2
-#define D_BOTH 1
-#define D_PRELOAD 2
-#define D_EXECUTOR 1
-#define D_CONSUMER 1
-#define D_GUI 1
-#define D_COMM 1
-
-// method
 #define LOG_ERR(content)                                                            \
 do {                                                                                \
     std::cout << _NAME << timeNow() << " ERROR " << basename(__FILE__)              \
@@ -124,9 +124,11 @@ do {                                                                            
 
 #define LOG_DBG(content)                                                            \
 do {                                                                                \
+  if (DEBUG_ENABLED) {                                                              \
     std::cout << _NAME << timeNow() << " DEBUG " << basename(__FILE__)              \
               << ":" << __LINE__ << " - " << __FUNCTION__ << "(): " << content      \
               << std::endl;                                                         \
+  }                                                                                 \
 } while(false)
 
 /// Accepts a log type and uses qDebug() so things like QWidgets are displayed with useful info
@@ -135,7 +137,7 @@ do {                                                                            
   if (type == D_ERROR) {                                                            \
     qWarning() << content;                                                          \
   }                                                                                 \
-  else if (type && DEBUG_ENABLED) {                                                 \
+  else if (type & DEBUG_ENABLED) {                                                  \
     qDebug() << content;                                                            \
   }                                                                                 \
 } while(false)
@@ -147,7 +149,7 @@ do {                                                                            
               << ":" << __LINE__ << " - " << __FUNCTION__ << "(): " << content      \
               << std::endl;                                                         \
   }                                                                                 \
-  else if (type && DEBUG_ENABLED) {                                                 \
+  else if (type & DEBUG_ENABLED) {                                                  \
     std::cout << _NAME << timeNow() << " DEBUG " << basename(__FILE__)              \
               << ":" << __LINE__ << " - " << __FUNCTION__ << "(): " << content      \
               << std::endl;                                                         \

@@ -53,7 +53,7 @@ ExecutionThread::~ExecutionThread() {}
 /// Execution method (thread)
 ///
 void ExecutionThread::operator()() {
-    DEBUG(D_PLAYBACK, "(ExecutionThread::run)");
+    DEBUG(D_PLAYBACK, "enter");
 
     /// reference checking
     assert(_comm);
@@ -61,13 +61,12 @@ void ExecutionThread::operator()() {
 
     /// test case checking
     if (!currentTestCase_) {
-        DEBUG(D_ERROR, "(ExecutionThread::run) No testcase to play.");
+        DEBUG(D_ERROR, "No testcase to play");
         threadState_ = ERROR;
         return;
     }
 
-    DEBUG(D_PLAYBACK, "(ExecutionThread::run) TestCase "
-          << currentTestCase_->name() << " OK.");
+    DEBUG(D_PLAYBACK, "TestCase '" << currentTestCase_->name() << "' OK");
 
     /// flags initialization (in running state)
     threadState_ = RUN;
@@ -99,12 +98,10 @@ void ExecutionThread::operator()() {
 
         // sending test item to preload module
         _comm->handleSendTestItem(ti);
-        DEBUG(D_PLAYBACK, "(ExecutionThread::run) Item sent.");
+        DEBUG(D_PLAYBACK, "Item sent");
 
         // debug
-        DEBUG(D_PLAYBACK, "(ExecutionThread::run) Executed testItem "
-              << counter << " of " << currentTestCase_->count()
-              << ".");
+        DEBUG(D_PLAYBACK, "Executed testItem " << counter << " of " << currentTestCase_->count());
 
         // completed percentage notification
         _observer->completedPercentageNotification(counter * 100.0 / total);
@@ -112,7 +109,7 @@ void ExecutionThread::operator()() {
         // wait before continuing with the next test
         waitExecution();
 
-        DEBUG(D_PLAYBACK, "(ExecutionThread::run) Continuing execution.");
+        DEBUG(D_PLAYBACK, "Continuing execution");
 
         // Once the command executed, attend pending PAUSE or STOP
         if (pendingState_ == PAUSED) {
@@ -124,7 +121,7 @@ void ExecutionThread::operator()() {
             // lock the mutex
             boost::unique_lock<boost::mutex> lock(pause_mutex_);
             resume_pause_.wait(lock);
-            DEBUG(D_PLAYBACK, "(ExecutionThread::run) Pause Mutex unlocked.");
+            DEBUG(D_PLAYBACK, "Pause Mutex unlocked");
         } else if (pendingState_ == STOPPED) {
             threadState_ = STOPPED;
             pendingState_ = NONE;
@@ -143,15 +140,14 @@ void ExecutionThread::operator()() {
     /// finish testcase execution
     ///
 
-    DEBUG(D_PLAYBACK, "(ExecutionThread::run) Finishing thread.");
+    DEBUG(D_PLAYBACK, "Finishing thread");
 
     // FIXME: Send this only if threadState_ != WANT_TERMINATE
     _sendStopPlayback();
 
-    DEBUG(D_PLAYBACK, "(ExecutionThread::run) StopPlayback command sent.");
+    DEBUG(D_PLAYBACK, "StopPlayback command sent");
 
-    DEBUG(D_PLAYBACK,
-          "(ExecutionThread::run) Finishing."
+    DEBUG(D_PLAYBACK, "Finishing "
           "________________________________________________________________");
 
     // execution thread finished notification
@@ -173,7 +169,7 @@ void ExecutionThread::operator()() {
 }
 
 void ExecutionThread::_sendStartPlayback() {
-    DEBUG(D_PLAYBACK, "(ExecutionThread::run) Sending START PLAYBACK COMMAND");
+    DEBUG(D_PLAYBACK, "Sending START PLAYBACK COMMAND");
     // sending "START PLAYBACK COMMAND"
     Control::CTI_StartPlayback cti;
     _comm->handleSendTestItem(cti);
@@ -183,7 +179,7 @@ void ExecutionThread::_sendStartPlayback() {
 }
 
 void ExecutionThread::_sendStopPlayback() {
-    DEBUG(D_PLAYBACK, "(ExecutionThread::run) Sending STOP PLAYBACK COMMAND");
+    DEBUG(D_PLAYBACK, "Sending STOP PLAYBACK COMMAND");
     // sending "STOP PLAYBACK COMMAND"
     Control::CTI_StopPlayback cti2;
     _comm->handleSendTestItem(cti2);
@@ -200,7 +196,7 @@ void ExecutionThread::_sleep(int ms) {
 /// pauses the process
 ///
 void ExecutionThread::pause() {
-    DEBUG(D_PLAYBACK, "(ExecutionThread::pause)");
+    DEBUG(D_PLAYBACK, "pausing");
 
     // Signal the future wanted state
     if (threadState_ == RUN)
@@ -211,7 +207,7 @@ void ExecutionThread::pause() {
 /// resumes the process
 ///
 void ExecutionThread::resume() {
-    DEBUG(D_PLAYBACK, "(ExecutionThread::resume)");
+    DEBUG(D_PLAYBACK, "resuming");
 
     // release the mutex, only if paused
     if (threadState_ == PAUSED) {
@@ -235,7 +231,7 @@ void ExecutionThread::resume() {
 // FIXME: by  now stop == kill, as the thread is never killed really.
 // a better separation between kill and stop must be done.
 void ExecutionThread::stop() {
-    DEBUG(D_PLAYBACK, "(ExecutionThread::stop)");
+    DEBUG(D_PLAYBACK, "stopping");
 
     pendingState_ = STOPPED;
     continueExecution();
@@ -245,7 +241,7 @@ void ExecutionThread::stop() {
 /// kill the thread
 ///
 void ExecutionThread::kill() {
-    DEBUG(D_PLAYBACK, "(ExecutionThread::kill)");
+    DEBUG(D_PLAYBACK, "killing");
     // kill the thread and wait for it
     pendingState_ = STOPPED;
     continueExecution();
@@ -255,7 +251,7 @@ void ExecutionThread::kill() {
 /// tested application finished notification
 ///
 void ExecutionThread::applicationFinished() {
-    DEBUG(D_PLAYBACK, "(ExecutionThread::applicationFinished)");
+    DEBUG(D_PLAYBACK, "Application finished");
     stop();
 }
 
@@ -277,7 +273,7 @@ bool ExecutionThread::isPaused() { return threadState_ == PAUSED; }
 ///
 ///
 void ExecutionThread::currentTestCase(DataModel::TestCase *tc) {
-    DEBUG(D_PLAYBACK, "(ExecutionThread::currentTestCase)");
+    DEBUG(D_PLAYBACK, "enter");
     assert(tc);
     currentTestCase_ = tc;
 }
@@ -290,9 +286,9 @@ void ExecutionThread::currentTestCase(DataModel::TestCase *tc) {
 /// add one ticket to the semaphore
 ///
 void ExecutionThread::continueExecution() {
-    DEBUG(D_PLAYBACK, "(ExecutionThread::continueExecution)");
+    DEBUG(D_PLAYBACK, "enter");
     next_step_ready_.notify_all();
-    DEBUG(D_PLAYBACK, "(ExecutionThread::continueExecution) Exit.");
+    DEBUG(D_PLAYBACK, "exit.");
 }
 
 ///
@@ -301,7 +297,7 @@ void ExecutionThread::continueExecution() {
 void ExecutionThread::waitExecution() {
     boost::unique_lock<boost::mutex> lock(step_mutex_);
 
-    DEBUG(D_PLAYBACK, "(ExecutionThread::waitExecution)");
+    DEBUG(D_PLAYBACK, "enter");
     next_step_ready_.wait(lock);
-    DEBUG(D_PLAYBACK, "(ExecutionThread::waitExecution) Exit.");
+    DEBUG(D_PLAYBACK, "exit.");
 }
