@@ -28,7 +28,43 @@
 
 #include <QObject>
 
+static void customLogger(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QByteArray localMsg = msg.toLocal8Bit();
+    const char *file = context.file ? basename(context.file) : "";
+    const char *function = context.function ? context.function : "";
+    switch (type) {
+    case QtDebugMsg:
+	std::cout << _NAME << timeNow() << " DEBUG " << file
+		  << ":" << context.line << " - " << function << "(): " << localMsg.constData()
+		  << std::endl;
+        break;
+    case QtInfoMsg:
+	std::cout << _NAME << timeNow() << " INFO  " << file
+		  << ":" << context.line << " - " << function << "(): " << localMsg.constData()
+		  << std::endl;
+        break;
+    case QtWarningMsg:
+	std::cout << _NAME << timeNow() << " ERROR " << file
+		  << ":" << context.line << " - " << function << "(): " << localMsg.constData()
+		  << std::endl;
+        break;
+    case QtCriticalMsg:
+	std::cout << _NAME << timeNow() << " CRITICAL " << file
+		  << ":" << context.line << " - " << function << "(): " << localMsg.constData()
+		  << std::endl;
+        break;
+    case QtFatalMsg:
+	std::cout << _NAME << timeNow() << " FATAL " << file
+		  << ":" << context.line << " - " << function << "(): " << localMsg.constData()
+		  << std::endl;
+        break;
+    }
+}
+
 PreloadingControl::PreloadingControl(EventConsumer *ec, EventExecutor *ex) {
+    qInstallMessageHandler(customLogger);
+
     // attach specific consumer
     assert(ec);
     test_thread_ = new QThread;

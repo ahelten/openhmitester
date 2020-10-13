@@ -152,7 +152,7 @@ bool ItemManager::isPaused() { return f_paused_; }
 ///
 /// ///
 void ItemManager::handleNewTestItem(DataModel::TestItem *ti) {
-    qDebug() << __PRETTY_FUNCTION__;
+    LOG_DBG("enter");
     DEBUG(D_RECORDING, "(ItemManager::handleNewTestItem)");
     // if it is in recording process...
     if (isRecording() && currentTestCase_) {

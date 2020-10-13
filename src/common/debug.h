@@ -25,25 +25,74 @@
 
 #include <cassert>
 #include <iostream>
+#include <sstream>
+#include <chrono>
+#include <iomanip>
+#include <qlogging.h>
 
 ///
 /// custom debug
 ///
 
-#define DEBUG_ENABLED 1
+#define DEBUG_ENABLED (D_ERROR | D_PLAYBACK | D_RECORDING)
 
-#define DEBUGc(content)                                                        \
-do { \
-  if (DEBUG_ENABLED) {                                                         \
-    std::cout << content << std::endl; \
-  } \
+#undef qDebug
+#define qDebug() QMessageLogger(__FILE__, __LINE__, __FUNCTION__).debug()
+#undef qWarning
+#define qWarning() QMessageLogger(__FILE__, __LINE__, __FUNCTION__).warning()
+#undef qCritical
+#define qCritical() QMessageLogger(__FILE__, __LINE__, __FUNCTION__).critical()
+
+/// The number of nano seconds in a second
+static const uint32_t NSECS_IN_A_SEC = 1000000000;
+/// The number of milli seconds in a second
+static const uint16_t MSECS_IN_A_SEC = 1000;
+/// The number of nano seconds in a millisecond (convert msecs->nsecs)
+static const uint32_t NSECS_IN_A_MSEC = (NSECS_IN_A_SEC / MSECS_IN_A_SEC);
+
+inline std::string timeNow()
+{
+    timespec t;
+    std::string ret;
+    if (clock_gettime(CLOCK_REALTIME, &t) == 0) {
+        std::tm tmTime;
+        if (localtime_r(&t.tv_sec, &tmTime) != nullptr) {
+            std::stringstream ss;
+            ss << std::put_time(&tmTime, "%Y-%m-%d %X");
+            ss << "." << std::setfill('0') << std::setw(3) << (t.tv_nsec / 1000000);
+            ret = ss.str();
+        }
+    }
+
+    return ret;
+}
+
+#define _NAME   "HMI-Tester: "
+
+/// Uses qDebug() so things like QWidgets are displayed with useful info
+#define QTDEBUG(content)                                                        \
+do {                                                                            \
+  if (DEBUG_ENABLED) {                                                          \
+    qDebug() << content;                                                        \
+  }                                                                             \
 } while(false)
 
-#define _d(content)                                                            \
-do { \
-  if (DEBUG_ENABLED) {                                                         \
-    std::cout << content << std::endl; \
-  } \
+#define DEBUGc(content)                                                         \
+do {                                                                            \
+  if (DEBUG_ENABLED) {                                                          \
+    std::cout << _NAME << timeNow() << " DEBUGc " << basename(__FILE__)         \
+              << ":" << __LINE__ << " - " << __FUNCTION__ << "(): " << content  \
+              << std::endl;                                                     \
+  }                                                                             \
+} while(false)
+
+#define _d(content)                                                             \
+do {                                                                            \
+  if (DEBUG_ENABLED) {                                                          \
+    std::cout << _NAME << timeNow() << " _d " << basename(__FILE__)             \
+              << ":" << __LINE__ << " - " << __FUNCTION__ << "(): " << content  \
+              << std::endl;                                                     \
+  }                                                                             \
 } while(false)
 
 ///
@@ -58,22 +107,51 @@ do { \
 #define D_ERROR 1
 #define D_PLAYBACK 2
 #define D_RECORDING 2
-#define D_BOTH 0
+#define D_BOTH 1
 #define D_PRELOAD 2
-#define D_EXECUTOR 0
-#define D_CONSUMER 0
-#define D_GUI 0
-#define D_COMM 0
+#define D_EXECUTOR 1
+#define D_CONSUMER 1
+#define D_GUI 1
+#define D_COMM 1
 
 // method
-#define DEBUG(type, content)                                                   \
-do { \
-  if (type == D_ERROR) {                                                       \
-    std::cerr << content << std::endl;                                         \
-  } \
-  else if (type && DEBUG_ENABLED) {                                            \
-    std::cout << content << std::endl; \
-  } \
+#define LOG_ERR(content)                                                            \
+do {                                                                                \
+    std::cout << _NAME << timeNow() << " ERROR " << basename(__FILE__)              \
+              << ":" << __LINE__ << " - " << __FUNCTION__ << "(): " << content      \
+              << std::endl;                                                         \
+} while(false)
+
+#define LOG_DBG(content)                                                            \
+do {                                                                                \
+    std::cout << _NAME << timeNow() << " DEBUG " << basename(__FILE__)              \
+              << ":" << __LINE__ << " - " << __FUNCTION__ << "(): " << content      \
+              << std::endl;                                                         \
+} while(false)
+
+/// Accepts a log type and uses qDebug() so things like QWidgets are displayed with useful info
+#define QTDEBUGT(type, content)                                                     \
+do {                                                                                \
+  if (type == D_ERROR) {                                                            \
+    qWarning() << content;                                                          \
+  }                                                                                 \
+  else if (type && DEBUG_ENABLED) {                                                 \
+    qDebug() << content;                                                            \
+  }                                                                                 \
+} while(false)
+
+#define DEBUG(type, content)                                                        \
+do {                                                                                \
+  if (type == D_ERROR) {                                                            \
+    std::cout << _NAME << timeNow() << " ERROR " << basename(__FILE__)              \
+              << ":" << __LINE__ << " - " << __FUNCTION__ << "(): " << content      \
+              << std::endl;                                                         \
+  }                                                                                 \
+  else if (type && DEBUG_ENABLED) {                                                 \
+    std::cout << _NAME << timeNow() << " DEBUG " << basename(__FILE__)              \
+              << ":" << __LINE__ << " - " << __FUNCTION__ << "(): " << content      \
+              << std::endl;                                                         \
+  }                                                                                 \
 } while(false)
 
 #endif // DEBUG_H

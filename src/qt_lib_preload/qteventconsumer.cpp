@@ -103,7 +103,7 @@ bool QtEventConsumer::eventFilter ( QObject *obj, QEvent *event )
     if (f_recording_ == false)
     {
         //no event handling
-        DEBUG(D_CONSUMER,"(QtEventConsumer::eventFilter) Stop state. No event handled.");
+        //DEBUG(D_CONSUMER,"(QtEventConsumer::eventFilter) Stop state. No event handled.");
         return false;
     }
     //if process is paused...
@@ -111,7 +111,7 @@ bool QtEventConsumer::eventFilter ( QObject *obj, QEvent *event )
     {
         //filter all events and
         //block the application
-        DEBUG(D_CONSUMER,"(QtEventConsumer::eventFilter) Pause state. Events blocked.");
+        //DEBUG(D_CONSUMER,"(QtEventConsumer::eventFilter) Pause state. Events blocked.");
         return true;
     }
     //no widget or event provided

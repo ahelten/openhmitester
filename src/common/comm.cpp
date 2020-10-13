@@ -122,7 +122,7 @@ void Comm::handleSendTestItem(const DataModel::TestItem &ti) {
 /// new received message handler
 ///
 void Comm::handleReceivedMessage(const QString &s) {
-    qDebug() << __PRETTY_FUNCTION__;
+    LOG_DBG("enter");
     std::istringstream iss(s.toStdString());
     // Create the test archive using a string as a buffer
     boost::archive::text_iarchive ia(iss);

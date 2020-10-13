@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 
     // initialize and launch HMI Tester
     QApplication a(argc, argv);
+
     HMITesterControl w(pa,dma);
     w.show();
     return a.exec();

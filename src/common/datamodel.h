@@ -78,8 +78,7 @@ public:
 
 protected:
     bool addPair(KeyValueMap &, const std::string &, const std::string &);
-    const std::string &getValue(const KeyValueMap &, const std::string &) const
-    throw(not_found);
+    const std::string getValue(const KeyValueMap &, const std::string &) const;
 
     DataMap dataMap_;
     MetadataMap metadataMap_;

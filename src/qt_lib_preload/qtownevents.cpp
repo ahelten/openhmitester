@@ -123,7 +123,9 @@ QPoint QOE_Base::adaptedGlobalPosition(QWidget *w) {
     if (w == NULL)
         return QPoint(globalX(), globalY());
 
+    QTDEBUG("global position requested:" << w);
     QPoint new_g = w->mapToGlobal(adaptedPosition(w));
+    QTDEBUG("global position determined:" << new_g << "for: " << w);
 
     /*   std::cout << "- " << widget() << std::endl;
 
@@ -142,7 +144,13 @@ QPoint QOE_Base::adaptedGlobalPosition(QWidget *w) {
 }
 
 bool QOE_Base::isSensitive() {
-    return boost::lexical_cast<bool>(getData(QOE_Base_IsSensitive));
+    std::string isSens = getData(QOE_Base_IsSensitive);
+    if (isSens.empty()) {
+        return false;
+    }
+    else {
+        return boost::lexical_cast<bool>(isSens);
+    }
 }
 
 void QOE_Base::isSensitive(bool b) {
@@ -175,8 +183,14 @@ QOE_WindowClose::QOE_WindowClose() {
 
 void QOE_WindowClose::execute(QWidget *w) {
     if (w) {
-        QCloseEvent ce;
-        qApp->notify(dynamic_cast<QObject *>(w), dynamic_cast<QEvent *>(&ce));
+        QPoint pos = adaptedPosition(w);
+        QTDEBUG("window_close requested:" << w << "at:" << pos);
+        QMetaObject::invokeMethod(w, [this, w, pos]{
+                    QCloseEvent ce;
+                    qApp->notify(dynamic_cast<QObject *>(w), dynamic_cast<QEvent *>(&ce));
+                    QTDEBUG("window_close executed:" << w);
+                    });
+        QTest::qWait(100);
     }
 }
 
@@ -224,11 +238,14 @@ QOE_MousePress::QOE_MousePress() {
 
 void QOE_MousePress::execute(QWidget *w) {
     if (w) {
-        qDebug() << "mouse_press requested";
-        QTest::mousePress(w, (Qt::MouseButton)button(),
-                          (Qt::KeyboardModifiers)modifiers(), adaptedPosition(w));
-        // position() );
-        qDebug() << "mouse_press executed";
+        QPoint pos = adaptedPosition(w);
+        QTDEBUG("mouse_press requested:" << w << "at:" << pos);
+        QMetaObject::invokeMethod(w, [this, w, pos]{
+                    QTest::mousePress(w, (Qt::MouseButton)button(),
+                                      (Qt::KeyboardModifiers)modifiers(), pos);
+                    QTDEBUG("mouse_press executed:" << w);
+                    });
+        QTest::qWait(100);
     }
 }
 
@@ -244,11 +261,14 @@ QOE_MouseRelease::QOE_MouseRelease() {
 
 void QOE_MouseRelease::execute(QWidget *w) {
     if (w) {
-        qDebug() << "mouse_release requested";
-        QTest::mouseRelease(w, (Qt::MouseButton)button(),
-                            (Qt::KeyboardModifiers)modifiers(), adaptedPosition(w));
-        qDebug() << "mouse_release executed";
-        // position() );
+        QPoint pos = adaptedPosition(w);
+        QTDEBUG("mouse_release requested:" << w << "at:" << pos);
+        QMetaObject::invokeMethod(w, [this, w, pos]{
+                      QTest::mouseRelease(w, (Qt::MouseButton)button(),
+                                          (Qt::KeyboardModifiers)modifiers(), pos);
+                      QTDEBUG("mouse_release executed:" << w);
+                      });
+        QTest::qWait(100);
     }
 }
 
@@ -264,11 +284,14 @@ QOE_MouseDouble::QOE_MouseDouble() {
 
 void QOE_MouseDouble::execute(QWidget *w) {
     if (w) {
-        qDebug() << "mouse_double requested";
-        QTest::mouseDClick(w, (Qt::MouseButton)button(),
-                           (Qt::KeyboardModifiers)modifiers(), adaptedPosition(w));
-        qDebug() << "mouse_double executed";
-        // position() );
+        QPoint pos = adaptedPosition(w);
+        QTDEBUG("mouse_double requested:" << w << "at:" << pos);
+        QMetaObject::invokeMethod(w, [this, w, pos]{
+                    QTest::mouseDClick(w, (Qt::MouseButton)button(),
+                                       (Qt::KeyboardModifiers)modifiers(), pos);
+                    QTDEBUG("mouse_double executed:" << w);
+                    });
+        QTest::qWait(200);
     }
 }
 
@@ -286,9 +309,16 @@ void QOE_MouseWheel::execute(QWidget *w) {
     if (w) {
         // QWheelEvent we ( position(), globalPosition(), delta(), buttons(),
         // modifiers(), orientation() );
-        QWheelEvent we(adaptedPosition(w), adaptedGlobalPosition(w), delta(),
-                       buttons(), modifiers(), orientation());
-        qApp->notify(dynamic_cast<QObject *>(w), dynamic_cast<QEvent *>(&we));
+        QPoint pos = adaptedPosition(w);
+        QTDEBUG("mouse_wheel requested:" << w << "delta:" << delta() << "orientation:"
+                << orientation() << "pos:" << pos << "globalPos:" << adaptedGlobalPosition(w));
+        QMetaObject::invokeMethod(w, [this, w, pos]{
+                    QWheelEvent we(adaptedPosition(w), adaptedGlobalPosition(w), delta(),
+                                   buttons(), modifiers(), orientation());
+                    qApp->notify(dynamic_cast<QObject *>(w), dynamic_cast<QEvent *>(&we));
+                    QTDEBUG("mouse_wheel executed:" << w);
+                    });
+        QTest::qWait(200);
     }
 }
 

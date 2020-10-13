@@ -66,7 +66,7 @@ void TestSuite::deleteTestCase(TestCaseList::iterator ti) throw(not_found) {
         testCases_.erase(ti);
         tcMap_.erase(ti->name());
     } catch (...) {
-        qDebug() << "deleteTestCase() 1 throw";
+        LOG_ERR("deleteTestCase() 1 throw");
 
         throw not_found();
     }
@@ -93,7 +93,7 @@ void TestSuite::deleteTestCase(TestCaseList::iterator ti) throw(not_found) {
 void TestSuite::deleteTestCase(const std::string &name) throw(not_found) {
     TestCaseMap::iterator it = tcMap_.find(name);
     if (it == tcMap_.end()) {
-        qDebug() << "deleteTestCase() 2 throw";
+        LOG_ERR("deleteTestCase() 2 throw");
 
         throw not_found();
     }
@@ -143,7 +143,7 @@ DataModel::TestCase *TestSuite::getTestCase(const std::string &name) throw(not_f
     TestCaseMap::iterator it = tcMap_.find(name);
 
     if (it == tcMap_.end()) {
-        qDebug() << "getTestCase() throw";
+        LOG_ERR("getTestCase() throw");
 
         throw not_found();
     }
@@ -217,7 +217,7 @@ void TestCase::deleteTestItem(TestItemList::iterator ti) throw(not_found) {
         testItems_.erase(ti);
         itemMap_.erase(ti->uuid());
     } catch (...) {
-        qDebug() << "deleteTestItem() throw";
+        LOG_ERR("deleteTestItem() throw");
 
         throw not_found();
     }
@@ -354,14 +354,14 @@ bool TestBase::addPair(KeyValueMap &map, const std::string &key,
     return true;
 }
 
-const std::string &TestBase::getValue(const KeyValueMap &map,
-                                      const std::string &key) const
-throw(not_found) {
+const std::string TestBase::getValue(const KeyValueMap &map,
+                                      const std::string &key) const {
     KeyValueMap::const_iterator it = map.find(key);
 
     if (it == map.end()) {
-        qDebug() << "getValue() throw not_found for key: '" << key.c_str() << "'";
-        throw not_found();
+        // NOTE: No longer throw an exception here to handle modals/pop-ups
+        LOG_ERR("key not found: '" << key << "', returning empty string");
+        return std::string();
     }
     return it->second;
 }
