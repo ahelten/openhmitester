@@ -189,8 +189,9 @@ void QOE_WindowClose::execute(QWidget *w) {
                     QCloseEvent ce;
                     qApp->notify(dynamic_cast<QObject *>(w), dynamic_cast<QEvent *>(&ce));
                     QTDEBUG("window_close executed:" << w);
+                    this->notifyExecutionComplete();
                     });
-        QTest::qWait(100);
+        bool ret = this->waitForExecutionComplete(1000);
     }
 }
 
@@ -239,13 +240,14 @@ QOE_MousePress::QOE_MousePress() {
 void QOE_MousePress::execute(QWidget *w) {
     if (w) {
         QPoint pos = adaptedPosition(w);
-        QTDEBUG("mouse_press requested:" << w << "at:" << pos);
+        QTDEBUG("mouse_press requested:" << w << "at:" << pos << "this:" << this);
         QMetaObject::invokeMethod(w, [this, w, pos]{
                     QTest::mousePress(w, (Qt::MouseButton)button(),
                                       (Qt::KeyboardModifiers)modifiers(), pos);
-                    QTDEBUG("mouse_press executed:" << w);
+                    QTDEBUG("mouse_press executed:" << w << "this:" << this);
+                    this->notifyExecutionComplete();
                     });
-        QTest::qWait(100);
+        bool ret = this->waitForExecutionComplete(1000);
     }
 }
 
@@ -264,11 +266,12 @@ void QOE_MouseRelease::execute(QWidget *w) {
         QPoint pos = adaptedPosition(w);
         QTDEBUG("mouse_release requested:" << w << "at:" << pos);
         QMetaObject::invokeMethod(w, [this, w, pos]{
-                      QTest::mouseRelease(w, (Qt::MouseButton)button(),
-                                          (Qt::KeyboardModifiers)modifiers(), pos);
-                      QTDEBUG("mouse_release executed:" << w);
-                      });
-        QTest::qWait(100);
+                    QTest::mouseRelease(w, (Qt::MouseButton)button(),
+                                      (Qt::KeyboardModifiers)modifiers(), pos);
+                    QTDEBUG("mouse_release executed:" << w);
+                    this->notifyExecutionComplete();
+                    });
+        this->waitForExecutionComplete(1000);
     }
 }
 
@@ -290,8 +293,9 @@ void QOE_MouseDouble::execute(QWidget *w) {
                     QTest::mouseDClick(w, (Qt::MouseButton)button(),
                                        (Qt::KeyboardModifiers)modifiers(), pos);
                     QTDEBUG("mouse_double executed:" << w);
+                    this->notifyExecutionComplete();
                     });
-        QTest::qWait(200);
+        this->waitForExecutionComplete(1000);
     }
 }
 
@@ -317,8 +321,9 @@ void QOE_MouseWheel::execute(QWidget *w) {
                                    buttons(), modifiers(), orientation());
                     qApp->notify(dynamic_cast<QObject *>(w), dynamic_cast<QEvent *>(&we));
                     QTDEBUG("mouse_wheel executed:" << w);
+                    this->notifyExecutionComplete();
                     });
-        QTest::qWait(200);
+        this->waitForExecutionComplete(1000);
     }
 }
 

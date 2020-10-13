@@ -27,6 +27,7 @@
 #include <QEvent>
 #include <QPoint>
 #include <QWidget>
+#include <QSemaphore>
 
 namespace QOE
 {
@@ -108,6 +109,17 @@ public:
 
     //command pattern
     virtual void execute(QWidget *) = 0;
+
+protected:
+    void notifyExecutionComplete() {
+        m_notificationSem.release();
+    }
+    bool waitForExecutionComplete(int timeoutMs) {
+        return m_notificationSem.tryAcquire(1, timeoutMs);
+    }
+
+private:
+    QSemaphore m_notificationSem;
 };
 
 ///
